@@ -24,10 +24,10 @@
       font-family: 'Courier New', Courier, monospace;
       text-align: center;
       pointer-events: none;
-      opacity: 0;
-      transition: opacity 5s ease-in-out;
       white-space: pre-wrap;
       font-size: 2em;
+      opacity: 0;
+      transition: opacity 5s ease-in-out;
     }
   </style>
 </head>
@@ -59,7 +59,7 @@
       // Lower the ambient sound frequency using a low pass filter
       const filter = audioCtx.createBiquadFilter();
       filter.type = "lowpass";
-      filter.frequency.value = 200;  // Emphasizes deeper, lower frequencies
+      filter.frequency.value = 200;
       
       noiseSource.connect(filter);
       
@@ -98,11 +98,6 @@
       return Math.random() * (max - min) + min;
     }
 
-    window.addEventListener('resize', () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    });
-
     let mouse = { x: null, y: null, vx: 0, vy: 0 };
     let lastMouse = { x: null, y: null };
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
@@ -113,7 +108,7 @@
         this.y = y;
         this.vx = rand(-0.5, 0.5);
         this.vy = rand(-0.5, 0.5);
-        // Smaller base size for denser, subtler stars
+        // Smaller base size for subtler stars
         this.baseSize = rand(0.5, 1.5);
         this.alpha = rand(0.3, 0.8);
         this.idleTime = 0;
@@ -165,21 +160,22 @@
         ctx.save();
         if (this.idleTime > 200 && this.neighborCount >= 3) {
           let glowIntensity = Math.min((this.idleTime - 200) / 100, 1);
-          ctx.shadowColor = `rgba(255,255,255,${0.8 * glowIntensity})`;
+          ctx.shadowColor = `rgba(224,202,60,${0.8 * glowIntensity})`;
           ctx.shadowBlur = 10 * glowIntensity;
         }
         ctx.beginPath();
         ctx.arc(this.x, this.y, effectiveSize, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,${this.alpha})`;
+        // Star colour based on #E0CA3C
+        ctx.fillStyle = `rgba(224,202,60,${this.alpha})`;
         ctx.fill();
         ctx.restore();
       }
     }
 
-    // Increase star field density by reducing the divisor
-    const particleCount = Math.floor((width * height) / 6000);
+    // Increase star field density by adjusting the divisor (6000)
+    let desiredCount = Math.floor((width * height) / 6000);
     const particles = [];
-    for (let i = 0; i < particleCount; i++) {
+    for (let i = 0; i < desiredCount; i++) {
       particles.push(new Particle(rand(0, width), rand(0, height)));
     }
 
@@ -198,12 +194,47 @@
       "Fragile whispers weave the fabric of reality..."
     ];
     let currentMessage = "";
+
+    // ---- Glitch functions for overlay text ----
+    const glitchChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{};:,.<>/?\\|";
+
+    function randomGlitchChar() {
+      return glitchChars.charAt(Math.floor(Math.random() * glitchChars.length));
+    }
+
+    function getGlitchedText(target, revealFraction) {
+      let result = "";
+      for (let i = 0; i < target.length; i++) {
+        // Each character is correct with probability revealFraction; else random glitch
+        if (Math.random() < revealFraction) {
+          result += target.charAt(i);
+        } else {
+          result += randomGlitchChar();
+        }
+      }
+      return result;
+    }
+
+    function glitchAndShowMessage(message) {
+      const glitchDuration = 1500; // Total glitching time in ms
+      const startTime = Date.now();
+      const interval = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        let revealFraction = Math.min(elapsed / glitchDuration, 1);
+        overlay.textContent = getGlitchedText(message, revealFraction);
+        if (revealFraction >= 1) {
+          clearInterval(interval);
+        }
+      }, 100);
+    }
+
     function updateOverlayMessage() {
       const newMessage = messages[Math.floor(Math.random() * messages.length)];
       if (newMessage !== currentMessage) {
         currentMessage = newMessage;
-        overlay.textContent = currentMessage;
         overlay.style.opacity = 0.05;
+        glitchAndShowMessage(currentMessage);
+        // Fade in the overlay to max opacity then fade out
         setTimeout(() => {
           overlay.style.opacity = 0.3;
         }, 100);
@@ -214,27 +245,18 @@
     }
     setInterval(updateOverlayMessage, 15000);
     updateOverlayMessage();
+    // ---- End glitch functions ----
 
-    /* Updated Background Gradient with Enhanced Colors for Parallax */
+    /* Background Gradient Based on Colour #3A405A with Parallax */
     function drawBackground() {
       let offsetX = 0, offsetY = 0;
       if (mouse.x !== null && mouse.y !== null) {
-        offsetX = (mouse.x - width/2) * 0.05;
-        offsetY = (mouse.y - height/2) * 0.05;
+        offsetX = (mouse.x - width / 2) * 0.05;
+        offsetY = (mouse.y - height / 2) * 0.05;
       }
-      const now = new Date();
-      const hour = now.getHours();
-      let colorStart, colorEnd;
-      if (hour < 6 || hour >= 20) {
-        colorStart = "#0a0a22";
-        colorEnd = "#000000";
-      } else if (hour < 8 || hour >= 18) {
-        colorStart = "#2a0a2a";
-        colorEnd = "#000000";
-      } else {
-        colorStart = "#2a2a2a";
-        colorEnd = "#000000";
-      }
+      // Background uses base colour #3A405A and a darker variant (#2A2D45)
+      const colorStart = "#3A405A";
+      const colorEnd = "#2A2D45";
       const gradient = ctx.createLinearGradient(0 + offsetX, 0 + offsetY, width + offsetX, height + offsetY);
       gradient.addColorStop(0, colorStart);
       gradient.addColorStop(1, colorEnd);
@@ -273,7 +295,7 @@
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < 50) {
-            ctx.strokeStyle = `rgba(255,255,255,${(50 - dist) / 150})`;
+            ctx.strokeStyle = `rgba(224,202,60,${(50 - dist) / 150})`;
             ctx.lineWidth = 0.5;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
@@ -310,6 +332,7 @@
       }, { passive: true });
     }
 
+    /* Burst Effect on Click or Touch */
     function burst(x, y) {
       for (let i = 0; i < 10; i++) {
         const p = new Particle(x, y);
@@ -317,7 +340,7 @@
         p.vy = rand(-2, 2);
         particles.push(p);
       }
-      while (particles.length > particleCount * 2) {
+      while (particles.length > desiredCount * 2) {
         particles.shift();
       }
     }
@@ -327,6 +350,22 @@
     window.addEventListener('touchstart', (e) => {
       if (e.touches && e.touches.length > 0) {
         burst(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    });
+
+    /* Handle Window Resize: update canvas size and adjust particle count */
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      // Calculate desired particle count based on new window size
+      desiredCount = Math.floor((width * height) / 6000);
+      // If more particles are needed, add them; if fewer, trim the array.
+      if (desiredCount > particles.length) {
+        for (let i = particles.length; i < desiredCount; i++) {
+          particles.push(new Particle(rand(0, width), rand(0, height)));
+        }
+      } else if (desiredCount < particles.length) {
+        particles.splice(desiredCount, particles.length - desiredCount);
       }
     });
   </script>
