@@ -24,10 +24,10 @@
       font-family: 'Courier New', Courier, monospace;
       text-align: center;
       pointer-events: none;
-      opacity: 0;
-      transition: opacity 5s ease-in-out;
       white-space: pre-wrap;
       font-size: 2em;
+      opacity: 0;
+      transition: opacity 5s ease-in-out;
     }
   </style>
 </head>
@@ -56,19 +56,16 @@
       noiseSource.buffer = noiseBuffer;
       noiseSource.loop = true;
       
-      // Lower the ambient sound frequency using a low pass filter
       const filter = audioCtx.createBiquadFilter();
       filter.type = "lowpass";
-      filter.frequency.value = 200;  // Emphasizes deeper, lower frequencies
+      filter.frequency.value = 200;
       
       noiseSource.connect(filter);
       
-      // Create analyser for audio-reactive effects
       ambientAnalyser = audioCtx.createAnalyser();
       ambientAnalyser.fftSize = 256;
       frequencyData = new Uint8Array(ambientAnalyser.frequencyBinCount);
       
-      // Chain filter -> analyser -> master gain
       filter.connect(ambientAnalyser);
       ambientAnalyser.connect(masterGain);
       
@@ -98,11 +95,6 @@
       return Math.random() * (max - min) + min;
     }
 
-    window.addEventListener('resize', () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    });
-
     let mouse = { x: null, y: null, vx: 0, vy: 0 };
     let lastMouse = { x: null, y: null };
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
@@ -113,7 +105,7 @@
         this.y = y;
         this.vx = rand(-0.5, 0.5);
         this.vy = rand(-0.5, 0.5);
-        // Smaller base size for denser, subtler stars
+        // Smaller base size for subtler stars
         this.baseSize = rand(0.5, 1.5);
         this.alpha = rand(0.3, 0.8);
         this.idleTime = 0;
@@ -165,31 +157,31 @@
         ctx.save();
         if (this.idleTime > 200 && this.neighborCount >= 3) {
           let glowIntensity = Math.min((this.idleTime - 200) / 100, 1);
-          ctx.shadowColor = `rgba(255,255,255,${0.8 * glowIntensity})`;
+          ctx.shadowColor = `rgba(224,202,60,${0.8 * glowIntensity})`;
           ctx.shadowBlur = 10 * glowIntensity;
         }
         ctx.beginPath();
         ctx.arc(this.x, this.y, effectiveSize, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,${this.alpha})`;
+        // Use star colour based on #E0CA3C (RGBA: 224,202,60)
+        ctx.fillStyle = `rgba(224,202,60,${this.alpha})`;
         ctx.fill();
         ctx.restore();
       }
     }
 
-    // Increase star field density by reducing the divisor
-    const particleCount = Math.floor((width * height) / 6000);
+    let desiredCount = Math.floor((width * height) / 6000);
     const particles = [];
-    for (let i = 0; i < particleCount; i++) {
+    for (let i = 0; i < desiredCount; i++) {
       particles.push(new Particle(rand(0, width), rand(0, height)));
     }
 
     const messages = [
       "The night whispers secrets...",
-      "Echoes of forgotten dreams.",
-      "Shadows dance in silent riddles.",
-      "You are watched by unseen eyes.",
-      "The abstract unveils hidden truths.",
-      "Mysteries lie beyond the veil.",
+      "Echoes of forgotten dreams...",
+      "Shadows dance in silent riddles...",
+      "You are watched by unseen eyes...",
+      "The abstract unveils hidden truths...",
+      "Mysteries lie beyond the veil...",
       "Time unravels in silent echoes...",
       "The void hums in ancient tones...",
       "Lost voices stir the abyss...",
@@ -198,43 +190,57 @@
       "Fragile whispers weave the fabric of reality..."
     ];
     let currentMessage = "";
+
+    // Glitch effect functions for overlay text.
+    const glitchChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{};:,.<>/?\\|";
+
+    function randomGlitchChar() {
+      return glitchChars.charAt(Math.floor(Math.random() * glitchChars.length));
+    }
+
+    function getGlitchedText(target, revealFraction) {
+      let result = "";
+      for (let i = 0; i < target.length; i++) {
+        result += Math.random() < revealFraction ? target.charAt(i) : randomGlitchChar();
+      }
+      return result;
+    }
+
+    function glitchAndShowMessage(message) {
+      const glitchDuration = 1500; // glitching lasts 1.5 seconds
+      const startTime = Date.now();
+      const interval = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        let revealFraction = Math.min(elapsed / glitchDuration, 1);
+        overlay.textContent = getGlitchedText(message, revealFraction);
+        if (revealFraction >= 1) {
+          clearInterval(interval);
+        }
+      }, 100);
+    }
+
     function updateOverlayMessage() {
       const newMessage = messages[Math.floor(Math.random() * messages.length)];
       if (newMessage !== currentMessage) {
         currentMessage = newMessage;
-        overlay.textContent = currentMessage;
-        overlay.style.opacity = 0.05;
-        setTimeout(() => {
-          overlay.style.opacity = 0.3;
-        }, 100);
-        setTimeout(() => {
-          overlay.style.opacity = 0;
-        }, 8000);
+        overlay.style.opacity = isMobile ? 0.1 : 0.05;
+        glitchAndShowMessage(currentMessage);
+        setTimeout(() => { overlay.style.opacity = isMobile ? 0.5 : 0.3; }, 100);
+        setTimeout(() => { overlay.style.opacity = 0; }, 8000);
       }
     }
     setInterval(updateOverlayMessage, 15000);
     updateOverlayMessage();
 
-    /* Updated Background Gradient with Enhanced Colors for Parallax */
+    // Background gradient based on #3A405A with a darker variant.
     function drawBackground() {
       let offsetX = 0, offsetY = 0;
       if (mouse.x !== null && mouse.y !== null) {
-        offsetX = (mouse.x - width/2) * 0.05;
-        offsetY = (mouse.y - height/2) * 0.05;
+        offsetX = (mouse.x - width / 2) * 0.05;
+        offsetY = (mouse.y - height / 2) * 0.05;
       }
-      const now = new Date();
-      const hour = now.getHours();
-      let colorStart, colorEnd;
-      if (hour < 6 || hour >= 20) {
-        colorStart = "#0a0a22";
-        colorEnd = "#000000";
-      } else if (hour < 8 || hour >= 18) {
-        colorStart = "#2a0a2a";
-        colorEnd = "#000000";
-      } else {
-        colorStart = "#2a2a2a";
-        colorEnd = "#000000";
-      }
+      const colorStart = "#3A405A";
+      const colorEnd = "#2A2D45";
       const gradient = ctx.createLinearGradient(0 + offsetX, 0 + offsetY, width + offsetX, height + offsetY);
       gradient.addColorStop(0, colorStart);
       gradient.addColorStop(1, colorEnd);
@@ -242,7 +248,6 @@
       ctx.fillRect(0, 0, width, height);
     }
 
-    /* Main Animation Loop with Trails and Audio Reaction */
     function animate() {
       ctx.fillStyle = "rgba(0,0,0,0.1)";
       ctx.fillRect(0, 0, width, height);
@@ -273,7 +278,7 @@
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < 50) {
-            ctx.strokeStyle = `rgba(255,255,255,${(50 - dist) / 150})`;
+            ctx.strokeStyle = `rgba(224,202,60,${(50 - dist) / 150})`;
             ctx.lineWidth = 0.5;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
@@ -287,7 +292,6 @@
     }
     animate();
 
-    /* Mouse and Touch Interactivity */
     function updateMouse(e) {
       if (lastMouse.x !== null && lastMouse.y !== null) {
         mouse.vx = e.clientX - lastMouse.x;
@@ -317,7 +321,7 @@
         p.vy = rand(-2, 2);
         particles.push(p);
       }
-      while (particles.length > particleCount * 2) {
+      while (particles.length > desiredCount * 2) {
         particles.shift();
       }
     }
@@ -327,6 +331,19 @@
     window.addEventListener('touchstart', (e) => {
       if (e.touches && e.touches.length > 0) {
         burst(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      desiredCount = Math.floor((width * height) / 6000);
+      if (desiredCount > particles.length) {
+        for (let i = particles.length; i < desiredCount; i++) {
+          particles.push(new Particle(rand(0, width), rand(0, height)));
+        }
+      } else if (desiredCount < particles.length) {
+        particles.splice(desiredCount, particles.length - desiredCount);
       }
     });
   </script>
