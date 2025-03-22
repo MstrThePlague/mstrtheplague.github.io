@@ -56,19 +56,16 @@
       noiseSource.buffer = noiseBuffer;
       noiseSource.loop = true;
       
-      // Lower the ambient sound frequency using a low pass filter
       const filter = audioCtx.createBiquadFilter();
       filter.type = "lowpass";
       filter.frequency.value = 200;
       
       noiseSource.connect(filter);
       
-      // Create analyser for audio-reactive effects
       ambientAnalyser = audioCtx.createAnalyser();
       ambientAnalyser.fftSize = 256;
       frequencyData = new Uint8Array(ambientAnalyser.frequencyBinCount);
       
-      // Chain filter -> analyser -> master gain
       filter.connect(ambientAnalyser);
       ambientAnalyser.connect(masterGain);
       
@@ -102,13 +99,18 @@
     let lastMouse = { x: null, y: null };
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
+    // If on mobile, adjust overlay transition and size for better visibility.
+    if (isMobile) {
+      overlay.style.transition = "opacity 1s ease-in-out";
+      overlay.style.fontSize = "2.5em";
+    }
+
     class Particle {
       constructor(x, y) {
         this.x = x;
         this.y = y;
         this.vx = rand(-0.5, 0.5);
         this.vy = rand(-0.5, 0.5);
-        // Smaller base size for subtler stars
         this.baseSize = rand(0.5, 1.5);
         this.alpha = rand(0.3, 0.8);
         this.idleTime = 0;
@@ -165,14 +167,12 @@
         }
         ctx.beginPath();
         ctx.arc(this.x, this.y, effectiveSize, 0, Math.PI * 2);
-        // Star colour based on #E0CA3C
         ctx.fillStyle = `rgba(224,202,60,${this.alpha})`;
         ctx.fill();
         ctx.restore();
       }
     }
 
-    // Increase star field density by adjusting the divisor (6000)
     let desiredCount = Math.floor((width * height) / 6000);
     const particles = [];
     for (let i = 0; i < desiredCount; i++) {
@@ -182,10 +182,10 @@
     const messages = [
       "The night whispers secrets...",
       "Echoes of forgotten dreams.",
-      "Shadows dance in silent riddles.",
-      "You are watched by unseen eyes.",
-      "The abstract unveils hidden truths.",
-      "Mysteries lie beyond the veil.",
+      "Shadows dance in silent riddles...",
+      "You are watched by unseen eyes...",
+      "The abstract unveils hidden truths...",
+      "Mysteries lie beyond the veil...",
       "Time unravels in silent echoes...",
       "The void hums in ancient tones...",
       "Lost voices stir the abyss...",
@@ -205,7 +205,6 @@
     function getGlitchedText(target, revealFraction) {
       let result = "";
       for (let i = 0; i < target.length; i++) {
-        // Each character is correct with probability revealFraction; else random glitch
         if (Math.random() < revealFraction) {
           result += target.charAt(i);
         } else {
@@ -216,7 +215,7 @@
     }
 
     function glitchAndShowMessage(message) {
-      const glitchDuration = 1500; // Total glitching time in ms
+      const glitchDuration = 1500; // glitching lasts 1.5 seconds
       const startTime = Date.now();
       const interval = setInterval(() => {
         const elapsed = Date.now() - startTime;
@@ -232,11 +231,11 @@
       const newMessage = messages[Math.floor(Math.random() * messages.length)];
       if (newMessage !== currentMessage) {
         currentMessage = newMessage;
-        overlay.style.opacity = 0.05;
+        // On mobile, use slightly higher starting opacity
+        overlay.style.opacity = isMobile ? 0.1 : 0.05;
         glitchAndShowMessage(currentMessage);
-        // Fade in the overlay to max opacity then fade out
         setTimeout(() => {
-          overlay.style.opacity = 0.3;
+          overlay.style.opacity = isMobile ? 0.5 : 0.3;
         }, 100);
         setTimeout(() => {
           overlay.style.opacity = 0;
@@ -254,7 +253,6 @@
         offsetX = (mouse.x - width / 2) * 0.05;
         offsetY = (mouse.y - height / 2) * 0.05;
       }
-      // Background uses base colour #3A405A and a darker variant (#2A2D45)
       const colorStart = "#3A405A";
       const colorEnd = "#2A2D45";
       const gradient = ctx.createLinearGradient(0 + offsetX, 0 + offsetY, width + offsetX, height + offsetY);
@@ -357,9 +355,7 @@
     window.addEventListener('resize', () => {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
-      // Calculate desired particle count based on new window size
       desiredCount = Math.floor((width * height) / 6000);
-      // If more particles are needed, add them; if fewer, trim the array.
       if (desiredCount > particles.length) {
         for (let i = particles.length; i < desiredCount; i++) {
           particles.push(new Particle(rand(0, width), rand(0, height)));
