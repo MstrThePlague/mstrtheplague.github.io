@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mysterious Interactive Experience</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      overflow: hidden;
+      height: 100%;
+    }
+    canvas {
+      display: block;
+    }
+    #overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: rgba(255,255,255,0.7);
+      font-family: 'Courier New', Courier, monospace;
+      text-align: center;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 5s ease-in-out;
+      white-space: pre-wrap;
+      font-size: 2em;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <div id="overlay"></div>
+  <script>
+    /* Ambient Soundscape Setup with Lower Frequencies and Audio Analysis */
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const audioCtx = new AudioContext();
+    let masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.2;
+    masterGain.connect(audioCtx.destination);
+
+    let ambientAnalyser = null;
+    let frequencyData = null;
+
+    function createAmbientNoise() {
+      const bufferSize = 2 * audioCtx.sampleRate;
+      const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        output[i] = Math.random() * 2 - 1;
+      }
+      const noiseSource = audioCtx.createBufferSource();
+      noiseSource.buffer = noiseBuffer;
+      noiseSource.loop = true;
+      
+      // Lower the ambient sound frequency using a low pass filter
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = "lowpass";
+      filter.frequency.value = 200;  // Emphasizes deeper, lower frequencies
+      
+      noiseSource.connect(filter);
+      
+      // Create analyser for audio-reactive effects
+      ambientAnalyser = audioCtx.createAnalyser();
+      ambientAnalyser.fftSize = 256;
+      frequencyData = new Uint8Array(ambientAnalyser.frequencyBinCount);
+      
+      // Chain filter -> analyser -> master gain
+      filter.connect(ambientAnalyser);
+      ambientAnalyser.connect(masterGain);
+      
+      return noiseSource;
+    }
+    
+    let ambientStarted = false;
+    function startAmbientSound() {
+      if (!ambientStarted) {
+        const noise = createAmbientNoise();
+        noise.start(0);
+        ambientStarted = true;
+      }
+    }
+    
+    window.addEventListener('click', startAmbientSound);
+    window.addEventListener('touchstart', startAmbientSound);
+
+    /* Canvas, Particle, and Interaction Setup */
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const overlay = document.getElementById('overlay');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    function rand(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    let mouse = { x: null, y: null, vx: 0, vy: 0 };
+    let lastMouse = { x: null, y: null };
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+    class Particle {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.vx = rand(-0.5, 0.5);
+        this.vy = rand(-0.5, 0.5);
+        // Smaller base size for denser, subtler stars
+        this.baseSize = rand(0.5, 1.5);
+        this.alpha = rand(0.3, 0.8);
+        this.idleTime = 0;
+        this.neighborCount = 0;
+      }
+      update() {
+        if (mouse.x !== null && mouse.y !== null) {
+          let dx = mouse.x - this.x;
+          let dy = mouse.y - this.y;
+          let dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 150) {
+            let force = (150 - dist) / 150 * 0.05;
+            this.vx += (dx / dist) * force;
+            this.vy += (dy / dist) * force;
+          }
+        }
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vx *= 0.98;
+        this.vy *= 0.98;
+        if (this.x < 0) this.x += width;
+        if (this.x > width) this.x -= width;
+        if (this.y < 0) this.y += height;
+        if (this.y > height) this.y -= height;
+
+        let speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+        if (speed < 0.1) {
+          this.idleTime++;
+        } else {
+          this.idleTime = 0;
+        }
+        this.neighborCount = 0;
+        for (let other of particles) {
+          if (other === this) continue;
+          let dx = other.x - this.x;
+          let dy = other.y - this.y;
+          if (Math.sqrt(dx * dx + dy * dy) < 30) {
+            this.neighborCount++;
+          }
+        }
+        if (this.idleTime > 300 && this.neighborCount >= 3) {
+          this.vx = rand(-3, 3);
+          this.vy = rand(-3, 3);
+          this.idleTime = 0;
+        }
+      }
+      draw(ctx, bassFactor) {
+        let effectiveSize = this.baseSize * (1 + bassFactor * 0.5);
+        ctx.save();
+        if (this.idleTime > 200 && this.neighborCount >= 3) {
+          let glowIntensity = Math.min((this.idleTime - 200) / 100, 1);
+          ctx.shadowColor = `rgba(255,255,255,${0.8 * glowIntensity})`;
+          ctx.shadowBlur = 10 * glowIntensity;
+        }
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, effectiveSize, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${this.alpha})`;
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    // Increase star field density by reducing the divisor
+    const particleCount = Math.floor((width * height) / 6000);
+    const particles = [];
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle(rand(0, width), rand(0, height)));
+    }
+
+    const messages = [
+      "The night whispers secrets...",
+      "Echoes of forgotten dreams.",
+      "Shadows dance in silent riddles.",
+      "You are watched by unseen eyes.",
+      "The abstract unveils hidden truths.",
+      "Mysteries lie beyond the veil.",
+      "Time unravels in silent echoes...",
+      "The void hums in ancient tones...",
+      "Lost voices stir the abyss...",
+      "A distant echo of what once was...",
+      "In the stillness, the unknown stirs...",
+      "Fragile whispers weave the fabric of reality..."
+    ];
+    let currentMessage = "";
+    function updateOverlayMessage() {
+      const newMessage = messages[Math.floor(Math.random() * messages.length)];
+      if (newMessage !== currentMessage) {
+        currentMessage = newMessage;
+        overlay.textContent = currentMessage;
+        overlay.style.opacity = 0.05;
+        setTimeout(() => {
+          overlay.style.opacity = 0.3;
+        }, 100);
+        setTimeout(() => {
+          overlay.style.opacity = 0;
+        }, 8000);
+      }
+    }
+    setInterval(updateOverlayMessage, 15000);
+    updateOverlayMessage();
+
+    /* Updated Background Gradient with Enhanced Colors for Parallax */
+    function drawBackground() {
+      let offsetX = 0, offsetY = 0;
+      if (mouse.x !== null && mouse.y !== null) {
+        offsetX = (mouse.x - width/2) * 0.05;
+        offsetY = (mouse.y - height/2) * 0.05;
+      }
+      const now = new Date();
+      const hour = now.getHours();
+      let colorStart, colorEnd;
+      if (hour < 6 || hour >= 20) {
+        colorStart = "#0a0a22";
+        colorEnd = "#000000";
+      } else if (hour < 8 || hour >= 18) {
+        colorStart = "#2a0a2a";
+        colorEnd = "#000000";
+      } else {
+        colorStart = "#2a2a2a";
+        colorEnd = "#000000";
+      }
+      const gradient = ctx.createLinearGradient(0 + offsetX, 0 + offsetY, width + offsetX, height + offsetY);
+      gradient.addColorStop(0, colorStart);
+      gradient.addColorStop(1, colorEnd);
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, width, height);
+    }
+
+    /* Main Animation Loop with Trails and Audio Reaction */
+    function animate() {
+      ctx.fillStyle = "rgba(0,0,0,0.1)";
+      ctx.fillRect(0, 0, width, height);
+      
+      ctx.globalCompositeOperation = "destination-over";
+      drawBackground();
+      ctx.globalCompositeOperation = "source-over";
+      
+      let bassFactor = 0;
+      if (ambientAnalyser) {
+        ambientAnalyser.getByteFrequencyData(frequencyData);
+        let bassSum = 0;
+        let count = 10;
+        for (let i = 0; i < count; i++) {
+          bassSum += frequencyData[i];
+        }
+        bassFactor = bassSum / (count * 256);
+      }
+      
+      for (let particle of particles) {
+        particle.update();
+        particle.draw(ctx, bassFactor);
+      }
+      
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 50) {
+            ctx.strokeStyle = `rgba(255,255,255,${(50 - dist) / 150})`;
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+      
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    /* Mouse and Touch Interactivity */
+    function updateMouse(e) {
+      if (lastMouse.x !== null && lastMouse.y !== null) {
+        mouse.vx = e.clientX - lastMouse.x;
+        mouse.vy = e.clientY - lastMouse.y;
+      }
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      lastMouse.x = e.clientX;
+      lastMouse.y = e.clientY;
+    }
+    if (!isMobile) {
+      window.addEventListener('mousemove', updateMouse);
+    } else {
+      window.addEventListener('touchmove', (e) => {
+        if (e.touches && e.touches.length > 0) {
+          const touch = e.touches[0];
+          mouse.x = touch.clientX;
+          mouse.y = touch.clientY;
+        }
+      }, { passive: true });
+    }
+
+    function burst(x, y) {
+      for (let i = 0; i < 10; i++) {
+        const p = new Particle(x, y);
+        p.vx = rand(-2, 2);
+        p.vy = rand(-2, 2);
+        particles.push(p);
+      }
+      while (particles.length > particleCount * 2) {
+        particles.shift();
+      }
+    }
+    window.addEventListener('click', (e) => {
+      burst(e.clientX, e.clientY);
+    });
+    window.addEventListener('touchstart', (e) => {
+      if (e.touches && e.touches.length > 0) {
+        burst(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    });
+  </script>
+</body>
+</html>
