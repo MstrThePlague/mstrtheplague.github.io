@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>In Memory of Tom</title>
+  <meta name="description" content="My Friend Tom.">
+  <link rel="stylesheet" href="styles.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+
+<body class="tribute-page">
+
+  <main class="tribute-content">
+
+    <header class="tribute-header">
+      <h1>In Memory of Tom</h1>
+      <div class="dates">1977 &ndash; 2026</div>
+    </header>
+
+    <figure class="tribute-photo">
+      <img src="Tom.jpg" alt="A photograph of Tom" loading="lazy">
+    </figure>
+
+    <article class="tribute-text">
+      <p>
+        Tom, my wonderful friend, passed away in March 2026 after a long illness, he was 48 years old. I met Tom
+        at
+        school and we went through important early life events together, then college, then University and then out into
+        the
+        adult world. He was sage like in his wisdom and generous with his time. His life wasn't long enough for those of
+        us that loved him, I thought the quote below would be appropriate.
+      </p>
+      <blockquote class="tribute-quote">
+        <p>
+          “I would rather be ashes than dust!
+          I would rather that my spark should burn out
+          in a brilliant blaze than it should be stifled by dry-rot.
+          I would rather be a superb meteor, every atom
+          of me in magnificent glow, than a sleepy and permanent planet.
+          The function of man is to live, not to exist.
+          I shall not waste my days trying to prolong them.
+          I shall use my time.”
+        </p>
+        <footer>&mdash; <cite>London, J. (1916)</cite></footer>
+      </blockquote>
+      <p>
+        I miss him and think of him often.
+      </p>
+      <p>Rest in peace my friend.</p>
+      </p>
+      <p>
+        If you knew Tom, you can see his memorial page here: <a
+          href="https://tomfletcher-jones.muchloved.com/">https://tomfletcher-jones.muchloved.com/</a>
+      </p>
+    </article>
+
+    <!-- Obfuscated email contact fallback using JS to prevent raw mailto harvesting -->
+    <nav class="discreet-nav">
+      <a href="#" id="contact" class="back-link contact-link">Reach out</a>
+      <a href="index.html" class="back-link">Return</a>
+    </nav>
+
+  </main>
+
+  <!-- Script for email obfuscation to meet the 'No raw email addresses' requirement -->
+  <script>
+    document.getElementById('contact').addEventListener('click', function (e) {
+      e.preventDefault();
+      // Simple obfuscation: build the email string at runtime
+      var user = 'hellofromtheinternet.adwjuntact';
+      var domain = 'passmail.net';
+      window.location.href = 'mailto:' + user + '@' + domain;
+    });
+  </script>
+</body>
+
+</html>
