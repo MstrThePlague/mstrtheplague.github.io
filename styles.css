@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap');
+
+:root {
+  --font-family: 'Outfit', -apple-system, BlinkMacSystemFont, inherit, sans-serif;
+  --color-tribute-bg: #1a1a1a;
+  --color-tribute-text: #f4f4f5;
+  --color-main-text: #ffffff;
+  --color-main-shadow: rgba(0, 0, 0, 0.4);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-tribute-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--color-tribute-text);
+  overflow-x: hidden;
+}
+
+/* =========================================================================
+   Main Page Styles
+   ========================================================================= */
+
+.main-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #000;
+}
+
+#video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+  background-color: #101010;
+}
+
+#bg-video {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  display: block;
+  opacity: 0.35; /* Dimmed further so overlay text pops out more */
+}
+
+.overlay-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  text-align: center;
+  pointer-events: none; /* Let clicks pass through to video */
+  max-width: 32rem; /* Prevent the box from stretching too wide */
+  width: 90%;
+  
+  /* Restored clean backdrop filter */
+  background: rgba(0, 0, 0, 0.3); /* Made less transparent so it's more visible */
+  backdrop-filter: blur(12px) saturation(1.2);
+  -webkit-backdrop-filter: blur(12px) saturation(1.2);
+  padding: 3rem 4rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.overlay-content h1 {
+  font-size: 3rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--color-main-text);
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 10px var(--color-main-shadow);
+}
+
+.overlay-content p {
+  font-size: 1.1rem;
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 5px var(--color-main-shadow);
+  margin: 0 auto;
+}
+
+.discreet-nav {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  gap: 2rem;
+  white-space: nowrap;
+}
+
+.discreet-nav a {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 0.4s ease, text-shadow 0.4s ease;
+  padding: 1rem; /* Increase hit area */
+}
+
+.discreet-nav a:hover,
+.discreet-nav a:focus {
+  color: #fff;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  outline: none;
+}
+
+/* Fix discreet nav absolute positioning on the scrollable tribute page */
+.tribute-page .discreet-nav {
+  position: static;
+  transform: none;
+  margin-top: 4rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+/* =========================================================================
+   Tribute Page Styles
+   ========================================================================= */
+
+.tribute-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4rem 1.5rem;
+}
+
+.tribute-content {
+  max-width: 65ch; /* Optimal reading line length */
+  width: 100%;
+}
+
+.tribute-header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.tribute-header h1 {
+  font-weight: 400;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.tribute-header .dates {
+  font-weight: 300;
+  color: rgba(244, 244, 245, 0.6);
+  font-size: 1.1rem;
+}
+
+.tribute-photo {
+  width: 100%;
+  margin-bottom: 3rem;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  /* Placeholder aspect ratio */
+  background-color: #2a2a2a;
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tribute-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.tribute-text {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.tribute-text p {
+  margin-bottom: 1.5rem;
+}
+
+.tribute-text p:last-child {
+  margin-bottom: 0;
+}
+
+.tribute-quote {
+  font-style: italic;
+  margin: 2.5rem 0;
+  padding-left: 1.5rem;
+  border-left: 2px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.tribute-quote footer {
+  margin-top: 1rem;
+  font-style: normal;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: right;
+}
+
+.back-link {
+  margin-top: 4rem;
+  color: rgba(244, 244, 245, 0.5);
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  transition: color 0.3s ease;
+  display: inline-block;
+}
+
+.back-link:hover,
+.back-link:focus {
+  color: var(--color-tribute-text);
+  outline: none;
+}
+
+/* Contact Link Masking */
+.contact-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(244, 244, 245, 0.3);
+  text-underline-offset: 4px;
+  transition: color 0.3s ease, text-decoration-color 0.3s ease;
+}
+
+.contact-link:hover {
+  color: #fff;
+  text-decoration-color: rgba(255, 255, 255, 0.8);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .overlay-content h1 {
+    font-size: 2.2rem;
+  }
+  .overlay-content p {
+    font-size: 1rem;
+  }
+  .overlay-content {
+    padding: 2rem;
+    width: 90%;
+  }
+  .tribute-header h1 {
+    font-size: 2rem;
+  }
+}
