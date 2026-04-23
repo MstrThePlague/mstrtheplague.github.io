@@ -93,43 +93,55 @@ body {
   margin: 0 auto;
 }
 
-.discreet-nav {
-  position: absolute;
+/* =========================================================================
+   Navigation Styles
+   ========================================================================= */
+
+.site-nav {
+  position: fixed;
   bottom: 2rem;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 3;
+  z-index: 100;
   display: flex;
-  gap: 2rem;
+  gap: 2.5rem;
+  padding: 1rem 3rem;
+  background: rgba(20, 20, 20, 0.9); /* Very opaque */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 3rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
   white-space: nowrap;
 }
 
-.discreet-nav a {
-  color: rgba(255, 255, 255, 0.6);
+.site-nav a {
+  color: rgba(255, 255, 255, 0.5);
   text-decoration: none;
   font-size: 0.9rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  transition: color 0.4s ease, text-shadow 0.4s ease;
-  padding: 1rem; /* Increase hit area */
+  transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
-.discreet-nav a:hover,
-.discreet-nav a:focus {
+.site-nav a:hover,
+.site-nav a:focus,
+.site-nav a.active {
   color: #fff;
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
   outline: none;
 }
 
-/* Fix discreet nav absolute positioning on the scrollable tribute page */
-.tribute-page .discreet-nav {
-  position: static;
-  transform: none;
-  margin-top: 4rem;
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  width: 100%;
+@media (max-width: 768px) {
+  .site-nav {
+    width: 90%;
+    padding: 1rem 1.5rem;
+    gap: 1.5rem;
+    justify-content: center;
+  }
+  .site-nav a {
+    font-size: 0.8rem;
+  }
 }
 
 /* =========================================================================
@@ -141,7 +153,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 4rem 1.5rem;
+  padding: 4rem 1.5rem 8rem; /* Extra bottom padding for fixed nav */
 }
 
 .tribute-content {
@@ -218,35 +230,7 @@ body {
   text-align: right;
 }
 
-.back-link {
-  margin-top: 4rem;
-  color: rgba(244, 244, 245, 0.5);
-  text-decoration: none;
-  font-size: 0.9rem;
-  letter-spacing: 0.05em;
-  transition: color 0.3s ease;
-  display: inline-block;
-}
-
-.back-link:hover,
-.back-link:focus {
-  color: var(--color-tribute-text);
-  outline: none;
-}
-
-/* Contact Link Masking */
-.contact-link {
-  color: inherit;
-  text-decoration: underline;
-  text-decoration-color: rgba(244, 244, 245, 0.3);
-  text-underline-offset: 4px;
-  transition: color 0.3s ease, text-decoration-color 0.3s ease;
-}
-
-.contact-link:hover {
-  color: #fff;
-  text-decoration-color: rgba(255, 255, 255, 0.8);
-}
+/* Removed back-link and contact-link as they are replaced by site-nav */
 
 /* Responsive */
 @media (max-width: 768px) {
