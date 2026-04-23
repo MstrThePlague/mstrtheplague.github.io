@@ -31,6 +31,7 @@ body {
   position: relative;
   width: 100vw;
   height: 100vh;
+  height: 100dvh; /* Fix for mobile browser UI (Safari bottom bar) */
   overflow: hidden;
   background-color: #000;
 }
@@ -104,6 +105,7 @@ body {
   transform: translateX(-50%);
   z-index: 100;
   display: flex;
+  align-items: center;
   gap: 2.5rem;
   padding: 1rem 3rem;
   background: rgba(20, 20, 20, 0.9); /* Very opaque */
@@ -113,6 +115,11 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
   white-space: nowrap;
+}
+
+/* For the non-scrolling main page, absolute positioning prevents Safari UI from hiding it */
+.main-page .site-nav {
+  position: absolute;
 }
 
 .site-nav a {
@@ -134,13 +141,15 @@ body {
 
 @media (max-width: 768px) {
   .site-nav {
-    width: 90%;
-    padding: 1rem 1.5rem;
-    gap: 1.5rem;
-    justify-content: center;
+    width: max-content;
+    max-width: 95%;
+    padding: 0.8rem 1.25rem;
+    gap: 1rem;
+    bottom: max(1.5rem, calc(1rem + env(safe-area-inset-bottom)));
   }
   .site-nav a {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
   }
 }
 
