@@ -115,18 +115,22 @@ body {
   position: absolute;
 }
 
-.site-nav a {
+.site-nav a,
+.tribute-text a {
   color: rgba(255, 255, 255, 0.5);
   text-decoration: none;
   font-size: 0.9rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   transition: color 0.3s ease, text-shadow 0.3s ease;
+  word-break: break-word;
 }
 
 .site-nav a:hover,
 .site-nav a:focus,
-.site-nav a.active {
+.site-nav a.active,
+.tribute-text a:hover,
+.tribute-text a:focus {
   color: #fff;
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
   outline: none;
