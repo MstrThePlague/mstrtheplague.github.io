@@ -51,7 +51,6 @@
         I miss him and think of him often.
       </p>
       <p>Rest in peace my friend.</p>
-      </p>
       <p>
         If you knew Tom, you can see his memorial page here: <a
           href="https://tomfletcher-jones.muchloved.com/">https://tomfletcher-jones.muchloved.com/</a>
@@ -60,18 +59,15 @@
 
   </main>
 
-  <!-- Consistent Site Navigation -->
   <nav class="site-nav">
     <a href="index.html">Home</a>
     <a href="tribute.html" class="active">In memory of Tom</a>
     <a href="#" id="contact">Reach out</a>
   </nav>
 
-  <!-- Script for email obfuscation to meet the 'No raw email addresses' requirement -->
   <script>
     document.getElementById('contact').addEventListener('click', function (e) {
       e.preventDefault();
-      // Simple obfuscation: build the email string at runtime
       var user = 'hellofromtheinternet.adwjuntact';
       var domain = 'passmail.net';
       window.location.href = 'mailto:' + user + '@' + domain;

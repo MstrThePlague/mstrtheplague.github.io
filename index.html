@@ -8,22 +8,18 @@
   </title>
   <meta name="description" content="A minimalist digital presence and temporary holding space.">
   <link rel="stylesheet" href="styles.css">
-
-  <!-- Preconnect to Google Fonts for performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 
 <body class="main-page">
 
-  <!-- Video Background underlay -->
   <div id="video-container">
     <video id="bg-video" autoplay loop muted playsinline>
       <source src="204565-924698132.mp4" type="video/mp4">
     </video>
   </div>
 
-  <!-- Central Greeting Overlay -->
   <main class="overlay-content">
     <h1>Hello.</h1>
     <p>This is my quiet little corner of the web, sometimes I post things here I think someone might care about,
@@ -31,7 +27,6 @@
       email.</p>
   </main>
 
-  <!-- Consistent Site Navigation -->
   <nav class="site-nav">
     <a href="index.html" class="active">Home</a>
     <a href="tribute.html">In memory of Tom</a>
@@ -43,7 +38,6 @@
 
     document.getElementById('contact').addEventListener('click', function (e) {
       e.preventDefault();
-      // Simple obfuscation: build the email string at runtime
       var user = 'hellofromtheinternet.adwjuntact';
       var domain = 'passmail.net';
       window.location.href = 'mailto:' + user + '@' + domain;
