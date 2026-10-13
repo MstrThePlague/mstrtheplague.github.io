@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>InterLude</title>
-  <meta name="description" content="A macOS menu bar app that plays BBC 6 Music about a minute behind live and mutes the news bulletins.">
+  <meta name="description" content="A macOS menu bar app that plays BBC radio about a minute behind live, on your Mac or Chromecast speakers, and mutes the news bulletins.">
   <link rel="icon" type="image/png" href="images/interlude-icon.png">
   <link rel="stylesheet" href="styles.css">
 
@@ -28,8 +28,9 @@
     <article class="tribute-text">
 
       <p>
-        InterLude is a small macOS menu bar app that plays BBC 6 Music to my speakers, about a minute behind live,
-        and mutes every news bulletin. When the music comes back, so does the sound. It was built over a couple of days in October 2026.  It supports local play on the Mac or casting to Chromecast devices.
+        InterLude is a small macOS menu bar app that plays BBC radio to my speakers, about a minute behind live,
+        and mutes the news bulletins on music stations. When the music comes back, so does the sound. It was built
+        over a couple of days in October 2026. It plays on the Mac, a Chromecast or a Cast group.
       </p>
 
       <p class="project-links">
@@ -64,9 +65,9 @@
       <h2>How it works</h2>
       <p>
         The trick is a short delay. InterLude fetches the station's audio stream a minute or so ahead of what I'm
-        hearing and analyses it as it arrives. When it spots a bulletin starting, it swaps the audio for silence
-        before I get to that point in the stream, and swaps it back when the music returns. The delay stays
-        constant, so nothing glitches or skips.
+        hearing and analyses it as it arrives. When it spots a bulletin starting, it swaps the audio for silence (or waves,
+        a stream or birdsong, if you prefer) before I get to that point in the stream, and swaps it back when the music
+        returns. The delay stays constant, so nothing glitches or skips.
       </p>
 
       <figure class="diagram">
@@ -132,7 +133,7 @@
               alt="InterLude panel showing a Muted badge and a Bulletin muted card with a Not news button and a time so far."
               loading="lazy"></a>
           <figcaption><strong>2. Muted.</strong> The bulletin is silenced and timed. If it has got it wrong, one
-            press of &ldquo;Not news&rdquo; brings the music back.</figcaption>
+            press of &ldquo;Not news&rdquo; brings the music back, and &ldquo;News got through&rdquo; reports one it missed.</figcaption>
         </figure>
         <figure>
           <a href="images/interlude-playing.png"><img src="images/interlude-playing.png"
@@ -154,7 +155,11 @@
 
       <h2>What it does</h2>
       <ul>
-        <li>Lives in the menu bar and plays through the Mac or to Chromecast speakers on the network.</li>
+        <li>Lives in the menu bar and plays any BBC station through the Mac, a Chromecast or a Cast group, and you can switch speaker while it plays.</li>
+        <li>Plays a fixed time behind live: 60 seconds by default, adjustable per station.</li>
+        <li>Mutes from the news theme to the newsreader's sign-off, so the presenter's handover and chat afterwards still play.</li>
+        <li>Learns a station's news theme from the last few hours of broadcast the first time you play it.</li>
+        <li>Has &ldquo;Not news&rdquo; and &ldquo;News got through&rdquo; buttons to correct it, and a log of every decision.</li>
         <li>Shows what's playing and a countdown to the end of a mute.</li>
         <li>Can play ocean waves, a woodland stream or birdsong during a mute instead of silence, fading in and out.</li>
         <li>Sends no telemetry. Its only network traffic is to BBC servers and to my speakers.</li>
@@ -184,7 +189,7 @@
         <li>It isn't notarised by Apple, so the first launch needs a one-off approval in System Settings. The steps
           are in the README, or you can build it from source.</li>
         <li>BBC streams may not play outside the UK.</li>
-        <li>It's tuned and tested on 6 Music. Other music stations should work but haven't been measured.</li>
+        <li>Detection is tuned and tested on 6 Music. Other music stations should work but haven't been measured.</li>
       </ul>
 
       <h2>The small print</h2>
