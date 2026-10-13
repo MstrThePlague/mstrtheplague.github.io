@@ -39,22 +39,20 @@
 
   </main>
 
-  <nav class="site-nav">
-    <a href="index.html">Home</a>
-    <a href="projects.html" class="active">Projects</a>
-    <a href="tribute.html">In memory of Tom</a>
-    <a href="#" id="contact">Reach out</a>
-  </nav>
+
+  <!-- No-JS fallback: keep in sync with PAGES in js/nav.js -->
+  <noscript>
+    <nav class="site-nav nav-static" aria-label="Main">
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="projects.html" class="active" aria-current="page">Projects</a>
+        <a href="tribute.html">In memory of Tom</a>
+      </div>
+    </nav>
+  </noscript>
 
   <script src="js/particles.js"></script>
-  <script>
-    document.getElementById('contact').addEventListener('click', function (e) {
-      e.preventDefault();
-      var user = 'hellofromtheinternet.adwjuntact';
-      var domain = 'passmail.net';
-      window.location.href = 'mailto:' + user + '@' + domain;
-    });
-  </script>
+  <script src="js/nav.js"></script>
 
   <!-- Default Statcounter code for Personal Site http://benbull.org -->
   <script type="text/javascript">
