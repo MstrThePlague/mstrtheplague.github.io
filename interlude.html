@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InterLude</title>
+  <meta name="description" content="A macOS menu bar app that plays BBC 6 Music about a minute behind live and mutes the news bulletins.">
+  <link rel="stylesheet" href="styles.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+
+<body class="tribute-page">
+
+  <main class="tribute-content">
+
+    <p class="breadcrumb"><a href="projects.html">&larr; Projects</a></p>
+
+    <header class="tribute-header">
+      <h1>InterLude</h1>
+      <div class="dates">Music, minus the news</div>
+    </header>
+
+    <article class="tribute-text">
+
+      <p>
+        InterLude is a small macOS menu bar app that plays BBC 6 Music to my speakers, about a minute behind live,
+        and mutes every news bulletin. When the music comes back, so does the sound. It was built together with
+        Claude over a couple of days in October 2026.
+      </p>
+
+      <h2>Why</h2>
+      <p>
+        I like 6 Music. What I don't need is a news bulletin every half hour, all day, every day. I'm not
+        asking for the news to be abolished, just for it not to be the thing that interrupts the song I was enjoying.
+      </p>
+
+      <h2>I did ask nicely</h2>
+      <p>
+        In March 2025 I put a Freedom of Information request to the BBC with two questions. First, what is the
+        schedule and frequency of news bulletins on 6 Music in a typical week? Second, is any metadata broadcast, over
+        DAB or the internet streams, that tells a player a bulletin is imminent or under way? If there was a flag, a
+        radio could simply act on it.
+      </p>
+      <p>
+        The reply (reference OOS2025/00474, 31 March 2025) didn't answer either question. The BBC's position was that
+        anything it held on the subject would be held for the purposes of journalism, art or literature, which puts it
+        outside the Act, so it hadn't searched at all. As a courtesy it did point me to the relevant condition in
+        Ofcom's operating licence: at least 306 hours of news a year on 6 Music, with bulletins &ldquo;regularly at
+        frequent intervals throughout the day&rdquo;. Which I knew, and is rather the problem.
+      </p>
+      <p>
+        So I took it as a personal challenge. If the BBC won't tell me when the news is on, I'll listen for it.
+      </p>
+
+      <h2>How it works</h2>
+      <p>
+        The trick is a short delay. InterLude fetches the station's audio stream a minute or so ahead of what I'm
+        hearing and analyses it as it arrives. When it spots a bulletin starting, it swaps the audio for silence
+        before I get to that point in the stream, and swaps it back when the music returns. The delay stays
+        constant, so nothing glitches or skips.
+      </p>
+
+      <figure class="diagram">
+        <svg viewBox="0 0 360 150" role="img"
+          aria-label="Diagram: a bulletin in the stream from the BBC is replaced by silence about a minute later, before it reaches the speakers.">
+          <style>
+            .d-label { font: 300 14px Outfit, sans-serif; fill: rgba(244,244,245,0.75); }
+            .d-small { font: 400 12px Outfit, sans-serif; }
+          </style>
+          <text class="d-label" x="0" y="16">What the BBC sends</text>
+          <rect x="0" y="26" width="360" height="28" rx="4" fill="rgba(255,255,255,0.12)" />
+          <rect x="125" y="26" width="110" height="28" rx="4" fill="rgba(255,255,255,0.45)" />
+          <text class="d-small" x="180" y="44" text-anchor="middle" fill="#1a1a1a">news</text>
+
+          <path d="M180 58 L180 88 M175 82 L180 89 L185 82" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"
+            fill="none" />
+          <text class="d-small" x="190" y="76" fill="rgba(244,244,245,0.55)">+ 1 minute</text>
+
+          <text class="d-label" x="0" y="108">What I hear</text>
+          <rect x="0" y="118" width="360" height="28" rx="4" fill="rgba(255,255,255,0.12)" />
+          <rect x="125" y="118" width="110" height="28" rx="4" fill="none" stroke="rgba(255,255,255,0.35)"
+            stroke-dasharray="4 4" />
+          <text class="d-small" x="180" y="136" text-anchor="middle" fill="rgba(244,244,245,0.6)">silence</text>
+        </svg>
+        <figcaption>Spotted in the stream, silenced before it reaches the speakers.</figcaption>
+      </figure>
+
+      <p>
+        Spotting a bulletin is harder than it sounds. A radio can't just ask whether something is news, so the app
+        combines several clues:
+      </p>
+      <ul>
+        <li>Apple's built-in sound classifier, which scores audio for speech and for music.</li>
+        <li>The time. Bulletins sit around the hour and half hour, so sustained speech just after those marks is a
+          strong hint.</li>
+        <li>The news theme. The app learns the station's news jingle from the BBC's own six-hour rewind window, then
+          listens for it.</li>
+        <li>The sign-off. Apple's on-device speech recognition listens for the newsreader's closing words (&ldquo;next
+          update at&hellip;&rdquo;) so the mute can end promptly, rather than waiting for music.</li>
+      </ul>
+      <p>
+        The rules are deterministic and every decision is logged, so when it gets something wrong I can see why.
+        There's a &ldquo;Not news&rdquo; button for the times it does.
+      </p>
+
+      <h2>Seeing it run</h2>
+      <p>
+        InterLude lives in the menu bar and opens a small panel. Here it is going through one bulletin: a warning that
+        a mute is on its way, the mute itself, and the settings behind it. (The album artwork is hidden in these
+        pictures, since it belongs to the artists and the BBC.)
+      </p>
+
+      <div class="shots">
+        <figure>
+          <a href="images/interlude-countdown.png"><img src="images/interlude-countdown.png"
+              alt="InterLude panel showing Radio 6 Music playing live, with a notice that a bulletin is coming up and muting in 38 seconds."
+              loading="lazy"></a>
+          <figcaption><strong>1. Heads up.</strong> Because it listens a minute ahead, it knows a bulletin is coming
+            and counts down to the mute.</figcaption>
+        </figure>
+        <figure>
+          <a href="images/interlude-muted.png"><img src="images/interlude-muted.png"
+              alt="InterLude panel showing a Muted badge and a Bulletin muted card with a Not news button and a time so far."
+              loading="lazy"></a>
+          <figcaption><strong>2. Muted.</strong> The bulletin is silenced and timed. If it has got it wrong, one
+            press of &ldquo;Not news&rdquo; brings the music back.</figcaption>
+        </figure>
+        <figure>
+          <a href="images/interlude-playing.png"><img src="images/interlude-playing.png"
+              alt="InterLude panel with Radio 6 Music playing, volume slider, station and speaker pickers, the Mute news switch and a list of recent mutes."
+              loading="lazy"></a>
+          <figcaption><strong>3. Back to the music.</strong> The panel also has volume, a station picker, a choice of
+            speakers and a log of recent mutes you can mark as right or wrong.</figcaption>
+        </figure>
+      </div>
+
+      <figure class="shot-single">
+        <a href="images/interlude-settings.png"><img src="images/interlude-settings.png"
+            alt="InterLude settings window with playback delay, news detection, bulletin sound, and general options."
+            loading="lazy"></a>
+        <figcaption><strong>Settings.</strong> How far behind live to play, the longest a mute may last, the bulletin
+          minutes, whether it should only mute when the news jingle plays, and a shadow mode that notes bulletins
+          without muting. You can also choose waves, a stream or birdsong in place of silence.</figcaption>
+      </figure>
+
+      <h2>What it does</h2>
+      <ul>
+        <li>Lives in the menu bar and plays through the Mac or to Chromecast speakers on the network.</li>
+        <li>Shows what's playing and a countdown to the end of a mute.</li>
+        <li>Can play ocean waves, a woodland stream or birdsong during a mute instead of silence, fading in and out.</li>
+        <li>Sends no telemetry. Its only network traffic is to BBC servers and to my speakers.</li>
+      </ul>
+
+      <h2>How well does it work?</h2>
+      <p>
+        Honestly: well enough that I've stopped hearing the news, but I haven't measured it properly. I've
+        confirmed the mute mechanics, with a captured stream silent for exactly the length of a bulletin and normal
+        audio on both sides, and I've listened to it catch real bulletins. The first one to be caught correctly was on
+        12 October. It's had its mistakes as well: it muted a presenter talking over a song, and it has muted
+        the presenter's chat after a bulletin because the presenter's voice and the newsreader's look alike to the
+        classifier. Each of those turned into a fix. A proper accuracy test against a week of labelled listening is
+        still on the list.
+      </p>
+
+      <h2>The small print</h2>
+      <p>
+        InterLude is unofficial and has no connection with the BBC. It relies on stream addresses that aren't
+        documented and could change without warning. It's written for my own use, so it isn't released or available to
+        download. I'd want to read the BBC's terms carefully before it went anywhere public. It's built with Swift
+        and SwiftUI for macOS 15 and later.
+      </p>
+
+    </article>
+
+  </main>
+
+  <nav class="site-nav">
+    <a href="index.html">Home</a>
+    <a href="projects.html" class="active">Projects</a>
+    <a href="tribute.html">In memory of Tom</a>
+    <a href="#" id="contact">Reach out</a>
+  </nav>
+
+  <script>
+    document.getElementById('contact').addEventListener('click', function (e) {
+      e.preventDefault();
+      var user = 'hellofromtheinternet.adwjuntact';
+      var domain = 'passmail.net';
+      window.location.href = 'mailto:' + user + '@' + domain;
+    });
+  </script>
+
+  <!-- Default Statcounter code for Personal Site http://benbull.org -->
+  <script type="text/javascript">
+    var sc_project = 13228015;
+    var sc_invisible = 1;
+    var sc_security = "065d3980";
+  </script>
+  <script type="text/javascript" src="https://www.statcounter.com/counter/counter.js" async></script>
+  <noscript>
+    <div class="statcounter"><a title="Web Analytics" href="https://statcounter.com/" target="_blank"><img
+          class="statcounter" src="https://c.statcounter.com/13228015/0/065d3980/1/" alt="Web Analytics"
+          referrerPolicy="no-referrer-when-downgrade"></a></div>
+  </noscript>
+  <!-- End of Statcounter Code -->
+</body>
+
+</html>

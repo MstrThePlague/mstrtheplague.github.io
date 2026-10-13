@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects</title>
+  <meta name="description" content="Things I've built.">
+  <link rel="stylesheet" href="styles.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+
+<body class="tribute-page">
+
+  <main class="tribute-content">
+
+    <header class="tribute-header">
+      <h1>Projects</h1>
+      <div class="dates">Things I've built, mostly to scratch an itch</div>
+    </header>
+
+    <div class="project-list">
+
+      <a class="project-card" href="interlude.html">
+        <span class="project-meta">macOS app &middot; October 2026</span>
+        <h2>InterLude</h2>
+        <p>A menu bar app that plays BBC 6 Music to my speakers and quietly mutes the news bulletins.</p>
+        <span class="project-more">Read more &rarr;</span>
+      </a>
+
+    </div>
+
+  </main>
+
+  <nav class="site-nav">
+    <a href="index.html">Home</a>
+    <a href="projects.html" class="active">Projects</a>
+    <a href="tribute.html">In memory of Tom</a>
+    <a href="#" id="contact">Reach out</a>
+  </nav>
+
+  <script>
+    document.getElementById('contact').addEventListener('click', function (e) {
+      e.preventDefault();
+      var user = 'hellofromtheinternet.adwjuntact';
+      var domain = 'passmail.net';
+      window.location.href = 'mailto:' + user + '@' + domain;
+    });
+  </script>
+
+  <!-- Default Statcounter code for Personal Site http://benbull.org -->
+  <script type="text/javascript">
+    var sc_project = 13228015;
+    var sc_invisible = 1;
+    var sc_security = "065d3980";
+  </script>
+  <script type="text/javascript" src="https://www.statcounter.com/counter/counter.js" async></script>
+  <noscript>
+    <div class="statcounter"><a title="Web Analytics" href="https://statcounter.com/" target="_blank"><img
+          class="statcounter" src="https://c.statcounter.com/13228015/0/065d3980/1/" alt="Web Analytics"
+          referrerPolicy="no-referrer-when-downgrade"></a></div>
+  </noscript>
+  <!-- End of Statcounter Code -->
+</body>
+
+</html>

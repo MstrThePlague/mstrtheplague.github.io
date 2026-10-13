@@ -233,6 +233,103 @@ body {
   text-align: right;
 }
 
+.tribute-text h2 {
+  font-weight: 400;
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+  margin: 2.5rem 0 1rem;
+}
+
+.tribute-text ul {
+  margin: 0 0 1.5rem 1.25rem;
+}
+
+.tribute-text li {
+  margin-bottom: 0.6rem;
+}
+
+.breadcrumb {
+  margin-bottom: 2rem;
+}
+
+.breadcrumb a,
+.project-more {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.breadcrumb a:hover,
+.breadcrumb a:focus {
+  color: #fff;
+  outline: none;
+}
+
+.diagram {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+}
+
+.diagram svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.project-list {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.project-card {
+  display: block;
+  padding: 1.75rem 2rem;
+  color: inherit;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.project-card:hover,
+.project-card:focus {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
+  outline: none;
+}
+
+.project-card:hover .project-more,
+.project-card:focus .project-more {
+  color: #fff;
+}
+
+.project-meta {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: rgba(244, 244, 245, 0.5);
+  margin-bottom: 0.5rem;
+}
+
+.project-card h2 {
+  font-weight: 400;
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.project-card p {
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(244, 244, 245, 0.8);
+  margin-bottom: 1rem;
+}
 
 @media (max-width: 768px) {
   .overlay-content h1 {
@@ -247,5 +344,76 @@ body {
   }
   .tribute-header h1 {
     font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .site-nav {
+    padding: 0.8rem 1rem;
+    gap: 0.7rem;
+  }
+  .site-nav a {
+    font-size: 0.65rem;
+    letter-spacing: 0.02em;
+  }
+  .project-card {
+    padding: 1.5rem;
+  }
+}
+
+.diagram figcaption {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: rgba(244, 244, 245, 0.5);
+}
+
+.shots {
+  width: min(62rem, calc(100vw - 3rem));
+  margin: 2rem 0 2.5rem 50%;
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.shots figure,
+.shot-single {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(244, 244, 245, 0.6);
+}
+
+.shots img,
+.shot-single img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  margin-bottom: 0.9rem;
+}
+
+.shots figcaption strong,
+.shot-single figcaption strong {
+  color: rgba(244, 244, 245, 0.9);
+  font-weight: 500;
+}
+
+.shot-single {
+  max-width: 26rem;
+  margin: 2.5rem auto;
+}
+
+@media (max-width: 768px) {
+  .shots {
+    width: 100%;
+    margin: 2rem 0;
+    transform: none;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .shots figure {
+    max-width: 22rem;
+    margin: 0 auto;
   }
 }
