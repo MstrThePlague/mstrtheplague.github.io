@@ -440,3 +440,41 @@ body {
     gap: 1rem;
   }
 }
+
+.tribute-text .project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.tribute-text a.button {
+  display: inline-block;
+  padding: 0.6rem 1.25rem;
+  border-radius: 2rem;
+  background: rgba(255, 255, 255, 0.92);
+  color: #1a1a1a;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-shadow: none;
+}
+
+.tribute-text a.button:hover,
+.tribute-text a.button:focus {
+  background: #fff;
+  color: #000;
+  text-shadow: none;
+}
+
+.tribute-text a.button.secondary {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.tribute-text a.button.secondary:hover,
+.tribute-text a.button.secondary:focus {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.6);
+}
