@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- A 404 can be served from any URL depth, so resolve everything from the site root -->
+  <base href="/">
+  <title>404 &middot; Page not found</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="styles.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+
+<body class="tribute-page">
+
+  <canvas id="particles" aria-hidden="true"></canvas>
+
+  <main class="tribute-content">
+
+    <header class="tribute-header">
+      <h1>404</h1>
+      <div class="dates">The page you wanted isn't here, man</div>
+    </header>
+
+    <figure class="shot-single">
+      <img src="images/404.gif" width="500" height="300"
+        alt="The Dude from The Big Lebowski sprawled on a sofa, staring at the ceiling and scratching his head.">
+      <figcaption class="tribute-text"><strong>The Dude abides.</strong> This page, however, does not. It may have moved, or it may never
+        have existed, which is the sort of thing the Dude would say was just, like, your opinion. Try the
+        <a href="index.html">home page</a> or have a look at my <a href="projects.html">projects</a>.</figcaption>
+    </figure>
+
+  </main>
+
+  <noscript>
+    <nav class="site-nav nav-static" aria-label="Main">
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="projects.html">Projects</a>
+        <a href="tribute.html">In memory of Tom</a>
+      </div>
+    </nav>
+  </noscript>
+
+  <script src="js/particles.js"></script>
+  <script src="js/nav.js"></script>
+</body>
+
+</html>
