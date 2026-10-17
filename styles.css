@@ -628,20 +628,6 @@ body {
   border-color: rgba(255, 255, 255, 0.6);
 }
 
-.tribute-text ol.log {
-  margin: 0 0 1.5rem 1.25rem;
-}
-
-.tribute-text ol.log li {
-  margin-bottom: 0.9rem;
-  padding-left: 0.3rem;
-}
-
-.tribute-text ol.log li strong {
-  font-weight: 500;
-  color: #fff;
-}
-
 .icon-pair {
   display: grid;
   grid-template-columns: 1fr 1fr;
