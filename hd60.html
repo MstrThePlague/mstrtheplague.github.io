@@ -60,37 +60,35 @@
 
       <h2>How it went</h2>
       <p>
-        The development log is long, because every step had to be proved on real hardware. These were the turning
-        points.
+        It took a lot of small experiments, because I couldn't assume anything until I'd seen it work on the real card.
       </p>
-      <ol class="log">
-        <li><strong>First contact.</strong> The driver loaded, found the card and got an answer from its processor.
-          That told me the card was running its own firmware, version 1.11, and that I should never upload the older
-          version in Elgato's Windows installer.</li>
-        <li><strong>Telling the card where to put things.</strong> The card writes video into memory it has been
-          given. Registering around 64 MB of buffers through the mailbox worked first time.</li>
-        <li><strong>Signal lock.</strong> The chip that receives HDMI was held in reset. Releasing it needed a
-          sequence ported from the Linux driver, plus one change for this card: a pin that had to be driven the
-          opposite way round. Then the MiSTer locked straight away as 720p60.</li>
-        <li><strong>First video frames.</strong> No frames came until I added a final step after lock, which
-          switches the receiver to the sync mode the card wants. After that whole frames landed at exactly the
-          addresses I had registered.</li>
-        <li><strong>First picture.</strong> A still image of the MiSTer's screensaver appeared, grey noise with a
-          gradient. It was the right picture, and I confirmed it by eye. The same session taught me that the card has
-          to stay allowed to write to memory for the whole capture, or the Thunderbolt link falls over.</li>
-        <li><strong>Live video.</strong> The card was producing a single frame and then going quiet. The fix was to
-          hand each finished buffer back to the card, which tells it to keep going. From then on the
-          video held a steady 60 frames a second, decoded by the Mac's own hardware.</li>
-        <li><strong>Sound.</strong> Audio needed the right settings word and its own set of buffers. Once those were
-          in place the Mac played the MiSTer's sound.</li>
-        <li><strong>The smearing was the encoder.</strong> Motion looked blurred and speckled, and I spent a while
-          suspecting my own code. It was the card's compression setting. At the Windows default, text had halos around
-          it. At a much finer setting the picture is crisp at 7 to 9 Mbit/s, so the player now defaults to that and
-          backs off by itself when a picture gets too busy for the encoder.</li>
-        <li><strong>Interrupts and tidying.</strong> The driver now waits to be told when a frame is ready instead of
-          constantly asking, which cut its wake-ups from about 600 a second to about 160. A deadlock turned up after a
-          source rebooted, was fixed, and the player now recovers by itself if the picture stops.</li>
-      </ol>
+      <p>
+        First I just wanted the driver to load, find the card and get an answer from its processor. Then I gave the
+        card some memory to write into, which worked first time. The chip that receives the HDMI signal stayed in reset
+        until I copied its start-up sequence from the Linux driver, with one pin driven the opposite way round for
+        this card. After that the MiSTer locked straight away as 720p60.
+      </p>
+      <p>
+        Getting frames out was the slow part. Nothing arrived until I added a step after the lock that switches the
+        receiver to the sync mode the card expects. Then whole frames turned up at exactly the addresses I'd set up.
+        The first picture was the MiSTer's screensaver, grey noise with a gradient, and I recognised it, so I knew it
+        was right.
+      </p>
+      <p>
+        Live video came next. The card sent one frame and then went quiet, until I found it wanted each finished
+        buffer handed back before it would carry on. After that it held 60 frames a second, decoded by the Mac's own
+        hardware. Sound followed once I found the right settings and gave it buffers of its own.
+      </p>
+      <p>
+        Motion still looked smeared, and I spent a while blaming my own code. It was the card's compression setting.
+        The default Windows uses leaves halos around text. Turning it right up gives a crisp picture at 7 to 9 Mbit/s,
+        so the player now starts there and backs off by itself when a picture is too busy for the encoder.
+      </p>
+      <p>
+        The last jobs were tidying up. The driver now waits to be told a frame is ready instead of checking over and
+        over, which cut its wake-ups from about 600 a second to about 160. I also fixed a deadlock that showed up
+        when a source rebooted, so the player now recovers by itself if the picture stops.
+      </p>
 
       <h2>The pieces</h2>
 
