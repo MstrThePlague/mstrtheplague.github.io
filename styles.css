@@ -627,3 +627,48 @@ body {
   color: #fff;
   border-color: rgba(255, 255, 255, 0.6);
 }
+
+.tribute-text ol.log {
+  margin: 0 0 1.5rem 1.25rem;
+}
+
+.tribute-text ol.log li {
+  margin-bottom: 0.9rem;
+  padding-left: 0.3rem;
+}
+
+.tribute-text ol.log li strong {
+  font-weight: 500;
+  color: #fff;
+}
+
+.icon-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.icon-pair figure {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: rgba(244, 244, 245, 0.7);
+}
+
+.icon-pair img {
+  display: block;
+  width: 96px;
+  height: 96px;
+  margin-bottom: 0.75rem;
+}
+
+.icon-pair figcaption strong {
+  color: rgba(244, 244, 245, 0.95);
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .icon-pair {
+    grid-template-columns: 1fr;
+  }
+}

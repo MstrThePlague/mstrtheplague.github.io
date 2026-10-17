@@ -4,7 +4,7 @@
 (function () {
   var PAGES = [
     { label: 'Home', href: 'index.html' },
-    { label: 'Projects', href: 'projects.html', also: ['interlude.html'] },
+    { label: 'Projects', href: 'projects.html', also: ['interlude.html', 'hd60.html'] },
     { label: 'In memory of Tom', href: 'tribute.html' }
     // { label: 'Professional', href: 'professional.html' },
   ];
