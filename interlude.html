@@ -33,11 +33,11 @@
         InterLude is a small macOS menu bar app that plays BBC radio to my speakers, about a minute behind live,
         and mutes the news bulletins on music stations. When the music comes back, so does the sound. It was built
         over a couple of days in October 2026. It plays on the Mac, a Chromecast or a Cast group. It can also play back a programme from the last 30 days
-        with the news cut out.
+        with the news cut out, and you can control it from your phone.
       </p>
 
       <p class="project-links">
-        <a class="button" href="https://github.com/MstrThePlague/InterLude/releases/tag/v0.2.0">Download v0.2.0</a>
+        <a class="button" href="https://github.com/MstrThePlague/InterLude/releases/tag/v0.3.0">Download v0.3.0</a>
         <a class="button secondary" href="https://github.com/MstrThePlague/InterLude">Source on GitHub</a>
       </p>
 
@@ -192,6 +192,21 @@
         few seconds either side can go with them.
       </p>
 
+      <h2>Phone remote</h2>
+      <p>
+        Version 0.3.0 adds a remote for your phone. Turn it on in Settings, scan the QR code with the phone's camera
+        and the remote opens in its browser, with nothing to install. It can play and stop, change the volume, station
+        and speaker, and it shows whether a bulletin is muted, with the &ldquo;Not news&rdquo; and &ldquo;News got
+        through&rdquo; buttons. On an iPhone you can add it to the home screen, so it opens full screen with the
+        InterLude icon.
+      </p>
+      <p>
+        The remote's address carries a long random code, so other people on the network can't guess it, and Reset
+        link makes a new one and stops the old one working. The phone has to be on the same Wi-Fi and the Mac awake
+        with InterLude open. Playing from the phone always plays live, and you can't pick an earlier programme from it
+        yet.
+      </p>
+
       <h2>What it does</h2>
       <ul>
         <li>Lives in the menu bar and plays any of 64 BBC stations through the Mac, a Chromecast or a Cast group, and you can switch speaker while it plays.</li>
@@ -200,6 +215,7 @@
         <li>Learns a station's news theme from the last few hours of broadcast the first time you play it.</li>
         <li>Has &ldquo;Not news&rdquo; and &ldquo;News got through&rdquo; buttons to correct it, and a log of every decision.</li>
         <li>Plays a programme from the last 30 days from its start with the bulletins cut out, on the Mac or on Cast speakers.</li>
+        <li>Can be controlled from a phone on the same Wi-Fi: scan a QR code and it opens in the phone's browser.</li>
         <li>Shows what's playing and a countdown to the end of a mute.</li>
         <li>Can play ocean waves, a woodland stream or birdsong during a mute instead of silence, fading in and out.</li>
         <li>Sends no telemetry. Its only network traffic is to BBC servers and to my speakers.</li>
@@ -218,8 +234,8 @@
 
       <h2>Try it</h2>
       <p>
-        InterLude is free and open source (MIT licence). The latest release, 0.2.0, is on
-        <a href="https://github.com/MstrThePlague/InterLude/releases/tag/v0.2.0">GitHub</a>, with the source and the
+        InterLude is free and open source (MIT licence). The latest release, 0.3.0, is on
+        <a href="https://github.com/MstrThePlague/InterLude/releases/tag/v0.3.0">GitHub</a>, with the source and the
         full write-up of how it was worked out in the
         <a href="https://github.com/MstrThePlague/InterLude">repository</a>. It's an early release, so expect rough
         edges.
@@ -228,6 +244,8 @@
         <li>It needs an Apple silicon Mac running macOS 26 or later.</li>
         <li>It isn't notarised by Apple, so the first launch needs a one-off approval in System Settings. The steps
           are in the README, or you can build it from source.</li>
+        <li>If you use the phone remote and the Mac's firewall is on, macOS will ask once whether InterLude may accept
+          incoming connections. Allow it for the remote to work.</li>
         <li>BBC streams and BBC Sounds episodes may not play outside the UK.</li>
         <li>Detection is tuned and tested on 6 Music. Other music stations should work but haven't been measured.</li>
       </ul>
