@@ -670,3 +670,7 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+.shot-single.narrow {
+  max-width: 19rem;
+}
