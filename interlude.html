@@ -32,11 +32,12 @@
       <p>
         InterLude is a small macOS menu bar app that plays BBC radio to my speakers, about a minute behind live,
         and mutes the news bulletins on music stations. When the music comes back, so does the sound. It was built
-        over a couple of days in October 2026. It plays on the Mac, a Chromecast or a Cast group.
+        over a couple of days in October 2026. It plays on the Mac, a Chromecast or a Cast group. It can also play back a programme from the last 30 days
+        with the news cut out.
       </p>
 
       <p class="project-links">
-        <a class="button" href="https://github.com/MstrThePlague/InterLude/releases/tag/v0.1.0">Download v0.1.0</a>
+        <a class="button" href="https://github.com/MstrThePlague/InterLude/releases/tag/v0.2.0">Download v0.2.0</a>
         <a class="button secondary" href="https://github.com/MstrThePlague/InterLude">Source on GitHub</a>
       </p>
 
@@ -141,8 +142,8 @@
           <a href="images/interlude-playing.png"><img src="images/interlude-playing.png"
               alt="InterLude panel with Radio 6 Music playing, volume slider, station and speaker pickers, the Mute news switch and a list of recent mutes."
               loading="lazy"></a>
-          <figcaption><strong>3. Back to the music.</strong> The panel also has volume, a station picker, a choice of
-            speakers and a log of recent mutes you can mark as right or wrong.</figcaption>
+          <figcaption><strong>3. Back to the music.</strong> The panel also has volume, a Live and Earlier switch, a
+            station picker, a choice of speakers and a log of recent mutes you can mark as right or wrong.</figcaption>
         </figure>
       </div>
 
@@ -155,13 +156,50 @@
           without muting. You can also choose waves, a stream or birdsong in place of silence.</figcaption>
       </figure>
 
+      <h2>Earlier</h2>
+      <p>
+        The first version only worked on live radio. The second lets me go back. Switch the panel from Live to
+        Earlier, pick a day and a programme from the last 30 days, and it plays from the start with the news
+        bulletins cut out. They're cut, not muted: the programme carries straight on after the bulletin, so there's no
+        gap of silence, and a note says how much news was skipped.
+      </p>
+
+      <div class="shots two">
+        <figure>
+          <a href="images/interlude-earlier-pick.png"><img src="images/interlude-earlier-pick.png"
+              alt="InterLude panel in Earlier mode, showing a list of the day's Radio 6 Music programmes with their start times to choose from."
+              loading="lazy"></a>
+          <figcaption><strong>Pick a programme.</strong> Step back through the last 30 days and choose a show.</figcaption>
+        </figure>
+        <figure>
+          <a href="images/interlude-earlier-playing.png"><img src="images/interlude-earlier-playing.png"
+              alt="InterLude panel playing an earlier programme, with a progress bar marking where the news was, and a note that 3 minutes 8 seconds of news has been skipped."
+              loading="lazy"></a>
+          <figcaption><strong>News skipped.</strong> A bar shows how far through you are and where the news was, with a
+            count of what's been left out.</figcaption>
+        </figure>
+      </div>
+
+      <p>
+        Programmes from the last eleven hours or so come from the BBC's live stream, which keeps more than it lists.
+        Anything older comes from its BBC Sounds episode. Either way the whole programme is already there to be
+        analysed, so InterLude works about ten minutes ahead of where I'm listening. That leaves time for an extra
+        check: it transcribes the minutes around each hour and half hour and starts the cut where the newsreader
+        begins, even if the presenter has talked straight into the news.
+      </p>
+      <p>
+        It isn't finished. You can't seek within a programme yet, and bulletins are cut on 6.4 second boundaries, so a
+        few seconds either side can go with them.
+      </p>
+
       <h2>What it does</h2>
       <ul>
-        <li>Lives in the menu bar and plays any BBC station through the Mac, a Chromecast or a Cast group, and you can switch speaker while it plays.</li>
+        <li>Lives in the menu bar and plays any of 64 BBC stations through the Mac, a Chromecast or a Cast group, and you can switch speaker while it plays.</li>
         <li>Plays a fixed time behind live: 60 seconds by default, adjustable per station.</li>
         <li>Mutes from the news theme to the newsreader's sign-off, so the presenter's handover and chat afterwards still play.</li>
         <li>Learns a station's news theme from the last few hours of broadcast the first time you play it.</li>
         <li>Has &ldquo;Not news&rdquo; and &ldquo;News got through&rdquo; buttons to correct it, and a log of every decision.</li>
+        <li>Plays a programme from the last 30 days from its start with the bulletins cut out, on the Mac or on Cast speakers.</li>
         <li>Shows what's playing and a countdown to the end of a mute.</li>
         <li>Can play ocean waves, a woodland stream or birdsong during a mute instead of silence, fading in and out.</li>
         <li>Sends no telemetry. Its only network traffic is to BBC servers and to my speakers.</li>
@@ -180,8 +218,8 @@
 
       <h2>Try it</h2>
       <p>
-        InterLude is free and open source (MIT licence). The first release, 0.1.0, is on
-        <a href="https://github.com/MstrThePlague/InterLude/releases/tag/v0.1.0">GitHub</a>, with the source and the
+        InterLude is free and open source (MIT licence). The latest release, 0.2.0, is on
+        <a href="https://github.com/MstrThePlague/InterLude/releases/tag/v0.2.0">GitHub</a>, with the source and the
         full write-up of how it was worked out in the
         <a href="https://github.com/MstrThePlague/InterLude">repository</a>. It's an early release, so expect rough
         edges.
@@ -190,7 +228,7 @@
         <li>It needs an Apple silicon Mac running macOS 26 or later.</li>
         <li>It isn't notarised by Apple, so the first launch needs a one-off approval in System Settings. The steps
           are in the README, or you can build it from source.</li>
-        <li>BBC streams may not play outside the UK.</li>
+        <li>BBC streams and BBC Sounds episodes may not play outside the UK.</li>
         <li>Detection is tuned and tested on 6 Music. Other music stations should work but haven't been measured.</li>
       </ul>
 
