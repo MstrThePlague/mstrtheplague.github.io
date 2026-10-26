@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Twister</title>
+  <meta name="description" content="A real-time simulation of the look, motion and sound of an F5 wedge tornado.">
+  <style>
+    :root {
+      --bg: #000;
+      --fg: #d8d8d8;
+      --fg-dim: rgba(216, 216, 216, 0.55);
+      --scrim: rgba(0, 0, 0, 0.62);
+      --btn: rgba(255, 255, 255, 0.08);
+      --btn-hover: rgba(255, 255, 255, 0.16);
+      --line: rgba(255, 255, 255, 0.22);
+    }
+
+    body.light {
+      --bg: #fff;
+      --fg: #222;
+      --fg-dim: rgba(34, 34, 34, 0.55);
+      --scrim: rgba(255, 255, 255, 0.62);
+      --btn: rgba(0, 0, 0, 0.06);
+      --btn-hover: rgba(0, 0, 0, 0.12);
+      --line: rgba(0, 0, 0, 0.2);
+    }
+
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    #gl { z-index: 2; }
+    #front { z-index: 3; }
+
+    #intro {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 16px;
+      text-align: center;
+      background: var(--scrim);
+      transition: opacity 1.2s ease;
+    }
+
+    #intro.gone {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #intro h1 {
+      margin: 0;
+      font-weight: 200;
+      font-size: clamp(40px, 9vw, 84px);
+      letter-spacing: 0.32em;
+      text-indent: 0.32em;
+      text-transform: uppercase;
+    }
+
+    #intro p {
+      margin: 0;
+      max-width: 34em;
+      line-height: 1.5;
+      color: var(--fg-dim);
+      font-size: 15px;
+    }
+
+    #intro button {
+      margin-top: 10px;
+      font: inherit;
+      font-size: 16px;
+      letter-spacing: 0.08em;
+      color: var(--fg);
+      background: var(--btn);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 12px 28px;
+      cursor: pointer;
+    }
+
+    #intro button:hover { background: var(--btn-hover); }
+
+    #hud {
+      position: fixed;
+      z-index: 9;
+      left: 16px;
+      bottom: max(16px, env(safe-area-inset-bottom));
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      transition: opacity 0.8s ease;
+    }
+
+    #hud.idle {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #hud button {
+      font: inherit;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      color: var(--fg-dim);
+      background: var(--btn);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
+
+    #hud button:hover {
+      color: var(--fg);
+      background: var(--btn-hover);
+    }
+
+    #hud kbd {
+      font: inherit;
+      opacity: 0.6;
+      margin-left: 4px;
+    }
+
+    #nogl {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <canvas id="front" aria-hidden="true"></canvas>
+
+  <div id="intro">
+    <h1>Twister</h1>
+    <p>A real-time simulation of an F5 wedge tornado: over a third of a mile wide, winds above 260&nbsp;mph,
+      multiple suction vortices and a churning debris cloud.</p>
+    <button id="go" type="button">Begin &middot; sound on</button>
+    <p style="font-size:13px">Best with headphones or speakers that have some bass.</p>
+  </div>
+
+  <div id="hud" class="idle">
+    <button type="button" data-act="bg">Background<kbd>B</kbd></button>
+    <button type="button" data-act="mute">Sound<kbd>M</kbd></button>
+    <button type="button" data-act="fs">Fullscreen<kbd>F</kbd></button>
+  </div>
+
+  <div id="nogl">This simulation needs WebGL 2, which this browser doesn't seem to support.</div>
+
+  <script id="vs" type="x-shader/x-vertex">#version 300 es
+    in vec2 aPos;
+    void main() { gl_Position = vec4(aPos, 0.0, 1.0); }
+  </script>
+
+  <script id="fs" type="x-shader/x-fragment">#version 300 es
+    precision highp float;
+    precision highp sampler3D;
+
+    uniform sampler3D uNoise;
+    uniform vec2 uRes;
+    uniform float uScale;   // GL pixels per world unit (1 unit ~ cloud-base height)
+    uniform float uGround;  // GL pixels from the bottom edge to the ground
+    uniform float uTime;
+    uniform float uTop;     // cloud-base height, world units
+    uniform float uGust;    // 0..1 intensity pulse, shared with the audio and debris
+    uniform float uDrift;   // horizontal wander of the whole storm
+    uniform float uBg;      // 0 = black page, 1 = white page
+    uniform vec3 uBgCol;
+    uniform sampler2D uBack; // debris behind the funnel, premultiplied
+
+    out vec4 outColor;
+
+    float n3(vec3 p) { return texture(uNoise, p * (1.0 / 16.0)).r; }
+
+    float fbm3(vec3 p) {
+      float v = 0.5 * n3(p);
+      p = p * 2.02 + vec3(1.7, 9.2, 3.1); v += 0.25 * n3(p);
+      p = p * 2.03 + vec3(8.3, 2.8, 4.6); v += 0.125 * n3(p);
+      return v / 0.875;
+    }
+
+    float fbm4(vec3 p) {
+      float v = 0.5 * n3(p);
+      p = p * 2.02 + vec3(1.7, 9.2, 3.1); v += 0.25 * n3(p);
+      p = p * 2.03 + vec3(8.3, 2.8, 4.6); v += 0.125 * n3(p);
+      p = p * 2.01 + vec3(5.9, 4.4, 0.7); v += 0.0625 * n3(p);
+      return v / 0.9375;
+    }
+
+    float con(float v, float k) { return clamp(0.5 + (v - 0.5) * k, 0.0, 1.0); }
+
+    // Counter-clockwise (seen from above) rotation in the horizontal x/z plane.
+    vec2 rotv(vec2 v, float a) {
+      float c = cos(a), s = sin(a);
+      return vec2(c * v.x - s * v.y, s * v.x + c * v.y);
+    }
+
+    float hash(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+
+    // These three must match the JavaScript versions exactly.
+    float axisX(float y) {
+      float h = clamp(y / uTop, 0.0, 1.0);
+      return uDrift
+        + 0.05 * sin(0.23 * uTime + 2.1 * y) * smoothstep(0.0, 1.0, h)
+        + 0.022 * sin(0.41 * uTime + 4.3 * y + 1.0);
+    }
+
+    float funnelR(float y) {
+      float h = clamp(y / uTop, 0.0, 1.3);
+      float r = 0.30 + 0.05 * h + 0.30 * pow(smoothstep(0.45, 1.05, h), 1.6);
+      return r * (1.0 + 0.05 * sin(0.27 * uTime) + 0.10 * (uGust - 0.5));
+    }
+
+    float debrisR(float y) { return funnelR(0.0) * (1.3 + 0.75 * exp(-max(y, 0.0) * 5.0)); }
+
+    void main() {
+      vec2 fc = gl_FragCoord.xy;
+      float t = uTime;
+      float x = (fc.x - 0.5 * uRes.x) / uScale;
+      float y = (fc.y - uGround) / uScale;
+      float dx = x - axisX(y);
+      float Rf = funnelR(y);
+      float R0 = funnelR(0.0);
+      float dTop = 0.36 + 0.12 * uGust;
+      float h = y / uTop;
+
+      // Bounding cylinder for this row, so the march only covers the storm.
+      float B = Rf * 1.4;
+      bool inDeb = y < dTop * 1.6;
+      if (inDeb) B = max(B, debrisR(y) * 1.45);
+      bool inCloud = y > uTop - 0.3;
+      if (inCloud) B = max(B, 1.7);
+      bool marching = y > -0.06 && abs(dx) < B;
+
+      float halfc = sqrt(max(B * B - dx * dx, 0.0));
+      const int N = 44;
+      float dz = 2.0 * halfc / float(N);
+      float z = -halfc + dz * hash(fc + fract(t * 7.13) * 100.0);
+
+      vec3 L = normalize(vec3(-0.55, 0.5, -0.68));
+      float T = 1.0;
+      vec3 col = vec3(0.0);
+
+      // Two rigidly rotating layers (fast low, slow high) blended by height.
+      // Rigid layers never wind up into rings, however long the page runs.
+      float wt = smoothstep(0.25, 0.85, h);
+      float a1 = -t * 1.05 + y * 1.4;
+      float a2 = -t * 0.62 + y * 1.4;
+      float funnelFade = smoothstep(0.02, 0.16, y) * (1.0 - smoothstep(uTop - 0.05, uTop + 0.12, y));
+
+      for (int i = 0; i < N; i++) {
+        if (!marching) break;
+        vec2 p = vec2(dx, z);
+        float r = length(p);
+        float dens = 0.0;
+        vec3 c = vec3(0.0);
+
+        // Condensation funnel
+        if (r < Rf * 1.3 && funnelFade > 0.0) {
+          vec2 q1 = rotv(p, a1);
+          vec2 q2 = rotv(p, a2);
+          float e1 = fbm4(vec3(q1 * 2.6, y * 5.0 - t * 0.10));
+          float e2 = fbm4(vec3(q2 * 1.8 + 3.7, y * 3.6 - t * 0.06));
+          float e = con(mix(e1, e2, wt), 2.4);
+          float Reff = Rf * (0.82 + 0.32 * e);
+          float edge = Reff - r;
+          float dF = smoothstep(-0.004, 0.014, edge) * (0.6 + e) * funnelFade;
+
+          // Ragged scud whipping round just outside the wall
+          float dS = 0.0;
+          if (edge < 0.0 && h < 0.9) {
+            float sc = con(n3(vec3(q1 * 7.0, y * 9.0 - t * 0.3)) * 0.65 + n3(vec3(q1 * 14.0, y * 18.0)) * 0.35, 2.6);
+            dS = smoothstep(0.6, 0.85, sc) * (1.0 - smoothstep(Rf * 1.0, Rf * 1.3, r)) * smoothstep(0.12, 0.3, h) * (1.0 - smoothstep(0.65, 0.88, h));
+          }
+
+          if (dF + dS > 0.001) {
+            vec3 nrm = normalize(vec3(dx, 0.18, z));
+            float lam = dot(nrm, L) * 0.5 + 0.5;
+            float s1 = sin(y * 70.0 + atan(q1.y, q1.x) * 3.0 + e * 6.0);
+            float s2 = sin(y * 44.0 + atan(q2.y, q2.x) * 2.0 + e * 6.0);
+            float stri = mix(s1, s2, wt);
+            float f1 = n3(vec3(q1 * 7.0, y * 34.0 - t * 0.2)) * 0.6 + n3(vec3(q1 * 18.0, y * 85.0 - t * 0.3)) * 0.4;
+            float f2 = n3(vec3(q2 * 5.0, y * 24.0 - t * 0.12)) * 0.6 + n3(vec3(q2 * 12.0, y * 60.0 - t * 0.2)) * 0.4;
+            float fine = con(mix(f1, f2, wt), 2.2);
+            vec3 cf = vec3(0.52, 0.54, 0.57) * (0.28 + 0.9 * lam) * (0.66 + 0.62 * fine) * (0.88 + 0.12 * stri);
+            cf *= mix(0.72, 1.0, smoothstep(0.05, 0.6, h));
+            cf = mix(cf, vec3(0.42, 0.38, 0.34) * (0.4 + 0.7 * lam), (1.0 - smoothstep(0.1, 0.45, h)) * 0.5);
+            float w = dF * 55.0 + dS * 14.0;
+            dens += w;
+            c += cf * w;
+          }
+        }
+
+        // Debris cloud and suction vortices
+        if (inDeb) {
+          float Rd = debrisR(y);
+          if (r < Rd * 1.45) {
+            vec2 qa = rotv(p, -t * 1.35);
+            vec2 qb = rotv(p, -t * 0.75);
+            float na = fbm4(vec3(qa * 3.4, y * 4.0 - t * 0.32));
+            float nb = fbm4(vec3(qb * 2.2 + 7.1, y * 2.6 - t * 0.2));
+            float wIn = 1.0 - smoothstep(Rd * 0.35, Rd * 0.95, r);
+            float n = con(mix(nb, na, wIn), 2.3);
+            float Rde = Rd * (0.7 + 0.6 * n);
+            float dD = 1.0 - smoothstep(Rde * 0.7, Rde, r);
+            dD *= 1.0 - smoothstep(dTop * (0.35 + 0.3 * n), dTop * (0.8 + 0.6 * n), y);
+            dD *= smoothstep(-0.05, 0.015, y);
+            dD *= 0.25 + 1.2 * n * n;
+
+            float sv = 0.0;
+            for (int k = 0; k < 4; k++) {
+              float fk = float(k);
+              float ph = t * 2.2 + fk * 1.5708 + y * 2.6 + 0.5 * sin(t * 0.53 + fk * 2.1);
+              vec2 cc = R0 * (0.72 + 0.08 * sin(t * 0.9 + fk)) * vec2(cos(ph), sin(ph));
+              vec2 d = p - cc;
+              float w = 0.028 + 0.06 * max(y, 0.0);
+              sv += exp(-dot(d, d) / (w * w));
+            }
+            sv *= (1.0 - smoothstep(0.05, dTop * 0.95, y)) * smoothstep(-0.04, 0.02, y) * (0.6 + 0.8 * na);
+
+            if (dD + sv > 0.001) {
+              vec3 nrm = normalize(vec3(dx, 0.35, z));
+              float lam = dot(nrm, L) * 0.5 + 0.5;
+              float mot = con(n3(vec3(qa * 11.0, y * 14.0 - t * 0.5)), 2.0);
+              vec3 cd = mix(vec3(0.42, 0.37, 0.32), vec3(0.55, 0.50, 0.45), smoothstep(0.3, 1.0, r / Rd));
+              cd *= (0.36 + 0.78 * lam) * (0.62 + 0.45 * n) * (0.8 + 0.35 * mot) * mix(0.75, 1.0, smoothstep(0.0, 0.2, y));
+              vec3 cs = vec3(0.36, 0.34, 0.33) * (0.45 + 0.6 * lam);
+              float wD = dD * 24.0, wS = sv * 28.0;
+              dens += wD + wS;
+              c += cd * wD + cs * wS;
+            }
+          }
+        }
+
+        // Rotating parent cloud base the funnel hangs from
+        if (inCloud) {
+          float nc = con(fbm3(vec3(rotv(p, -t * 0.2) * 1.5 + 2.0, y * 2.2 - t * 0.025)), 2.0);
+          float baseY = uTop - 0.08 - 0.16 * exp(-r * r * 5.0) + 0.12 * r * r + (nc - 0.5) * 0.12;
+          float dC = smoothstep(baseY, baseY + 0.07, y) * (1.0 - smoothstep(0.5, 1.55, r + (nc - 0.5) * 0.6));
+          dC *= 0.35 + 0.9 * nc;
+          if (dC > 0.001) {
+            vec3 cc = vec3(0.36, 0.37, 0.40) * (0.6 + 0.5 * nc) * mix(0.8, 1.0, smoothstep(0.0, 0.6, r));
+            float w = dC * 30.0;
+            dens += w;
+            c += cc * w;
+          }
+        }
+
+        if (dens > 0.0) {
+          c /= dens;
+          float a = 1.0 - exp(-dens * dz);
+          col += T * a * c;
+          T *= 1.0 - a;
+          if (T < 0.015) break;
+        }
+        z += dz;
+      }
+
+      col *= mix(1.0, 0.9, uBg);
+      col += (hash(fc * 1.37 + t) - 0.5) / 255.0 * (1.0 - T);
+      vec4 bk = texture(uBack, fc / uRes);
+      outColor = vec4(col + T * (bk.rgb + uBgCol * (1.0 - bk.a)), 1.0);
+    }
+  </script>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+      const sm = (a, b, x) => { const k = clamp((x - a) / (b - a), 0, 1); return k * k * (3 - 2 * k); };
+
+      // ---------------------------------------------------------------
+      // Shared storm state. The shader receives the same values, so the
+      // debris particles line up with the volumetric funnel.
+      // ---------------------------------------------------------------
+      const S = { t: 40, gust: 0.5, drift: 0, top: 1, scale: 1, groundY: 0, W: 0, H: 0, driftAmp: 0 };
+
+      function axisX(y) {
+        const h = clamp(y / S.top, 0, 1);
+        return S.drift
+          + 0.05 * Math.sin(0.23 * S.t + 2.1 * y) * sm(0, 1, h)
+          + 0.022 * Math.sin(0.41 * S.t + 4.3 * y + 1.0);
+      }
+
+      function funnelR(y) {
+        const h = clamp(y / S.top, 0, 1.3);
+        const r = 0.30 + 0.05 * h + 0.30 * Math.pow(sm(0.45, 1.05, h), 1.6);
+        return r * (1 + 0.05 * Math.sin(0.27 * S.t) + 0.10 * (S.gust - 0.5));
+      }
+
+      const debrisR = y => funnelR(0) * (1.3 + 0.75 * Math.exp(-Math.max(y, 0) * 5.0));
+
+      function updateStorm() {
+        const t = S.t;
+        S.gust = clamp(0.5 + 0.28 * Math.sin(0.13 * t) + 0.15 * Math.sin(0.31 * t + 1.3) + 0.08 * Math.sin(0.77 * t + 2.1), 0, 1);
+        S.drift = S.driftAmp * (0.7 * Math.sin(0.043 * t) + 0.3 * Math.sin(0.101 * t + 0.8));
+      }
+
+      // ---------------------------------------------------------------
+      // Canvases and layout
+      // ---------------------------------------------------------------
+      const glCanvas = document.getElementById('gl');
+      const back = document.createElement('canvas');
+      const front = document.getElementById('front');
+      const bctx = back.getContext('2d');
+      const fctx = front.getContext('2d');
+      let dpr = 1;
+      let renderScale = 0.6;
+
+      function layout() {
+        S.W = innerWidth;
+        S.H = innerHeight;
+        // Fit the debris cloud's width; on tall screens the funnel just grows taller.
+        const sc = Math.min(S.H / 1.12, S.W / 1.4);
+        S.scale = sc;
+        S.groundY = S.H - 0.06 * sc;
+        S.top = Math.min(S.groundY / sc + 0.02, 3.2);
+        S.driftAmp = clamp(S.W / (2 * sc) - 0.7, 0, 0.22);
+
+        dpr = Math.min(2, devicePixelRatio || 1);
+        front.width = Math.round(S.W * dpr);
+        front.height = Math.round(S.H * dpr);
+        back.width = Math.round(S.W);
+        back.height = Math.round(S.H);
+        sizeGL();
+      }
+
+      function sizeGL() {
+        glCanvas.width = Math.max(1, Math.round(S.W * renderScale));
+        glCanvas.height = Math.max(1, Math.round(S.H * renderScale));
+      }
+
+      // ---------------------------------------------------------------
+      // WebGL volumetric renderer
+      // ---------------------------------------------------------------
+      const gl = glCanvas.getContext('webgl2', { alpha: false, antialias: false });
+      if (!gl) {
+        document.getElementById('nogl').style.display = 'flex';
+        document.getElementById('intro').classList.add('gone');
+        return;
+      }
+
+      function compile(type, src) {
+        const s = gl.createShader(type);
+        gl.shaderSource(s, src.trim());
+        gl.compileShader(s);
+        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+        return s;
+      }
+
+      const prog = gl.createProgram();
+      gl.attachShader(prog, compile(gl.VERTEX_SHADER, document.getElementById('vs').textContent));
+      gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, document.getElementById('fs').textContent));
+      gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+      gl.useProgram(prog);
+
+      const vbo = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+      const aPos = gl.getAttribLocation(prog, 'aPos');
+      gl.enableVertexAttribArray(aPos);
+      gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+      const U = {};
+      for (const n of ['uNoise', 'uBack', 'uRes', 'uScale', 'uGround', 'uTime', 'uTop', 'uGust', 'uDrift', 'uBg', 'uBgCol']) {
+        U[n] = gl.getUniformLocation(prog, n);
+      }
+
+      // Tileable 3D gradient noise, baked once into a 64^3 texture so the
+      // shader's noise is just hardware-filtered texture reads.
+      (function makeNoise() {
+        const size = 64, period = 16;
+        const grads = new Float32Array(period * period * period * 3);
+        for (let i = 0; i < period * period * period; i++) {
+          let x, y, z, l;
+          do { x = Math.random() * 2 - 1; y = Math.random() * 2 - 1; z = Math.random() * 2 - 1; l = x * x + y * y + z * z; } while (l > 1 || l < 1e-4);
+          l = Math.sqrt(l);
+          grads[i * 3] = x / l; grads[i * 3 + 1] = y / l; grads[i * 3 + 2] = z / l;
+        }
+        const gi = (x, y, z) => (((z % period) * period + (y % period)) * period + (x % period)) * 3;
+        const fade = f => f * f * f * (f * (f * 6 - 15) + 10);
+        const data = new Uint8Array(size * size * size);
+        const step = period / size;
+        let o = 0;
+        for (let k = 0; k < size; k++) {
+          const pz = k * step, iz = Math.floor(pz), fz = pz - iz, wz = fade(fz);
+          for (let j = 0; j < size; j++) {
+            const py = j * step, iy = Math.floor(py), fy = py - iy, wy = fade(fy);
+            for (let i = 0; i < size; i++) {
+              const px = i * step, ix = Math.floor(px), fx = px - ix, wx = fade(fx);
+              let v = 0;
+              for (let c = 0; c < 8; c++) {
+                const cx = c & 1, cy = (c >> 1) & 1, cz = c >> 2;
+                const g = gi(ix + cx, iy + cy, iz + cz);
+                const d = grads[g] * (fx - cx) + grads[g + 1] * (fy - cy) + grads[g + 2] * (fz - cz);
+                v += d * (cx ? wx : 1 - wx) * (cy ? wy : 1 - wy) * (cz ? wz : 1 - wz);
+              }
+              data[o++] = clamp(Math.round((v * 0.9 + 0.5) * 255), 0, 255);
+            }
+          }
+        }
+        const tex = gl.createTexture();
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_3D, tex);
+        gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
+        gl.texImage3D(gl.TEXTURE_3D, 0, gl.R8, size, size, size, 0, gl.RED, gl.UNSIGNED_BYTE, data);
+        gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        for (const w of [gl.TEXTURE_WRAP_S, gl.TEXTURE_WRAP_T, gl.TEXTURE_WRAP_R]) gl.texParameteri(gl.TEXTURE_3D, w, gl.REPEAT);
+        gl.uniform1i(U.uNoise, 0);
+      })();
+
+      const backTex = gl.createTexture();
+      gl.activeTexture(gl.TEXTURE1);
+      gl.bindTexture(gl.TEXTURE_2D, backTex);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.uniform1i(U.uBack, 1);
+
+      function renderGL() {
+        const w = glCanvas.width, h = glCanvas.height;
+        gl.viewport(0, 0, w, h);
+        gl.uniform2f(U.uRes, w, h);
+        gl.uniform1f(U.uScale, S.scale * renderScale);
+        gl.uniform1f(U.uGround, (S.H - S.groundY) * renderScale);
+        gl.uniform1f(U.uTime, S.t);
+        gl.uniform1f(U.uTop, S.top);
+        gl.uniform1f(U.uGust, S.gust);
+        gl.uniform1f(U.uDrift, S.drift);
+        gl.uniform1f(U.uBg, light ? 1 : 0);
+        gl.uniform3f(U.uBgCol, light ? 1 : 0, light ? 1 : 0, light ? 1 : 0);
+        gl.activeTexture(gl.TEXTURE1);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, back);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+      }
+
+      // ---------------------------------------------------------------
+      // Debris: dust, chunks and sheets of material carried by a
+      // Rankine vortex: surface inflow, spiral ascent, centrifugal ejection.
+      // ---------------------------------------------------------------
+      const DUST = 0, CHUNK = 1, SHEET = 2;
+      const parts = [];
+      const VMAX = 0.36;
+
+      function spawn(p, warm) {
+        const u = Math.random();
+        p.type = u < 0.76 ? DUST : u < 0.93 ? CHUNK : SHEET;
+        const R0 = funnelR(0);
+        p.r = R0 * (1.0 + Math.random() * 1.7);
+        p.th = Math.random() * Math.PI * 2;
+        p.y = warm ? Math.random() * 0.02 : 0;
+        p.state = 0;
+        p.vr = 0;
+        p.vy = 0;
+        p.ride = 1.0 + Math.random() * 0.5;
+        if (p.type === DUST) {
+          p.maxY = 0.06 + Math.pow(Math.random(), 1.5) * 0.65;
+          p.lift = 0.10 + Math.random() * 0.10;
+          p.size = 0.6 + Math.random() * 1.3;
+        } else if (p.type === CHUNK) {
+          p.maxY = 0.04 + Math.pow(Math.random(), 2) * 0.4;
+          p.lift = 0.06 + Math.random() * 0.06;
+          p.size = 1.6 + Math.pow(Math.random(), 2) * 4.5;
+        } else {
+          p.maxY = 0.06 + Math.pow(Math.random(), 1.5) * 0.5;
+          p.lift = 0.07 + Math.random() * 0.07;
+          p.size = 3 + Math.pow(Math.random(), 2) * 8;
+        }
+        p.spin = Math.random() * 6.28;
+        p.spinV = (Math.random() - 0.5) * 18;
+        p.tumble = Math.random() * 6.28;
+        p.tumbleV = (Math.random() - 0.5) * 12;
+        p.shade = Math.random();
+        p.px = null;
+      }
+
+      for (let i = 0; i < 1500; i++) { const p = {}; spawn(p, true); parts.push(p); }
+
+      function stepParticles(dt) {
+        const strength = 0.8 + 0.4 * S.gust;
+        const dTop = 0.36 + 0.12 * S.gust;
+        for (const p of parts) {
+          const R = funnelR(p.y);
+          const Rc = R * 0.85;
+          const vt = VMAX * strength * (p.r < Rc ? p.r / Rc : Rc / p.r);
+          p.th += (vt / Math.max(p.r, 0.02)) * dt;
+
+          if (p.state === 0) {
+            // Surface inflow: dragged along the ground toward the core
+            p.vr += (-(0.05 + 0.09 * S.gust) * (p.type === DUST ? 1.2 : 0.8) - p.vr) * dt * 2;
+            p.vy += (0.012 - p.vy) * dt * 2;
+            if (p.r < R * 1.15) p.state = 1;
+          } else if (p.state === 1) {
+            // Spiral ascent in the updraft just inside the debris sheath
+            p.vy += (p.lift * strength - p.vy) * dt * 1.5;
+            p.vr += ((R * p.ride - p.r) * 1.5 - p.vr) * dt * 3;
+            if (p.y > p.maxY) {
+              p.state = 2;
+              p.vr = 0.06 + Math.random() * 0.22;
+            }
+          } else {
+            // Flung outward, then falls (dust drifts, heavy pieces drop)
+            if (p.type === DUST) p.vy += (-0.025 - p.vy) * dt * 0.8;
+            else p.vy -= (p.type === CHUNK ? 0.16 : 0.09) * dt;
+            p.vr *= Math.pow(p.type === DUST ? 0.55 : 0.85, dt);
+          }
+
+          p.r = Math.max(0.02, p.r + p.vr * dt);
+          p.y += p.vy * dt;
+          if (p.state === 0 && p.y < 0) { p.y = 0; p.vy = 0; }
+          p.spin += p.spinV * dt * strength;
+          p.tumble += p.tumbleV * dt;
+
+          if ((p.state === 2 && p.y < -0.01) || p.r > 1.6 || p.y > S.top) spawn(p, false);
+          p.inDebris = p.y < dTop && p.r < debrisR(p.y);
+        }
+      }
+
+      const palettes = {
+        dark: ['#5d5246', '#6b5e50', '#7a6d5f', '#8a7c6c', '#968a7c', '#a49a8d'],
+        light: ['#3d352d', '#4a4036', '#574c41', '#62574b', '#706457', '#7d7163']
+      };
+
+      function drawParticles() {
+        const pal = light ? palettes.light : palettes.dark;
+        bctx.setTransform(1, 0, 0, 1, 0, 0);
+        fctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        bctx.clearRect(0, 0, S.W, S.H);
+        fctx.clearRect(0, 0, S.W, S.H);
+        const unit = S.scale / 700;
+        const cx0 = S.W / 2;
+
+        for (const p of parts) {
+          const cos = Math.cos(p.th), sin = Math.sin(p.th);
+          const X = cx0 + (axisX(p.y) + p.r * cos) * S.scale;
+          const Y = S.groundY - p.y * S.scale;
+          const z = p.r * sin;               // > 0 is behind the axis
+          const R = funnelR(p.y);
+          let px = p.px, py = p.py;
+          p.px = X; p.py = Y;
+          if (px === null) continue;
+
+          // Hidden inside the opaque condensation funnel
+          if (p.r < R * 0.92 && p.y > 0.2) continue;
+
+          const persp = 1 - z * 0.3;
+          let alpha = 0.9;
+          if (p.inDebris) alpha *= z < 0 ? 0.35 + 0.6 * (-sin) : 0.6;
+          if (p.y < 0) alpha *= clamp(1 + p.y * 60, 0, 1);
+          const out = (p.r - debrisR(Math.max(p.y, 0))) / (p.type === DUST ? 0.25 : 0.6);
+          if (out > 0) alpha *= Math.max(0, 1 - out);
+          if (alpha < 0.03) continue;
+
+          const ctx = z > 0 ? bctx : fctx;
+          ctx.globalAlpha = alpha;
+          const color = pal[Math.min(pal.length - 1, Math.floor(p.shade * pal.length))];
+
+          // Cap streak length so a respawn or resize never draws a long line
+          let sx = X - px, sy = Y - py;
+          const len = Math.hypot(sx, sy);
+          if (len > 45) { px = X - sx / len * 45; py = Y - sy / len * 45; }
+
+          if (p.type === DUST) {
+            ctx.strokeStyle = color;
+            ctx.lineWidth = Math.max(0.6, p.size * unit * persp);
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(px, py);
+            ctx.lineTo(X, Y);
+            ctx.stroke();
+          } else {
+            const s = p.size * unit * persp;
+            const hgt = p.type === SHEET ? s * 0.22 : s * (0.6 + 0.4 * Math.abs(Math.sin(p.tumble)));
+            const sw = s * (0.25 + 0.75 * Math.abs(Math.cos(p.tumble)));
+            ctx.fillStyle = color;
+            ctx.save();
+            ctx.translate(X, Y);
+            ctx.rotate(p.spin);
+            ctx.fillRect(-sw / 2, -hgt / 2, sw, hgt);
+            ctx.restore();
+            if (len > 3) {
+              ctx.globalAlpha = alpha * 0.35;
+              ctx.strokeStyle = color;
+              ctx.lineWidth = Math.max(0.6, hgt * 0.8);
+              ctx.beginPath();
+              ctx.moveTo(px, py);
+              ctx.lineTo(X, Y);
+              ctx.stroke();
+            }
+          }
+        }
+        bctx.globalAlpha = 1;
+        fctx.globalAlpha = 1;
+      }
+
+      // ---------------------------------------------------------------
+      // Sound: synthesized roar, rumble, howl and debris impacts
+      // ---------------------------------------------------------------
+      const A = { ctx: null, muted: false };
+
+      function loopBuffer(ac, seconds, kind) {
+        const sr = ac.sampleRate;
+        // Whole render quanta: Chromium can stick on the final block when a
+        // looping buffer's length isn't a multiple of 128 samples.
+        const len = Math.round(sr * seconds / 128) * 128;
+        const fadeN = Math.floor(sr * 0.25);
+        const buf = ac.createBuffer(2, len, sr);
+        for (let ch = 0; ch < 2; ch++) {
+          const raw = new Float32Array(len + fadeN);
+          let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0, last = 0;
+          for (let i = 0; i < raw.length; i++) {
+            const w = Math.random() * 2 - 1;
+            if (kind === 'white') raw[i] = w;
+            else if (kind === 'pink') {
+              b0 = 0.99886 * b0 + w * 0.0555179; b1 = 0.99332 * b1 + w * 0.0750759;
+              b2 = 0.96900 * b2 + w * 0.1538520; b3 = 0.86650 * b3 + w * 0.3104856;
+              b4 = 0.55000 * b4 + w * 0.5329522; b5 = -0.7616 * b5 - w * 0.0168980;
+              raw[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362;
+              b6 = w * 0.115926;
+            } else {
+              last = (last + 0.02 * w) / 1.02;
+              raw[i] = last;
+            }
+          }
+          // Remove DC, normalize to a known RMS so mix levels are predictable
+          let mean = 0; for (let i = 0; i < raw.length; i++) mean += raw[i]; mean /= raw.length;
+          let rms = 0; for (let i = 0; i < raw.length; i++) { raw[i] -= mean; rms += raw[i] * raw[i]; }
+          rms = Math.sqrt(rms / raw.length) || 1;
+          const g = 0.25 / rms;
+          // Equal-power crossfade the tail into the head for a seamless loop
+          const out = buf.getChannelData(ch);
+          for (let i = 0; i < len; i++) out[i] = raw[i] * g;
+          for (let i = 0; i < fadeN; i++) {
+            const f = i / fadeN;
+            out[i] = (raw[i] * Math.sqrt(f) + raw[len + i] * Math.sqrt(1 - f)) * g;
+          }
+        }
+        return buf;
+      }
+
+      function impulse(ac, seconds) {
+        const sr = ac.sampleRate, len = Math.floor(sr * seconds);
+        const buf = ac.createBuffer(2, len, sr);
+        for (let ch = 0; ch < 2; ch++) {
+          const d = buf.getChannelData(ch);
+          let lp = 0;
+          for (let i = 0; i < len; i++) {
+            const tt = i / sr;
+            lp += ((Math.random() * 2 - 1) - lp) * 0.35;
+            d[i] = lp * Math.exp(-tt * 2.4) * (1 - Math.exp(-tt * 60));
+          }
+        }
+        return buf;
+      }
+
+      function initAudio() {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        const ac = new AC();
+        A.ctx = ac;
+        const now = ac.currentTime;
+
+        const white = loopBuffer(ac, 9.3, 'white');
+        const pink = loopBuffer(ac, 11.7, 'pink');
+        const brown = loopBuffer(ac, 13.1, 'brown');
+        A.white = white;
+
+        const master = ac.createGain();
+        master.gain.setValueAtTime(0, now);
+        master.gain.linearRampToValueAtTime(0.75, now + 5);
+        master.connect(ac.destination);
+        A.master = master;
+
+        const comp = ac.createDynamicsCompressor();
+        comp.threshold.value = -16;
+        comp.knee.value = 12;
+        comp.ratio.value = 4;
+        comp.attack.value = 0.01;
+        comp.release.value = 0.35;
+        comp.connect(master);
+
+        const verb = ac.createConvolver();
+        verb.buffer = impulse(ac, 3.2);
+        const verbGain = ac.createGain();
+        verbGain.gain.value = 0.32;
+        verb.connect(verbGain).connect(comp);
+        A.verb = verb;
+        A.comp = comp;
+
+        const pan = ac.createStereoPanner ? ac.createStereoPanner() : ac.createGain();
+        pan.connect(comp);
+        A.pan = pan;
+
+        const src = buf => {
+          const s = ac.createBufferSource();
+          s.buffer = buf;
+          s.loop = true;
+          s.start(now, Math.random() * buf.duration);
+          return s;
+        };
+        const filt = (type, f, q, gain) => {
+          const b = ac.createBiquadFilter();
+          b.type = type; b.frequency.value = f;
+          if (q !== undefined) b.Q.value = q;
+          if (gain !== undefined) b.gain.value = gain;
+          return b;
+        };
+        const gainNode = v => { const g = ac.createGain(); g.gain.value = v; return g; };
+
+        // Slow random modulator: lowpassed brown noise driving gain params
+        const modulator = (cut, depth, param) => {
+          const m = gainNode(depth);
+          src(brown).connect(filt('lowpass', cut, 0.5)).connect(m).connect(param);
+        };
+
+        // Deep ground rumble (felt more than heard)
+        const rumble = gainNode(1.0);
+        src(brown).connect(filt('lowpass', 95, 0.7)).connect(rumble).connect(pan);
+        modulator(4, 3, rumble.gain);
+        A.rumble = rumble;
+
+        // The continuous "freight train" roar
+        const roar = gainNode(1.4);
+        const roarLP = filt('lowpass', 650, 0.6);
+        src(pink).connect(roarLP).connect(filt('peaking', 160, 1, 5)).connect(roar);
+        roar.connect(pan);
+        roar.connect(verb);
+        modulator(6, 4, roar.gain);
+        A.roar = roar;
+        A.roarLP = roarLP;
+
+        // Midrange churn
+        const mid = gainNode(2.0);
+        src(white).connect(filt('bandpass', 420, 0.7)).connect(mid).connect(pan);
+        modulator(9, 5, mid.gain);
+        A.mid = mid;
+
+        // Howling wind whistles that slowly glide in pitch
+        A.howls = [[520, 12, 6], [860, 16, 4], [1350, 20, 2.5]].map(([f, q, g]) => {
+          const bp = filt('bandpass', f, q);
+          const gg = gainNode(g);
+          src(white).connect(bp).connect(gg).connect(pan);
+          gg.connect(verb);
+          return { bp, gg, base: f, g };
+        });
+
+        // Jet-like hiss of high-speed air
+        const hiss = gainNode(0.3);
+        src(white).connect(filt('highpass', 2500, 0.7)).connect(filt('lowpass', 7000, 0.7)).connect(hiss).connect(pan);
+        A.hiss = hiss;
+
+        A.nextImpact = now + 0.5;
+        A.nextHowl = now;
+        setInterval(audioTick, 60);
+      }
+
+      function impactSound(at) {
+        const ac = A.ctx;
+        const u = Math.random();
+        let dur, peak;
+        const s = ac.createBufferSource();
+        s.buffer = A.white;
+        const f = ac.createBiquadFilter();
+        if (u < 0.62) {            // thud of heavy debris landing
+          f.type = 'lowpass'; f.frequency.value = 120 + Math.random() * 260; f.Q.value = 1.2;
+          dur = 0.12 + Math.random() * 0.35; peak = 3 + Math.random() * 7;
+        } else if (u < 0.9) {      // crack and snap of splintering wood
+          f.type = 'bandpass'; f.frequency.value = 700 + Math.random() * 2200; f.Q.value = 1.5 + Math.random() * 2;
+          dur = 0.025 + Math.random() * 0.08; peak = 1.5 + Math.random() * 3;
+        } else if (u < 0.97) {     // big structural crash
+          f.type = 'lowpass'; f.frequency.value = 300 + Math.random() * 500; f.Q.value = 0.8;
+          dur = 0.6 + Math.random() * 0.9; peak = 4 + Math.random() * 4;
+        } else {                   // metal or glass
+          f.type = 'bandpass'; f.frequency.value = 2500 + Math.random() * 3500; f.Q.value = 8 + Math.random() * 10;
+          dur = 0.2 + Math.random() * 0.5; peak = 6 + Math.random() * 6;
+        }
+        const g = ac.createGain();
+        g.gain.setValueAtTime(0, at);
+        g.gain.linearRampToValueAtTime(peak * (0.4 + 0.8 * S.gust), at + 0.003);
+        g.gain.exponentialRampToValueAtTime(0.0008, at + dur);
+        const p = ac.createStereoPanner ? ac.createStereoPanner() : ac.createGain();
+        if (p.pan) p.pan.value = clamp((Math.random() * 2 - 1) * 0.8 + (A.panVal || 0), -1, 1);
+        s.connect(f).connect(g).connect(p);
+        p.connect(A.comp);
+        const send = ac.createGain();
+        send.gain.value = 0.6;
+        p.connect(send).connect(A.verb);
+        s.start(at, Math.random() * (A.white.duration - 2), dur + 0.05);
+      }
+
+      function audioTick() {
+        const ac = A.ctx;
+        if (!ac || ac.state !== 'running') return;
+        const now = ac.currentTime;
+        const g = S.gust;
+
+        A.rumble.gain.setTargetAtTime(0.8 + 0.6 * g, now, 0.4);
+        A.roar.gain.setTargetAtTime(1.0 + 0.9 * g, now, 0.4);
+        A.roarLP.frequency.setTargetAtTime(520 + 380 * g, now, 0.5);
+        A.mid.gain.setTargetAtTime(1.3 + 1.6 * g, now, 0.4);
+        A.hiss.gain.setTargetAtTime(0.18 + 0.3 * g, now, 0.4);
+
+        if (now > A.nextHowl) {
+          for (const h of A.howls) {
+            h.bp.frequency.setTargetAtTime(h.base * (0.8 + Math.random() * 0.45), now, 0.8 + Math.random() * 1.5);
+            h.gg.gain.setTargetAtTime(h.g * (0.3 + Math.random() * 0.9) * (0.5 + g), now, 0.7);
+          }
+          A.nextHowl = now + 1.2 + Math.random() * 2.5;
+        }
+
+        A.panVal = clamp(axisX(0.3) / Math.max(0.4, S.W / (2 * S.scale)), -1, 1) * 0.5;
+        if (A.pan.pan) A.pan.pan.setTargetAtTime(A.panVal, now, 0.5);
+
+        // Poisson-scheduled debris impacts, denser in the strongest pulses
+        const rate = 3 + 11 * g * g;
+        while (A.nextImpact < now + 0.15) {
+          if (A.nextImpact > now) impactSound(A.nextImpact);
+          A.nextImpact = Math.max(A.nextImpact, now) - Math.log(1 - Math.random()) / rate;
+        }
+      }
+
+      function setMuted(m) {
+        A.muted = m;
+        if (!A.ctx) return;
+        const now = A.ctx.currentTime;
+        A.master.gain.cancelScheduledValues(now);
+        A.master.gain.setTargetAtTime(m ? 0 : 0.75, now, 0.15);
+      }
+
+      document.addEventListener('visibilitychange', () => {
+        if (!A.ctx) return;
+        if (document.hidden) A.ctx.suspend(); else A.ctx.resume();
+      });
+
+      // ---------------------------------------------------------------
+      // UI
+      // ---------------------------------------------------------------
+      let light = false;
+      try {
+        const q = new URLSearchParams(location.search).get('bg');
+        if (q) light = q === 'white';
+        else light = localStorage.getItem('twister-bg') === 'white';
+      } catch (e) { /* storage unavailable */ }
+
+      function setLight(v) {
+        light = v;
+        document.body.classList.toggle('light', light);
+        try { localStorage.setItem('twister-bg', light ? 'white' : 'black'); } catch (e) { /* ignore */ }
+      }
+      setLight(light);
+
+      function toggleFullscreen() {
+        const d = document;
+        if (d.fullscreenElement || d.webkitFullscreenElement) (d.exitFullscreen || d.webkitExitFullscreen).call(d);
+        else {
+          const el = d.documentElement;
+          const req = el.requestFullscreen || el.webkitRequestFullscreen;
+          if (req) req.call(el);
+        }
+      }
+
+      const intro = document.getElementById('intro');
+      const hud = document.getElementById('hud');
+      let started = false;
+
+      document.getElementById('go').addEventListener('click', () => {
+        if (started) return;
+        started = true;
+        try { initAudio(); } catch (e) { console.error(e); }
+        intro.classList.add('gone');
+        poke();
+      });
+
+      hud.addEventListener('click', e => {
+        const b = e.target.closest('button');
+        if (!b) return;
+        const act = b.dataset.act;
+        if (act === 'bg') setLight(!light);
+        else if (act === 'mute') setMuted(!A.muted);
+        else if (act === 'fs') toggleFullscreen();
+      });
+
+      addEventListener('keydown', e => {
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        const k = e.key.toLowerCase();
+        if (k === 'b') setLight(!light);
+        else if (k === 'm') setMuted(!A.muted);
+        else if (k === 'f') toggleFullscreen();
+        else return;
+        poke();
+      });
+
+      let idleTimer = 0;
+      function poke() {
+        if (!started) return;
+        hud.classList.remove('idle');
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => hud.classList.add('idle'), 3000);
+      }
+      addEventListener('pointermove', poke);
+      addEventListener('pointerdown', poke);
+
+      addEventListener('resize', layout);
+      layout();
+
+      // ---------------------------------------------------------------
+      // Main loop with adaptive render resolution
+      // ---------------------------------------------------------------
+      updateStorm();
+      for (let i = 0; i < 360; i++) { S.t += 1 / 30; updateStorm(); stepParticles(1 / 30); }
+
+      let last = performance.now();
+      let ema = 1 / 60;
+      let lastAdjust = last;
+
+      function frame(now) {
+        const dt = Math.min(0.05, (now - last) / 1000);
+        last = now;
+        ema += (dt - ema) * 0.05;
+
+        if (now - lastAdjust > 1500) {
+          lastAdjust = now;
+          if (ema > 1 / 42 && renderScale > 0.3) { renderScale = Math.max(0.3, renderScale * 0.85); sizeGL(); }
+          else if (ema < 1 / 57 && renderScale < 1) { renderScale = Math.min(1, renderScale * 1.08); sizeGL(); }
+        }
+
+        S.t += dt;
+        updateStorm();
+        stepParticles(dt);
+        drawParticles();
+        renderGL();
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    })();
+  </script>
+
+</body>
+
+</html>
