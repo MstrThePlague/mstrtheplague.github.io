@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>InterLude</title>
-  <meta name="description" content="A macOS menu bar app that plays BBC radio about a minute behind live, on your Mac or Chromecast speakers, and mutes the news bulletins.">
+  <meta name="description" content="Plays BBC radio about a minute behind live and mutes the news bulletins. A macOS menu bar app, and a self-hosted web app for Linux, playing on your device, Chromecast or Sonos speakers.">
   <link rel="icon" type="image/png" href="images/interlude-icon.png">
   <link rel="stylesheet" href="styles.css">
 
@@ -30,15 +30,15 @@
     <article class="tribute-text">
 
       <p>
-        InterLude is a small macOS menu bar app that plays BBC radio to my speakers, about a minute behind live,
-        and mutes the news bulletins on music stations. When the music comes back, so does the sound. It was built
-        over a couple of days in October 2026. It plays on the Mac, a Chromecast or a Cast group. It can also play back a programme from the last 30 days
-        with the news cut out, and you can control it from your phone.
+        InterLude plays BBC radio to my speakers, about a minute behind live, and mutes the news bulletins on music
+        stations. When the music comes back, so does the sound. It started in October 2026 as a small macOS menu bar
+        app, and now also runs as a web app on a Linux server, with no Mac needed. It plays on a Mac, in a browser, or
+        on Chromecast and Sonos speakers. It can also play back a programme from the last 30 days with the news cut
+        out, and you can control it from your phone.
       </p>
 
       <p class="project-links">
-        <a class="button" href="https://github.com/MstrThePlague/InterLude/releases/tag/v0.3.0">Download v0.3.0</a>
-        <a class="button secondary" href="https://github.com/MstrThePlague/InterLude">Source on GitHub</a>
+        <a class="button" href="https://github.com/MstrThePlague/InterLude">InterLude on GitHub</a>
       </p>
 
       <h2>Why</h2>
@@ -210,20 +210,64 @@
 
       <p>
         The remote's address carries a long random code, so other people on the network can't guess it, and Reset
-        link makes a new one and stops the old one working. The phone has to be on the same Wi-Fi and the Mac awake
-        with InterLude open. Playing from the phone always plays live, and you can't pick an earlier programme from it
-        yet.
+        link makes a new one and stops the old one working. The phone has to be on the same Wi-Fi, or on the same
+        tailnet if the Mac runs Tailscale, and the Mac awake with InterLude open. The remote now has Earlier too, so
+        you can pick a programme from the last 30 days on the phone and play it from the start.
+      </p>
+
+      <h2>One interface, and no Mac needed</h2>
+      <p>
+        Since then the panel has been rebuilt as a web app. The Mac's menu bar panel, the phone remote and the
+        server's page are now the same set of files, so they look and work alike everywhere. On a wide window,
+        Earlier and the news sit beside the player.
+      </p>
+
+      <div class="shots two">
+        <figure>
+          <a href="images/interlude-mac-muted.png"><img src="images/interlude-mac-muted.png"
+              alt="The InterLude panel on the Mac while a bulletin is muted, glowing pink, with News muted, a Bulletin muted card and a Not news button."
+              loading="lazy"></a>
+          <figcaption><strong>On the Mac.</strong> The new panel partway through a muted bulletin.</figcaption>
+        </figure>
+        <figure>
+          <a href="images/interlude-web-phone.png"><img src="images/interlude-web-phone.png"
+              alt="The InterLude web app on a phone, playing Radio 6 Music about 65 seconds behind live on all speakers."
+              loading="lazy"></a>
+          <figcaption><strong>On a phone.</strong> The server's web app, playing on every speaker in the house.</figcaption>
+        </figure>
+      </div>
+
+      <figure class="shot-single">
+        <a href="images/interlude-web-desktop.png"><img src="images/interlude-web-desktop.png"
+            alt="The InterLude web app in a wide browser window, playing an earlier Steve Lamacq programme with two bulletins skipped, beside the list of yesterday's programmes."
+            loading="lazy"></a>
+        <figcaption><strong>In a browser.</strong> An earlier programme with two bulletins skipped, and yesterday's
+          schedule alongside.</figcaption>
+      </figure>
+
+      <p>
+        It plays on Sonos speakers now, as well as Chromecasts. Sonos can't play the stream a Chromecast does, so
+        InterLude gives it one continuous stream made from the same delayed, de-newsed audio. The speaker's own
+        buttons and the Sonos app work alongside it: change the volume there and InterLude's slider follows, press
+        pause and InterLude stops.
+      </p>
+      <p>
+        And it runs as a server. A Docker image for x86-64 Linux does everything the Mac app does, played and
+        controlled from any browser and playing on Chromecast and Sonos speakers itself. In place of Apple's sound
+        classifier and speech recognition it uses open models, YAMNet and whisper.cpp, running on the server's own CPU,
+        with YAMNet's scores mapped onto Apple's so the same rules apply to both. Nothing is sent to a speech service.
       </p>
 
       <h2>What it does</h2>
       <ul>
-        <li>Lives in the menu bar and plays any of 64 BBC stations through the Mac, a Chromecast or a Cast group, and you can switch speaker while it plays.</li>
+        <li>Runs as a macOS menu bar app, or as a web app on a Linux server with Docker.</li>
+        <li>Plays any of 64 BBC stations on the Mac, in a browser, or on Chromecast and Sonos speakers and groups, and you can switch speaker while it plays.</li>
         <li>Plays a fixed time behind live: 60 seconds by default, adjustable per station.</li>
         <li>Mutes from the news theme to the newsreader's sign-off, so the presenter's handover and chat afterwards still play.</li>
         <li>Learns a station's news theme from the last few hours of broadcast the first time you play it.</li>
         <li>Has &ldquo;Not news&rdquo; and &ldquo;News got through&rdquo; buttons to correct it, and a log of every decision.</li>
-        <li>Plays a programme from the last 30 days from its start with the bulletins cut out, on the Mac or on Cast speakers.</li>
-        <li>Can be controlled from a phone on the same Wi-Fi: scan a QR code and it opens in the phone's browser.</li>
+        <li>Plays a programme from the last 30 days from its start with the bulletins cut out, on any of its speakers.</li>
+        <li>Can be controlled from a phone: scan a QR code and it opens in the phone's browser.</li>
         <li>Shows what's playing and a countdown to the end of a mute.</li>
         <li>Can play ocean waves, a woodland stream or birdsong during a mute instead of silence, fading in and out.</li>
         <li>Sends no telemetry. Its only network traffic is to BBC servers and to my speakers.</li>
@@ -242,16 +286,16 @@
 
       <h2>Try it</h2>
       <p>
-        InterLude is free and open source (MIT licence). The latest release, 0.3.0, is on
-        <a href="https://github.com/MstrThePlague/InterLude/releases/tag/v0.3.0">GitHub</a>, with the source and the
-        full write-up of how it was worked out in the
-        <a href="https://github.com/MstrThePlague/InterLude">repository</a>. It's an early release, so expect rough
-        edges.
+        InterLude is free and open source (MIT licence). Everything is in the
+        <a href="https://github.com/MstrThePlague/InterLude">repository on GitHub</a>: the Mac app, the Linux server,
+        the instructions for installing either, and the full write-up of how it was worked out. It's still early, so
+        expect rough edges.
       </p>
       <ul>
-        <li>It needs an Apple silicon Mac running macOS 26 or later.</li>
-        <li>It isn't notarised by Apple, so the first launch needs a one-off approval in System Settings. The steps
-          are in the README, or you can build it from source.</li>
+        <li>The Mac app needs an Apple silicon Mac running macOS 26 or later. It isn't notarised by Apple, so the
+          first launch needs a one-off approval in System Settings. The steps are in the README, or you can build it
+          from source.</li>
+        <li>The server needs an x86-64 Linux machine with Docker and about 1 GB of memory free.</li>
         <li>If you use the phone remote and the Mac's firewall is on, macOS will ask once whether InterLude may accept
           incoming connections. Allow it for the remote to work.</li>
         <li>BBC streams and BBC Sounds episodes may not play outside the UK.</li>
@@ -262,7 +306,7 @@
       <p>
         InterLude is unofficial and has no connection with the BBC. It relies on stream addresses that aren't
         documented and could change without warning, and the BBC could stop it working at any time. It's built with
-        Swift and SwiftUI.
+        Swift, on the Mac and on the server alike.
       </p>
 
     </article>
