@@ -110,16 +110,24 @@
       </p>
       <ul>
         <li>Apple's built-in sound classifier, which scores audio for speech and for music.</li>
-        <li>The time. Bulletins sit around the hour and half hour, so sustained speech just after those marks is a
-          strong hint.</li>
+        <li>The time. Bulletins sit at set minutes past the hour, usually the hour and half hour, so sustained speech
+          just after those marks is a strong hint. InterLude starts there and learns each station's own minutes from
+          the bulletins it finds.</li>
         <li>The news theme. The app learns the station's news jingle from the BBC's own six-hour rewind window, then
           listens for it.</li>
-        <li>The sign-off. Apple's on-device speech recognition listens for the newsreader's closing words (&ldquo;next
-          update at&hellip;&rdquo;) so the mute can end promptly, rather than waiting for music.</li>
+        <li>The newsreader's words. Around each bulletin time, Apple's on-device speech recognition listens for the
+          opening (&ldquo;BBC News at&hellip;&rdquo;, &ldquo;Newsbeat&rdquo;) and the sign-off (&ldquo;next update
+          at&hellip;&rdquo;), so the mute starts and ends on the newsreader's words rather than waiting for music.</li>
       </ul>
       <p>
         The rules are deterministic and every decision is logged, so when it gets something wrong I can see why.
         There's a &ldquo;Not news&rdquo; button for the times it does.
+      </p>
+      <p>
+        It began with 6 Music, but it now works across the BBC's music stations. Radio 1, 1Xtra and Asian Network
+        share Newsbeat, which I checked against four hours of recordings, including its fifteen-minute lunchtime
+        edition. Streams with no news, like Radio 1 Dance, are left alone, and Radio 2 and Radio 3 start out just
+        noting bulletins until I've checked them.
       </p>
 
       <h2>Seeing it run</h2>
@@ -172,7 +180,7 @@
         Programmes from the last eleven hours or so come from the BBC's live stream, which keeps more than it lists.
         Anything older comes from its BBC Sounds episode. Either way the whole programme is already there to be
         analysed, so InterLude works about ten minutes ahead of where I'm listening. That leaves time for an extra
-        check: it transcribes the minutes around each hour and half hour and starts the cut where the newsreader
+        check: it transcribes the minutes around each bulletin time and starts the cut where the newsreader
         begins, even if the presenter has talked straight into the news.
       </p>
       <p>
