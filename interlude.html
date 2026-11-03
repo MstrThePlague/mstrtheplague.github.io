@@ -111,23 +111,31 @@
       <ul>
         <li>Apple's built-in sound classifier, which scores audio for speech and for music.</li>
         <li>The time. Bulletins sit at set minutes past the hour, usually the hour and half hour, so sustained speech
-          just after those marks is a strong hint. InterLude starts there and learns each station's own minutes from
-          the bulletins it finds.</li>
+          just after those marks is a strong hint. Every station starts at :00 and :30, and once it has a dozen
+          confirmed bulletins it follows where they actually start, so a station with news only on the hour stops
+          listening at :30. A station can also list longer bulletins at fixed times, such as Newsbeat's fifteen
+          minutes at 12:45.</li>
         <li>The news theme. The app learns the station's news jingle from the BBC's own six-hour rewind window, then
           listens for it.</li>
-        <li>The newsreader's words. Around each bulletin time, Apple's on-device speech recognition listens for the
-          opening (&ldquo;BBC News at&hellip;&rdquo;, &ldquo;Newsbeat&rdquo;) and the sign-off (&ldquo;next update
-          at&hellip;&rdquo;), so the mute starts and ends on the newsreader's words rather than waiting for music.</li>
+        <li>The words. From a minute before to three minutes after each bulletin time, on-device speech recognition
+          transcribes the stream as it arrives. The newsreader's opening (&ldquo;BBC News at five
+          thirty&rdquo;, &ldquo;Newsbeat, I'm&hellip;&rdquo;) starts a mute straight away. So does a presenter's
+          handover (&ldquo;here's the news with&hellip;&rdquo;), if the talking carries on, but not a trail like
+          &ldquo;after the news&rdquo;. The sign-off (&ldquo;your next update's at six thirty&rdquo;) ends it, so the
+          mute starts and ends on the newsreader's words rather than waiting for music.</li>
       </ul>
       <p>
         The rules are deterministic and every decision is logged, so when it gets something wrong I can see why.
         There's a &ldquo;Not news&rdquo; button for the times it does.
       </p>
       <p>
-        It began with 6 Music, but it now works across the BBC's music stations. Radio 1, 1Xtra and Asian Network
-        share Newsbeat, which I checked against four hours of recordings, including its fifteen-minute lunchtime
-        edition. Streams with no news, like Radio 1 Dance, are left alone, and Radio 2 and Radio 3 start out just
-        noting bulletins until I've checked them.
+        It began with 6 Music, but it now works across the BBC's music stations. Each station's own name for its
+        news (&ldquo;6 Music News&rdquo;, &ldquo;Newsbeat&rdquo;) is in an editable station list, so adding one
+        doesn't need a new version. Radio 1, 1Xtra and Asian Network share Newsbeat, which I checked against four
+        hours of recordings of each, including its fifteen-minute lunchtime edition, now muted in full. Streams with
+        no news, like Radio 1 Dance or 6 Music Indie Forever, are left alone. Radio 2 and Radio 3 start cautiously,
+        muting only when they hear the news theme, until I've checked them: Radio 3's presenters talk at length
+        around the hour, and that fooled it five times in four hours.
       </p>
 
       <h2>Seeing it run</h2>
@@ -220,10 +228,10 @@
 
       <figure class="shot-single">
         <a href="images/interlude-web-desktop.png"><img src="images/interlude-web-desktop.png"
-            alt="The InterLude web app in a wide browser window, playing an earlier Steve Lamacq programme with two bulletins skipped, beside the list of yesterday's programmes."
+            alt="The InterLude web app in a wide browser window, playing an earlier Radcliffe and Maconie programme on all speakers with two bulletins and 3 minutes 8 seconds of news skipped, beside a Skip news switch and the list of today's Radio 6 Music programmes."
             loading="lazy"></a>
-        <figcaption><strong>In a browser.</strong> An earlier programme with two bulletins skipped, and yesterday's
-          schedule alongside.</figcaption>
+        <figcaption><strong>In a browser.</strong> An earlier programme playing on every speaker, with two bulletins
+          skipped, and today's schedule alongside.</figcaption>
       </figure>
 
       <p>
@@ -245,7 +253,8 @@
         <li>Plays any of 64 BBC stations on the Mac, in a browser, or on Chromecast and Sonos speakers and groups, and you can switch speaker while it plays.</li>
         <li>Plays a fixed time behind live: 60 seconds by default, adjustable per station.</li>
         <li>Mutes from the news theme to the newsreader's sign-off, so the presenter's handover and chat afterwards still play.</li>
-        <li>Learns a station's news theme from the last few hours of broadcast the first time you play it.</li>
+        <li>Learns a station's news theme from the last few hours of broadcast the first time you play it, and its bulletin times as it goes.</li>
+        <li>Mutes long bulletins at fixed times, such as Newsbeat at 12:45, and leaves streams with no news alone.</li>
         <li>Has &ldquo;Not news&rdquo; and &ldquo;News got through&rdquo; buttons to correct it, and a log of every decision.</li>
         <li>Plays a programme from the last 30 days from its start with the bulletins cut out, on any of its speakers.</li>
         <li>Can be controlled from a phone: scan a QR code and it opens in the phone's browser.</li>
@@ -261,8 +270,14 @@
         audio on both sides, and I've listened to it catch real bulletins. The first one to be caught correctly was on
         12 October. It's had its mistakes as well: it muted a presenter talking over a song, and it has muted
         the presenter's chat after a bulletin because the presenter's voice and the newsreader's look alike to the
-        classifier. Each of those turned into a fix. A proper accuracy test against a week of labelled listening is
-        still on the list.
+        classifier. Each of those turned into a fix.
+      </p>
+      <p>
+        The closest I have to numbers comes from replaying four hours each of Radio 1, 1Xtra, Asian Network and Radio
+        3 through the detector. Radio 1's half-hour bulletins were found within three seconds of their start, and
+        their sign-offs within a second of their real end. Every Newsbeat was muted in full on Radio 1 and Asian
+        Network; on 1Xtra the first 19 seconds of the 12:45 one got through. A proper accuracy test against a week of
+        labelled listening is still on the list.
       </p>
 
       <h2>Try it</h2>
@@ -280,7 +295,8 @@
         <li>If you use the phone remote and the Mac's firewall is on, macOS will ask once whether InterLude may accept
           incoming connections. Allow it for the remote to work.</li>
         <li>BBC streams and BBC Sounds episodes may not play outside the UK.</li>
-        <li>Detection is tuned and tested on 6 Music. Other music stations should work but haven't been measured.</li>
+        <li>Detection is best tested on 6 Music and the Newsbeat stations. Radio 2 and Radio 3 start cautiously, and
+          other music stations should work but haven't been measured.</li>
       </ul>
 
       <h2>The small print</h2>
