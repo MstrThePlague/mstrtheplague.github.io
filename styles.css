@@ -159,6 +159,17 @@ button:focus-visible {
   color: var(--accent);
 }
 
+/* On the home page the fish is only just there, until someone finds it */
+.main-page .site-footer .fish {
+  opacity: 0.25;
+  transition: opacity 0.4s ease, color 0.2s ease;
+}
+
+.main-page .site-footer .fish:hover,
+.main-page .site-footer .fish:focus-visible {
+  opacity: 1;
+}
+
 /* Home */
 
 .hero {
