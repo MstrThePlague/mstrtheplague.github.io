@@ -18,18 +18,11 @@
   <main class="hero">
     <div class="hello">
       <h1>
-        <svg id="hello-svg" viewBox="0 -240 640 300" width="640" height="300" role="img" aria-label="Hello.">
-          <defs>
-            <clipPath id="hello-letters">
-              <text x="0" y="0">Hello</text>
-            </clipPath>
-          </defs>
-          <text id="hello-measure" x="0" y="0" visibility="hidden" aria-hidden="true">Hello.</text>
-          <foreignObject id="hello-frame" x="0" y="-240" width="640" height="300" clip-path="url(#hello-letters)">
-            <video id="hello-video" autoplay muted loop playsinline aria-hidden="true"></video>
-          </foreignObject>
-          <text id="hello-dot" class="hello-dot" x="0" y="0" visibility="hidden" aria-hidden="true">.</text>
-        </svg>
+        <span class="visually-hidden">Hello.</span>
+        <span id="hello-frame" class="hello-frame" aria-hidden="true">
+          <video id="hello-video" autoplay muted loop playsinline></video>
+          <canvas id="hello-mask"></canvas>
+        </span>
       </h1>
     </div>
     <p class="intro">A quiet little corner of the web. Sometimes I post things someone might care about. Other times it's

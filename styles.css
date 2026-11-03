@@ -193,27 +193,47 @@ button:focus-visible {
   line-height: 0;
 }
 
-.hello svg {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-
-.hello svg text {
-  font-family: var(--serif);
-  font-size: 300px;
-  letter-spacing: -0.04em;
-}
-
-.hello .hello-dot {
-  fill: var(--dot);
-}
-
-.hello video {
+/* The video sits under a canvas stencil (js/hello.js) that leaves only the letters open */
+.hello-frame {
+  position: relative;
   display: block;
   width: 100%;
-  height: 100%;
+  max-width: 640px;
+  aspect-ratio: 640 / 300;
+}
+
+.hello-frame video,
+.hello-frame canvas {
+  position: absolute;
+  display: block;
+}
+
+/* Inset a touch so no edge of the video can peep past the stencil */
+.hello-frame video {
+  inset: 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
   object-fit: cover;
+  visibility: hidden;
+}
+
+.hello-frame canvas {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hello-frame.ready video {
+  visibility: visible;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .hello-caption {

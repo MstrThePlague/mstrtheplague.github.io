@@ -11,13 +11,10 @@
     { src: 'videos/iceland-2.mp4', poster: 'videos/iceland-2.jpg', place: 'a glacier in Iceland' } // Gylfi Gylfason
   ];
 
-  var svg = document.getElementById('hello-svg');
-  if (!svg) return;
-  // The video shows through "Hello" only; a hidden "Hello." gives the size and where the full stop goes
-  var letters = document.getElementById('hello-measure');
   var frame = document.getElementById('hello-frame');
+  if (!frame) return;
   var video = document.getElementById('hello-video');
-  var dot = document.getElementById('hello-dot');
+  var mask = document.getElementById('hello-mask');
   var caption = document.getElementById('hello-place');
 
   var clip = CLIPS[Math.floor(Math.random() * CLIPS.length)];
@@ -32,22 +29,53 @@
     video.play().catch(function () {});
   }
 
-  // Fit the SVG to the letters, so "Hello." sits at its natural size
-  function fit() {
-    var b = letters.getBBox();
-    if (!b.width) return;
-    var x = Math.floor(b.x), y = Math.floor(b.y), w = Math.ceil(b.width), h = Math.ceil(b.height);
-    svg.setAttribute('viewBox', x + ' ' + y + ' ' + w + ' ' + h);
-    svg.setAttribute('width', w);
-    svg.setAttribute('height', h);
-    // Inset the video slightly: browsers can let its edge show past the clip, and no letter reaches the box edge
-    frame.setAttribute('x', x + 3);
-    frame.setAttribute('y', y + 3);
-    frame.setAttribute('width', w - 6);
-    frame.setAttribute('height', h - 6);
-    // Paint the full stop in colour, exactly over the one in the letters
-    dot.setAttribute('x', letters.getStartPositionOfChar(5).x);
-    dot.removeAttribute('visibility');
+  // The canvas sits over the video like a stencil: it paints the page colour everywhere except
+  // the letters of "Hello", then a solid full stop. (A video inside SVG isn't clipped on iOS.)
+  var TEXT = 'Hello.';
+  var SIZE = 300;
+  var SPACING = -0.04 * SIZE;
+  var FONT = '400 ' + SIZE + 'px "Instrument Serif", Georgia, serif';
+  var PAD = 4;
+
+  function draw() {
+    var root = getComputedStyle(document.documentElement);
+    var ctx = mask.getContext('2d');
+    ctx.font = FONT;
+
+    // Each letter's position, keeping the font's kerning and the tighter letter spacing
+    var xs = [];
+    for (var i = 0; i < TEXT.length; i++) xs.push(ctx.measureText(TEXT.slice(0, i)).width + i * SPACING);
+    var m = ctx.measureText(TEXT);
+    var ascent = Math.ceil(m.actualBoundingBoxAscent), descent = Math.ceil(m.actualBoundingBoxDescent);
+    var w = Math.ceil(xs[TEXT.length - 1] + ctx.measureText('.').width) + PAD * 2;
+    var h = ascent + descent + PAD * 2;
+
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    mask.width = w * dpr;
+    mask.height = h * dpr;
+    frame.style.maxWidth = w + 'px';
+    frame.style.aspectRatio = w + ' / ' + h;
+
+    ctx = mask.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.font = FONT;
+    ctx.textBaseline = 'alphabetic';
+    var baseline = PAD + ascent;
+
+    ctx.fillStyle = root.getPropertyValue('--bg').trim();
+    ctx.fillRect(0, 0, w, h);
+    ctx.globalCompositeOperation = 'destination-out';
+    for (i = 0; i < TEXT.length - 1; i++) ctx.fillText(TEXT[i], PAD + xs[i], baseline);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = root.getPropertyValue('--dot').trim();
+    ctx.fillText('.', PAD + xs[TEXT.length - 1], baseline);
+
+    frame.classList.add('ready');
   }
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit); else fit();
+
+  var fontReady = document.fonts && document.fonts.load ? document.fonts.load(FONT) : Promise.resolve();
+  fontReady.then(draw, draw);
+
+  // Repaint the stencil when the visitor switches between light and dark
+  new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 })();
