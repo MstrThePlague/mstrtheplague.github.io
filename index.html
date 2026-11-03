@@ -7,47 +7,55 @@
   <title>¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸><(((º>
   </title>
   <meta name="description" content="A minimalist digital presence and temporary holding space.">
-  <link rel="stylesheet" href="styles.css">
+  <script>try { if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light'); } catch (e) {}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="main-page">
 
-  <div id="video-container">
-    <video id="bg-video" autoplay loop muted playsinline>
-      <source src="204565-924698132.mp4" type="video/mp4">
-    </video>
-  </div>
-
-  <main class="overlay-content">
-    <h1>Hello.</h1>
-    <p>This is my quiet little corner of the web, sometimes I post things here I think someone might care about,
-      other times it's just quiet. I don't have any social media, but there is a link down below for an old fashioned
-      email.</p>
+  <main class="hero">
+    <div class="hello">
+      <h1>
+        <svg id="hello-svg" viewBox="0 -240 640 300" width="640" height="300" role="img" aria-label="Hello.">
+          <defs>
+            <clipPath id="hello-letters">
+              <text x="0" y="0">Hello</text>
+            </clipPath>
+          </defs>
+          <text id="hello-measure" x="0" y="0" visibility="hidden" aria-hidden="true">Hello.</text>
+          <foreignObject id="hello-frame" x="0" y="-240" width="640" height="300" clip-path="url(#hello-letters)">
+            <video id="hello-video" autoplay muted loop playsinline aria-hidden="true"></video>
+          </foreignObject>
+          <text id="hello-dot" class="hello-dot" x="0" y="0" visibility="hidden" aria-hidden="true">.</text>
+        </svg>
+      </h1>
+    </div>
+    <p class="intro">A quiet little corner of the web. Sometimes I post things someone might care about. Other times it's
+      just quiet, and that's fine too.</p>
   </main>
+
+  <!-- Sits directly above the footer that js/nav.js adds -->
+  <p class="hello-caption">Today's view: <span id="hello-place">somewhere quiet</span></p>
 
   <!-- No-JS fallback: keep in sync with PAGES in js/nav.js -->
   <noscript>
-    <nav class="site-nav nav-static" aria-label="Main">
-      <div class="nav-links">
-        <a href="index.html" class="active" aria-current="page">Home</a>
-        <a href="projects.html">Projects</a>
-        <a href="tribute.html">In memory of Tom</a>
-      </div>
+    <nav class="site-nav site-header" aria-label="Main">
+      <a href="index.html" aria-current="page">Index</a>
+      <a href="projects.html">Projects</a>
+      <a href="tribute.html">Tom</a>
     </nav>
   </noscript>
 
-  <script>
-    document.getElementById('bg-video').playbackRate = 1.0;
-  </script>
   <script src="js/nav.js"></script>
+  <script src="js/hello.js"></script>
 
   <!-- Default Statcounter code for Personal Site http://benbull.org -->
   <script type="text/javascript">
     var sc_project = 13228015;
     var sc_invisible = 1;
-    var sc_security = "065d3980"; 
+    var sc_security = "065d3980";
   </script>
   <script type="text/javascript" src="https://www.statcounter.com/counter/counter.js" async></script>
   <noscript>

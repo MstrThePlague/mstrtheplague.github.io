@@ -7,6 +7,7 @@
   <title>HD60 Pro for macOS</title>
   <meta name="description" content="A DriverKit driver and player that make the Elgato Game Capture HD60 Pro, a PCIe HDMI capture card, work on Apple Silicon Macs.">
   <link rel="icon" type="image/png" href="images/hd60-player-icon.png">
+  <script>try { if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light'); } catch (e) {}</script>
   <link rel="stylesheet" href="styles.css">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,7 +16,6 @@
 
 <body class="tribute-page">
 
-  <canvas id="particles" aria-hidden="true"></canvas>
 
   <main class="tribute-content">
 
@@ -158,16 +158,13 @@
 
   <!-- No-JS fallback: keep in sync with PAGES in js/nav.js -->
   <noscript>
-    <nav class="site-nav nav-static" aria-label="Main">
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="projects.html" class="active" aria-current="page">Projects</a>
-        <a href="tribute.html">In memory of Tom</a>
-      </div>
+    <nav class="site-nav site-header" aria-label="Main">
+      <a href="index.html">Index</a>
+      <a href="projects.html" aria-current="page">Projects</a>
+      <a href="tribute.html">Tom</a>
     </nav>
   </noscript>
 
-  <script src="js/particles.js"></script>
   <script src="js/nav.js"></script>
 
   <!-- Default Statcounter code for Personal Site http://benbull.org -->

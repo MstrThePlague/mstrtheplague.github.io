@@ -7,6 +7,7 @@
   <title>InterLude</title>
   <meta name="description" content="Plays BBC radio about a minute behind live and mutes the news bulletins. A macOS menu bar app, and a self-hosted web app for Linux, playing on your device, Chromecast or Sonos speakers.">
   <link rel="icon" type="image/png" href="images/interlude-icon.png">
+  <script>try { if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light'); } catch (e) {}</script>
   <link rel="stylesheet" href="styles.css">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,7 +16,6 @@
 
 <body class="tribute-page">
 
-  <canvas id="particles" aria-hidden="true"></canvas>
 
   <main class="tribute-content">
 
@@ -83,23 +83,23 @@
         <svg viewBox="0 0 360 150" role="img"
           aria-label="Diagram: a bulletin in the stream from the BBC is replaced by silence about a minute later, before it reaches the speakers.">
           <style>
-            .d-label { font: 300 14px Outfit, sans-serif; fill: rgba(244,244,245,0.75); }
-            .d-small { font: 400 12px Outfit, sans-serif; }
+            .d-label { font: 400 14px 'Inter Tight', sans-serif; fill: var(--muted); }
+            .d-small { font: 400 12px 'JetBrains Mono', monospace; }
           </style>
           <text class="d-label" x="0" y="16">What the BBC sends</text>
-          <rect x="0" y="26" width="360" height="28" rx="4" fill="rgba(255,255,255,0.12)" />
-          <rect x="125" y="26" width="110" height="28" rx="4" fill="rgba(255,255,255,0.45)" />
-          <text class="d-small" x="180" y="44" text-anchor="middle" fill="#1a1a1a">news</text>
+          <rect x="0" y="26" width="360" height="28" rx="4" fill="currentColor" fill-opacity="0.12" />
+          <rect x="125" y="26" width="110" height="28" rx="4" fill="currentColor" fill-opacity="0.6" />
+          <text class="d-small" x="180" y="44" text-anchor="middle" fill="var(--bg)">news</text>
 
-          <path d="M180 58 L180 88 M175 82 L180 89 L185 82" stroke="rgba(255,255,255,0.4)" stroke-width="1.2"
+          <path d="M180 58 L180 88 M175 82 L180 89 L185 82" stroke="currentColor" stroke-opacity="0.45" stroke-width="1.2"
             fill="none" />
-          <text class="d-small" x="190" y="76" fill="rgba(244,244,245,0.55)">+ 1 minute</text>
+          <text class="d-small" x="190" y="76" fill="var(--muted)">+ 1 minute</text>
 
           <text class="d-label" x="0" y="108">What I hear</text>
-          <rect x="0" y="118" width="360" height="28" rx="4" fill="rgba(255,255,255,0.12)" />
-          <rect x="125" y="118" width="110" height="28" rx="4" fill="none" stroke="rgba(255,255,255,0.35)"
+          <rect x="0" y="118" width="360" height="28" rx="4" fill="currentColor" fill-opacity="0.12" />
+          <rect x="125" y="118" width="110" height="28" rx="4" fill="none" stroke="var(--accent)"
             stroke-dasharray="4 4" />
-          <text class="d-small" x="180" y="136" text-anchor="middle" fill="rgba(244,244,245,0.6)">silence</text>
+          <text class="d-small" x="180" y="136" text-anchor="middle" fill="var(--accent)">silence</text>
         </svg>
         <figcaption>Spotted in the stream, silenced before it reaches the speakers.</figcaption>
       </figure>
@@ -313,16 +313,13 @@
 
   <!-- No-JS fallback: keep in sync with PAGES in js/nav.js -->
   <noscript>
-    <nav class="site-nav nav-static" aria-label="Main">
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="projects.html" class="active" aria-current="page">Projects</a>
-        <a href="tribute.html">In memory of Tom</a>
-      </div>
+    <nav class="site-nav site-header" aria-label="Main">
+      <a href="index.html">Index</a>
+      <a href="projects.html" aria-current="page">Projects</a>
+      <a href="tribute.html">Tom</a>
     </nav>
   </noscript>
 
-  <script src="js/particles.js"></script>
   <script src="js/nav.js"></script>
 
   <!-- Default Statcounter code for Personal Site http://benbull.org -->
