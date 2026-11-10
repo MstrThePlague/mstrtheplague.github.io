@@ -8,28 +8,36 @@
   <meta name="description" content="Plays BBC radio about a minute behind live and mutes the news bulletins. A macOS menu bar app, and a self-hosted web app for Linux, playing on your device, Chromecast or Sonos speakers.">
   <link rel="icon" type="image/png" href="images/interlude-icon.png">
   <script>try { if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light'); } catch (e) {}</script>
-  <link rel="stylesheet" href="styles.css?v=202611031703">
+  <link rel="stylesheet" href="styles.css?v=202611101200">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 
-<body class="tribute-page">
+<body class="article-page">
 
 
-  <main class="tribute-content">
+  <main id="main">
 
-    <p class="breadcrumb"><a href="projects.html">&larr; Projects</a></p>
-
-    <header class="tribute-header">
+    <header class="page-head">
+      <p class="breadcrumb"><a href="projects.html">&larr; Projects</a></p>
       <img class="app-icon" src="images/interlude-icon.png" alt="The InterLude app icon: a pause symbol inside radiating sound waves, on a purple-blue gradient." width="128" height="128">
-      <h1>InterLude</h1>
-      <div class="dates">Music, minus the news</div>
+      <h1 class="page-title">InterLude<span class="dot">.</span></h1>
+      <p class="tagline">Music, minus the news</p>
+      <p class="label">macOS app and Linux server &middot; Open source &middot; October 2026</p>
     </header>
 
-    <article class="tribute-text">
+    <div class="article-body">
 
-      <p>
+    <!-- Filled in from the article's h2s by js/contents.js -->
+    <nav class="toc" aria-labelledby="toc-title" hidden>
+      <h2 id="toc-title" class="label">On this page</h2>
+      <ul></ul>
+    </nav>
+
+    <article class="prose">
+
+      <p class="lead">
         InterLude plays BBC radio to my speakers, about a minute behind live, and mutes the news bulletins on music
         stations. When the music comes back, so does the sound. It plays on a Mac, in a browser, or on Chromecast and
         Sonos speakers. It can also play back a programme from the last 30 days with the news cut out, and you can
@@ -44,16 +52,16 @@
       </p>
 
       <p class="project-links">
-        <a class="button" href="https://github.com/MstrThePlague/InterLude">InterLude on GitHub</a>
+        <a class="pill button" href="https://github.com/MstrThePlague/InterLude">InterLude on GitHub</a>
       </p>
 
-      <h2>Why</h2>
+      <h2 id="why">Why</h2>
       <p>
         I like 6 Music. What I don't need is a news bulletin every half hour, all day, every day. I'm not
         asking for the news to be abolished, just for it not to be the thing that interrupts flow of music.
       </p>
 
-      <h2>I did ask nicely</h2>
+      <h2 id="asked">I did ask nicely</h2>
       <p>
         In March 2025 I put a Freedom of Information request to the BBC with two questions. First, what is the
         schedule and frequency of news bulletins on 6 Music in a typical week? Second, is any metadata broadcast, over
@@ -67,11 +75,11 @@
         Ofcom's operating licence: at least 306 hours of news a year on 6 Music, with bulletins &ldquo;regularly at
         frequent intervals throughout the day&rdquo;. Which I knew, and is rather the problem.
       </p>
-      <p>
-        So I took it as a personal challenge. If the BBC won't tell me when the news is on, I'll listen for it.
+      <p class="pull">
+        So I took it as a personal challenge. If the BBC won't tell me when the news is on, <em>I'll listen for it.</em>
       </p>
 
-      <h2>How it works</h2>
+      <h2 id="how">How it works</h2>
       <p>
         The trick is a short delay. InterLude fetches the station's audio stream a minute or so ahead of what I'm
         hearing and analyses it as it arrives. When it spots a bulletin starting, it swaps the audio for silence (or waves,
@@ -138,7 +146,7 @@
         around the hour, and that fooled it five times in four hours.
       </p>
 
-      <h2>Seeing it run</h2>
+      <h2 id="seeing-it-run">Seeing it run</h2>
       <p>
         On the Mac, InterLude lives in the menu bar and opens a small panel. Here it is playing live, and then partway
         through a bulletin.
@@ -168,7 +176,7 @@
         choose waves, a stream or birdsong in place of silence.
       </p>
 
-      <h2>Earlier</h2>
+      <h2 id="earlier">Earlier</h2>
       <p>
         The first version only worked on live radio. The second lets me go back. Switch the panel from Live to
         Earlier, pick a day and a programme from the last 30 days, and it plays from the start with the news
@@ -196,7 +204,7 @@
         few seconds either side can go with them.
       </p>
 
-      <h2>Phone remote</h2>
+      <h2 id="phone-remote">Phone remote</h2>
       <p>
         Version 0.3.0 adds a remote for your phone. Turn it on in Settings, scan the QR code with the phone's camera
         and the remote opens in its browser, with nothing to install. It can play and stop, change the volume, station
@@ -219,7 +227,7 @@
         you can pick a programme from the last 30 days on the phone and play it from the start.
       </p>
 
-      <h2>One interface, and no Mac needed</h2>
+      <h2 id="one-interface">One interface, and no Mac needed</h2>
       <p>
         Since then the panel has been rebuilt as a web app. The Mac's menu bar panel, the phone remote and the
         server's page are now the same set of files, so they look and work alike everywhere. On a wide window,
@@ -247,7 +255,7 @@
         with YAMNet's scores mapped onto Apple's so the same rules apply to both. Nothing is sent to a speech service.
       </p>
 
-      <h2>What it does</h2>
+      <h2 id="what-it-does">What it does</h2>
       <ul>
         <li>Runs as a macOS menu bar app, or as a web app on a Linux server with Docker.</li>
         <li>Plays any of 64 BBC stations on the Mac, in a browser, or on Chromecast and Sonos speakers and groups, and you can switch speaker while it plays.</li>
@@ -263,7 +271,7 @@
         <li>Sends no telemetry. Its only network traffic is to BBC servers and to my speakers.</li>
       </ul>
 
-      <h2>How well does it work?</h2>
+      <h2 id="how-well">How well does it work?</h2>
       <p>
         Honestly: well enough that I've stopped hearing the news, but I haven't measured it properly. I've
         confirmed the mute mechanics, with a captured stream silent for exactly the length of a bulletin and normal
@@ -280,7 +288,7 @@
         labelled listening is still on the list.
       </p>
 
-      <h2>Try it</h2>
+      <h2 id="try-it">Try it</h2>
       <p>
         InterLude is free and open source (MIT licence). Everything is in the
         <a href="https://github.com/MstrThePlague/InterLude">repository on GitHub</a>: the Mac app, the Linux server,
@@ -299,7 +307,7 @@
           other music stations should work but haven't been measured.</li>
       </ul>
 
-      <h2>The small print</h2>
+      <h2 id="small-print">The small print</h2>
       <p>
         InterLude is unofficial and has no connection with the BBC. It relies on stream addresses that aren't
         documented and could change without warning, and the BBC could stop it working at any time. It's built with
@@ -308,19 +316,30 @@
 
     </article>
 
+    </div>
+
+    <a class="next-project" href="hd60.html">
+      <span>
+        <span class="label">Next project</span>
+        <span class="next-title">HD60 Pro for macOS</span>
+      </span>
+      <span class="next-arrow" aria-hidden="true">&rarr;</span>
+    </a>
+
   </main>
 
 
   <!-- No-JS fallback: keep in sync with PAGES in js/nav.js -->
   <noscript>
     <nav class="site-nav site-header" aria-label="Main">
-      <a href="index.html">Index</a>
+      <a href="index.html">benbull.org</a>
       <a href="projects.html" aria-current="page">Projects</a>
       <a href="tribute.html">Tom</a>
     </nav>
   </noscript>
 
-  <script src="js/nav.js?v=202611031703"></script>
+  <script src="js/nav.js?v=202611101200"></script>
+  <script src="js/contents.js?v=202611101200"></script>
 
   <!-- Default Statcounter code for Personal Site http://benbull.org -->
   <script type="text/javascript">

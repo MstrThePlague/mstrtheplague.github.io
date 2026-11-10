@@ -8,28 +8,36 @@
   <meta name="description" content="A DriverKit driver and player that make the Elgato Game Capture HD60 Pro, a PCIe HDMI capture card, work on Apple Silicon Macs.">
   <link rel="icon" type="image/png" href="images/hd60-player-icon.png">
   <script>try { if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light'); } catch (e) {}</script>
-  <link rel="stylesheet" href="styles.css?v=202611031703">
+  <link rel="stylesheet" href="styles.css?v=202611101200">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 
-<body class="tribute-page">
+<body class="article-page">
 
 
-  <main class="tribute-content">
+  <main id="main">
 
-    <p class="breadcrumb"><a href="projects.html">&larr; Projects</a></p>
-
-    <header class="tribute-header">
+    <header class="page-head">
+      <p class="breadcrumb"><a href="projects.html">&larr; Projects</a></p>
       <img class="app-icon" src="images/hd60-player-icon.png" alt="The HD60 Player app icon: a monitor showing a play symbol made of pink and white blocks, with the letters HD60 above it." width="128" height="128">
-      <h1>HD60 Pro for macOS</h1>
-      <div class="dates">A capture card Elgato never made a Mac driver for</div>
+      <h1 class="page-title">HD60 Pro for macOS<span class="dot">.</span></h1>
+      <p class="tagline">A capture card Elgato never made a Mac driver for</p>
+      <p class="label">macOS driver and app &middot; October 2026</p>
     </header>
 
-    <article class="tribute-text">
+    <div class="article-body">
 
-      <p>
+    <!-- Filled in from the article's h2s by js/contents.js -->
+    <nav class="toc" aria-labelledby="toc-title" hidden>
+      <h2 id="toc-title" class="label">On this page</h2>
+      <ul></ul>
+    </nav>
+
+    <article class="prose">
+
+      <p class="lead">
         This is a driver and a player that make the Elgato Game Capture HD60 Pro work on an Apple Silicon Mac. The
         HD60 Pro is a PCIe HDMI capture card, and Elgato never released a macOS driver for it. The player shows
         whatever is plugged into the card's HDMI input live in a window, with sound, at 60 frames a second. It was
@@ -37,10 +45,10 @@
       </p>
 
       <p class="project-links">
-        <a class="button" href="#get-a-copy">Ask for a copy</a>
+        <a class="pill button" href="#get-a-copy">Ask for a copy</a>
       </p>
 
-      <h2>Why</h2>
+      <h2 id="why">Why</h2>
       <p>
         I had the card, a Mac and a MiSTer FPGA to play through it, and no way to connect them. Elgato's driver is
         for Windows, and the card is a PCIe card, not a USB one, so it doesn't even plug into a Mac without help.
@@ -48,7 +56,7 @@
         combination shows up in the system as a card with no driver, and nothing else happens. So I wrote one.
       </p>
 
-      <h2>Starting from almost nothing</h2>
+      <h2 id="starting">Starting from almost nothing</h2>
       <p>
         I wasn't the first to look inside this card. The card has its own small ARM computer on board, and the host
         talks to it by passing commands through a mailbox in the card's memory. Someone had already worked out that
@@ -58,7 +66,7 @@
         below.
       </p>
 
-      <h2>How it went</h2>
+      <h2 id="how-it-went">How it went</h2>
       <p>
         It took a lot of small experiments, because I couldn't assume anything until I'd seen it work on the real card.
       </p>
@@ -90,7 +98,7 @@
         when a source rebooted, so the player now recovers by itself if the picture stops.
       </p>
 
-      <h2>The pieces</h2>
+      <h2 id="the-pieces">The pieces</h2>
 
       <div class="icon-pair">
         <figure>
@@ -110,7 +118,7 @@
         working out why a picture wasn't there.
       </p>
 
-      <h2>What works, and what doesn't</h2>
+      <h2 id="what-works">What works, and what doesn't</h2>
       <ul>
         <li>Live picture and sound from progressive HDMI sources, from 480p to 1080p. I've tested 720p60 and 1080p60,
           with the MiSTer as the source.</li>
@@ -121,7 +129,7 @@
           differently, and I haven't measured latency formally.</li>
       </ul>
 
-      <h2>A security trade-off</h2>
+      <h2 id="security">A security trade-off</h2>
       <p>
         Apple decides which developers may write this kind of driver, and it hands out the permissions on request.
         I haven't got them, so for now the driver only runs with the Mac's System Integrity Protection switched off
@@ -138,7 +146,7 @@
         guide and the full development notes come with it.
       </p>
 
-      <h2>Credits and the small print</h2>
+      <h2 id="credits">Credits and the small print</h2>
       <p>
         The driver is built on the reverse-engineering work in
         <a href="https://github.com/Wolffyx/hd60pro-linux-driver">Wolffyx's HD60 Pro Linux driver</a>, and
@@ -153,19 +161,30 @@
 
     </article>
 
+    </div>
+
+    <a class="next-project" href="interlude.html">
+      <span>
+        <span class="label">Next project</span>
+        <span class="next-title">InterLude</span>
+      </span>
+      <span class="next-arrow" aria-hidden="true">&rarr;</span>
+    </a>
+
   </main>
 
 
   <!-- No-JS fallback: keep in sync with PAGES in js/nav.js -->
   <noscript>
     <nav class="site-nav site-header" aria-label="Main">
-      <a href="index.html">Index</a>
+      <a href="index.html">benbull.org</a>
       <a href="projects.html" aria-current="page">Projects</a>
       <a href="tribute.html">Tom</a>
     </nav>
   </noscript>
 
-  <script src="js/nav.js?v=202611031703"></script>
+  <script src="js/nav.js?v=202611101200"></script>
+  <script src="js/contents.js?v=202611101200"></script>
 
   <!-- Default Statcounter code for Personal Site http://benbull.org -->
   <script type="text/javascript">

@@ -7,44 +7,41 @@
   <title>Projects</title>
   <meta name="description" content="Things I've built.">
   <script>try { if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light'); } catch (e) {}</script>
-  <link rel="stylesheet" href="styles.css?v=202611031703">
+  <link rel="stylesheet" href="styles.css?v=202611101200">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 
-<body class="tribute-page">
+<body>
 
+  <main id="main">
 
-  <main class="tribute-content">
-
-    <header class="tribute-header">
-      <h1>Projects</h1>
-      <div class="dates">Things I've built, mostly to scratch an itch</div>
+    <header class="page-head">
+      <h1 class="page-title">Projects<span class="dot">.</span></h1>
+      <p class="tagline">Things I've built, mostly to scratch an itch</p>
     </header>
 
-    <div class="project-list">
+    <div class="projects">
+      <div class="cards">
 
-      <a class="project-card" href="interlude.html">
-        <img class="card-icon" src="images/interlude-icon.png" alt="" width="88" height="88">
-        <div class="card-body">
-          <span class="project-meta">macOS app and Linux server &middot; Open source &middot; October 2026</span>
-          <h2>InterLude</h2>
-          <p>Plays BBC radio to my Mac, a browser, or Chromecast and Sonos speakers and quietly mutes the news bulletins, or cuts them out of programmes from the last 30 days. Runs as a menu bar app or on a Linux server, with a remote for your phone.</p>
-          <span class="project-more">Read more &rarr;</span>
-        </div>
-      </a>
+        <a class="card" href="interlude.html">
+          <img class="card-icon" src="images/interlude-icon.png" alt="" width="84" height="84">
+          <h2 class="card-title">InterLude</h2>
+          <p class="label">macOS app and Linux server &middot; Open source &middot; October 2026</p>
+          <p class="card-text">Plays BBC radio to my Mac, a browser, or Chromecast and Sonos speakers and quietly mutes the news bulletins, or cuts them out of programmes from the last 30 days. Runs as a menu bar app or on a Linux server, with a remote for your phone.</p>
+          <span class="card-more">Read more &rarr;</span>
+        </a>
 
-      <a class="project-card" href="hd60.html">
-        <img class="card-icon" src="images/hd60-player-icon.png" alt="" width="88" height="88">
-        <div class="card-body">
-          <span class="project-meta">macOS driver and app &middot; October 2026</span>
-          <h2>HD60 Pro for macOS</h2>
-          <p>A DriverKit driver and player that make Elgato's HD60 Pro capture card work on Apple Silicon Macs, a card Elgato never wrote a Mac driver for.</p>
-          <span class="project-more">Read more &rarr;</span>
-        </div>
-      </a>
+        <a class="card" href="hd60.html">
+          <img class="card-icon" src="images/hd60-player-icon.png" alt="" width="84" height="84">
+          <h2 class="card-title">HD60 Pro for macOS</h2>
+          <p class="label">macOS driver and app &middot; October 2026</p>
+          <p class="card-text">A DriverKit driver and player that make Elgato's HD60 Pro capture card work on Apple Silicon Macs, a card Elgato never wrote a Mac driver for.</p>
+          <span class="card-more">Read more &rarr;</span>
+        </a>
 
+      </div>
     </div>
 
   </main>
@@ -53,13 +50,13 @@
   <!-- No-JS fallback: keep in sync with PAGES in js/nav.js -->
   <noscript>
     <nav class="site-nav site-header" aria-label="Main">
-      <a href="index.html">Index</a>
+      <a href="index.html">benbull.org</a>
       <a href="projects.html" aria-current="page">Projects</a>
       <a href="tribute.html">Tom</a>
     </nav>
   </noscript>
 
-  <script src="js/nav.js?v=202611031703"></script>
+  <script src="js/nav.js?v=202611101200"></script>
 
   <!-- Default Statcounter code for Personal Site http://benbull.org -->
   <script type="text/javascript">

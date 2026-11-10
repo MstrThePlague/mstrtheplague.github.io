@@ -10,39 +10,70 @@
   <script>try { if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light'); } catch (e) {}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=202611031703">
+  <link rel="stylesheet" href="styles.css?v=202611101200">
 </head>
 
-<body class="main-page">
+<body class="home">
 
-  <main class="hero">
-    <div class="hello">
-      <h1>
-        <span class="visually-hidden">Hello.</span>
-        <span id="hello-frame" class="hello-frame" aria-hidden="true">
-          <video id="hello-video" autoplay muted loop playsinline></video>
-          <canvas id="hello-mask"></canvas>
-        </span>
-      </h1>
-    </div>
-    <p class="intro">A quiet little corner of the web. Sometimes I post things someone might care about. Other times it's
-      just quiet, and that's fine too.</p>
+  <main id="main">
+
+    <!-- js/wind.js draws the wind behind this and the header -->
+    <section class="hero" aria-labelledby="hello">
+      <h1 id="hello" class="hello">Hello<span class="dot">.</span></h1>
+      <div class="hero-foot">
+        <p class="intro">A quiet little corner of the web. Sometimes I post things someone might care about. Other
+          times it's just quiet, and that's fine too.</p>
+        <button type="button" class="pill wind-toggle" aria-pressed="false" hidden>Pause the wind</button>
+      </div>
+    </section>
+
+    <section class="projects" aria-labelledby="projects-title">
+      <div class="section-head">
+        <h2 id="projects-title">Projects</h2>
+        <p class="label">Things I've built, mostly to scratch an itch</p>
+      </div>
+
+      <div class="cards">
+
+        <a class="card" href="interlude.html">
+          <img class="card-icon" src="images/interlude-icon.png" alt="" width="84" height="84">
+          <h3 class="card-title">InterLude</h3>
+          <p class="label">macOS app and Linux server &middot; Open source &middot; October 2026</p>
+          <p class="card-text">Plays BBC radio to my Mac, a browser, or Chromecast and Sonos speakers and quietly mutes the news bulletins, or cuts them out of programmes from the last 30 days. Runs as a menu bar app or on a Linux server, with a remote for your phone.</p>
+          <span class="card-more">Read more &rarr;</span>
+        </a>
+
+        <a class="card" href="hd60.html">
+          <img class="card-icon" src="images/hd60-player-icon.png" alt="" width="84" height="84">
+          <h3 class="card-title">HD60 Pro for macOS</h3>
+          <p class="label">macOS driver and app &middot; October 2026</p>
+          <p class="card-text">A DriverKit driver and player that make Elgato's HD60 Pro capture card work on Apple Silicon Macs, a card Elgato never wrote a Mac driver for.</p>
+          <span class="card-more">Read more &rarr;</span>
+        </a>
+
+      </div>
+    </section>
+
+    <section class="tom-note" aria-labelledby="tom-title">
+      <h2 id="tom-title">In Memory of Tom</h2>
+      <p class="years">1977 &ndash; 2026</p>
+      <p>My wonderful friend. I miss him and think of him often.</p>
+      <a href="tribute.html">Read about Tom</a>
+    </section>
+
   </main>
-
-  <!-- Sits directly above the footer that js/nav.js adds -->
-  <p class="hello-caption">Today's view: <span id="hello-place">somewhere quiet</span></p>
 
   <!-- No-JS fallback: keep in sync with PAGES in js/nav.js -->
   <noscript>
     <nav class="site-nav site-header" aria-label="Main">
-      <a href="index.html" aria-current="page">Index</a>
+      <a href="index.html" aria-current="page">benbull.org</a>
       <a href="projects.html">Projects</a>
       <a href="tribute.html">Tom</a>
     </nav>
   </noscript>
 
-  <script src="js/nav.js?v=202611031703"></script>
-  <script src="js/hello.js?v=202611031703"></script>
+  <script src="js/nav.js?v=202611101200"></script>
+  <script src="js/wind.js?v=202611101200"></script>
 
   <!-- Default Statcounter code for Personal Site http://benbull.org -->
   <script type="text/javascript">
