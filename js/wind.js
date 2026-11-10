@@ -90,10 +90,15 @@
     if (!run && raf) { cancelAnimationFrame(raf); raf = 0; }
   }
 
+  // The label names what pressing the button does, so it carries no aria-pressed
+  var PAUSE = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14M16 5v14"/></svg>';
+  var PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 4.5v15l12-7.5z"/></svg>';
   function label() {
     if (!button) return;
-    button.textContent = paused ? 'Start the wind' : 'Pause the wind';
-    button.setAttribute('aria-pressed', paused ? 'true' : 'false');
+    var text = paused ? 'Start the wind' : 'Pause the wind';
+    button.innerHTML = paused ? PLAY : PAUSE;
+    button.setAttribute('aria-label', text);
+    button.title = text;
   }
 
   size();

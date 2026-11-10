@@ -128,6 +128,42 @@ img {
   color: var(--bg);
 }
 
+/* A quiet icon button: the theme toggle and the wind button. The icon is small, the hit area is 44px,
+   and the solid background keeps the icon at full contrast when it sits over the wind */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  color: var(--accent);
+}
+
+.icon-btn svg {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Line the icon up with the text edge; the hit area still extends past it */
+.wind-toggle {
+  margin-left: -0.75rem;
+}
+
 /* Skip link, added first in the page by js/nav.js */
 
 .skip-link {
@@ -271,13 +307,6 @@ img {
   font-size: clamp(1.375rem, 2.6vw, 2.375rem);
   line-height: 1.25;
   letter-spacing: -0.015em;
-}
-
-.wind-toggle {
-  flex: none;
-  padding: 0 1.125rem;
-  font-family: var(--mono);
-  font-size: 0.8125rem;
 }
 
 /* Projects: on the home page and projects.html */
