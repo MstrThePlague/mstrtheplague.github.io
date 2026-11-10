@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <title>Elektrek — Chevron Fold</title>
+  <rect width="800" height="600" fill="#2B3238"/>
+  <g fill="none" stroke="#E9E4D8" stroke-width="5" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="butt">
+    <polyline points="270,170 340,170 362,130 390,200 418,115 446,200 468,170 530,170"/>
+    <polyline points="270,190 340,190 362,150 390,220 418,135 446,220 468,190 530,190"/>
+    <polyline points="270,210 340,210 362,170 390,240 418,155 446,240 468,210 530,210" stroke="#C47A4A"/>
+    <polyline points="270,230 340,230 362,190 390,260 418,175 446,260 468,230 530,230"/>
+  </g>
+  <text x="407" y="368" font-family="Futura,'Avenir Next','Century Gothic',sans-serif" font-weight="500" font-size="54" letter-spacing="14" fill="#E9E4D8" text-anchor="middle">ELEKTREK</text>
+  <text x="402.500" y="412" font-family="Futura,'Avenir Next','Century Gothic',sans-serif" font-size="13" letter-spacing="5" fill="#C47A4A" text-anchor="middle">BESPOKE ELECTRIC CAMPERS · NORTH CORNWALL</text>
+</svg>

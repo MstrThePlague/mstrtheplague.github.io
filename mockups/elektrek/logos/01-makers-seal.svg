@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <title>Elektrek — Maker's Seal</title>
+  <rect width="800" height="600" fill="#F3EDE0"/>
+  <defs>
+    <path id="arcTop" d="M223,300 A177,177 0 0 1 577,300"/>
+    <path id="arcBottom" d="M207,300 A193,193 0 0 0 593,300"/>
+  </defs>
+  <g fill="none" stroke="#1F2D3A">
+    <circle cx="400" cy="300" r="234" stroke-width="4"/>
+    <circle cx="400" cy="300" r="222" stroke-width="1.2"/>
+    <circle cx="400" cy="300" r="150" stroke-width="1.2"/>
+  </g>
+  <g font-family="'Gill Sans','Gill Sans MT','Avenir Next',sans-serif" font-size="21" letter-spacing="5" fill="#1F2D3A" text-anchor="middle">
+    <text><textPath href="#arcTop" startOffset="50%">BESPOKE ELECTRIC CAMPERS</textPath></text>
+    <text><textPath href="#arcBottom" startOffset="50%">BUDE · NORTH CORNWALL</textPath></text>
+  </g>
+  <circle cx="215" cy="300" r="4" fill="#B5673A"/>
+  <circle cx="585" cy="300" r="4" fill="#B5673A"/>
+  <!-- four-point spark -->
+  <path d="M400,212 Q403,235 426,238 Q403,241 400,264 Q397,241 374,238 Q397,235 400,212 Z" fill="#B5673A"/>
+  <text x="402.500" y="318" font-family="Baskerville,'Big Caslon','Hoefler Text',Georgia,serif" font-weight="600" font-size="36" letter-spacing="5" fill="#1F2D3A" text-anchor="middle">ELEKTREK</text>
+  <line x1="330" y1="338" x2="470" y2="338" stroke="#1F2D3A" stroke-width="1.2"/>
+  <text x="401.500" y="366" font-family="'Gill Sans','Gill Sans MT','Avenir Next',sans-serif" font-size="14" letter-spacing="3" fill="#1F2D3A" text-anchor="middle">COMMISSION Nº 001</text>
+</svg>

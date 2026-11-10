@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elektrek — Mockup 5: The View</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--green:#1F3D3A;--deep:#172E2C;--cream:#F1EADB;--copper:#D4864A;--line:rgba(241,234,219,.22)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--green);color:var(--cream);font-family:Jost,'Avenir Next',sans-serif;font-weight:300;font-size:18px;line-height:1.7}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,.disp{font-family:Marcellus,Optima,'Gill Sans',serif;font-weight:400}
+.cap{text-transform:uppercase;letter-spacing:.3em;font-size:11px;font-weight:400}
+.wrap{max-width:1240px;margin:0 auto;padding:0 40px}
+header{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:26px 0}
+header nav{display:flex;gap:34px}
+header .r{justify-content:flex-end}
+.brand{display:flex;flex-direction:column;align-items:center;gap:8px}
+.brand svg{width:40px;height:40px}
+.brand span{font-family:Marcellus,Optima,serif;letter-spacing:.42em;font-size:15px;padding-left:.42em}
+.window{position:relative;border:5px solid var(--cream);border-radius:90px;overflow:hidden;height:min(68vh,640px);min-height:440px}
+.window svg{position:absolute;inset:0;width:100%;height:100%}
+.window .txt{position:absolute;left:64px;bottom:56px;right:64px;display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap}
+h1{font-size:clamp(46px,6.6vw,96px);line-height:1.02;text-shadow:0 2px 30px rgba(23,46,44,.35)}
+.btn{display:inline-block;border:1px solid var(--cream);border-radius:999px;padding:16px 30px}
+.btn.fill{background:var(--cream);color:var(--green)}
+.btn.cu{background:var(--copper);border-color:var(--copper);color:var(--deep)}
+.lede{display:grid;grid-template-columns:1fr 1.4fr;gap:80px;padding:110px 0;align-items:start}
+.lede .cap{color:var(--copper)}
+.lede p{font-family:Marcellus,Optima,serif;font-size:clamp(24px,2.7vw,36px);line-height:1.4}
+.lede small{display:block;font-family:Jost,sans-serif;font-size:18px;line-height:1.7;margin-top:28px;max-width:34em;opacity:.85}
+.three{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.three article{padding:48px 40px 52px;border-left:1px solid var(--line)}
+.three article:first-child{border-left:0;padding-left:0}
+.three .cap{color:var(--copper)}
+.three h3{font-size:34px;margin:14px 0 12px}
+.three p{opacity:.85}
+.three a{display:inline-block;margin-top:24px;border-bottom:1px solid var(--copper);padding-bottom:4px}
+.details{padding:120px 0;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.panes{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.pane{border:4px solid var(--cream);border-radius:44px;aspect-ratio:1;position:relative;overflow:hidden}
+.pane::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(96deg,rgba(0,0,0,.08) 0 1px,transparent 1px 11px)}
+.pane span{position:absolute;left:0;right:0;bottom:16px;text-align:center;z-index:1;font-size:10px}
+.pane.big{grid-column:span 2;aspect-ratio:2/1}
+h2{font-size:clamp(34px,4.2vw,58px);line-height:1.1;margin:16px 0 24px}
+.details ul{list-style:none;margin-top:28px;border-top:1px solid var(--line)}
+.details li{display:flex;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--line)}
+.details li span:last-child{opacity:.7}
+.enq{background:var(--deep);padding:120px 0}
+.enq .grid{display:grid;grid-template-columns:1fr 1fr;gap:80px}
+form{display:grid;gap:26px}
+label{display:grid;gap:8px}
+input,select,textarea{background:none;border:0;border-bottom:1px solid var(--line);color:var(--cream);font:inherit;padding:8px 0;border-radius:0;width:100%}
+select option{color:#000}
+textarea{min-height:90px;resize:vertical}
+form .btn{justify-self:start;cursor:pointer;font:inherit;font-size:11px;letter-spacing:.3em;text-transform:uppercase}
+footer{padding:44px 0;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;opacity:.75}
+@media(max-width:880px){header{grid-template-columns:1fr}header nav{display:none}.window{border-radius:48px}.window .txt{left:28px;right:28px;bottom:32px}.lede,.details,.enq .grid{grid-template-columns:1fr;gap:40px}.three{grid-template-columns:1fr}.three article{border-left:0;border-top:1px solid var(--line);padding-left:0}.three article:first-child{border-top:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <nav class="cap"><a href="#">Commissions</a><a href="#">Craft</a><a href="#">Platforms</a></nav>
+  <a class="brand" href="#">
+    <svg viewBox="310 92 180 180" aria-hidden="true"><rect x="318" y="100" width="164" height="164" rx="38" fill="none" stroke="#F1EADB" stroke-width="7"/><g fill="none" stroke="#F1EADB" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"><path d="M440,142 L362,142 L362,222 L440,222"/><line x1="362" y1="182" x2="408" y2="182"/></g><circle cx="430" cy="182" r="10" fill="#D4864A"/></svg>
+    <span>ELEKTREK</span>
+  </a>
+  <nav class="cap r"><a href="#">Journal</a><a href="#">Workshop</a><a href="#enquire">Enquire</a></nav>
+</header>
+
+<div class="window">
+  <svg viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#274e55"/><stop offset=".45" stop-color="#c98f5e"/><stop offset=".62" stop-color="#eec38a"/></linearGradient>
+      <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f7a79"/><stop offset="1" stop-color="#173734"/></linearGradient>
+    </defs>
+    <rect width="1200" height="400" fill="url(#sky)"/>
+    <circle cx="820" cy="372" r="62" fill="#f6dfb4"/>
+    <rect y="380" width="1200" height="260" fill="url(#sea)"/>
+    <g stroke="#f6dfb4" stroke-linecap="round" opacity=".55"><line x1="770" y1="398" x2="870" y2="398" stroke-width="3"/><line x1="740" y1="420" x2="900" y2="420" stroke-width="3"/><line x1="700" y1="450" x2="940" y2="450" stroke-width="2.5"/><line x1="640" y1="490" x2="1000" y2="490" stroke-width="2"/></g>
+    <path d="M0,260 L90,250 L170,280 L250,270 L330,318 L400,330 L470,372 L520,380 L0,380 Z" fill="#1b3a37"/>
+    <path d="M0,330 L120,322 L210,352 L300,368 L360,380 L0,380 Z" fill="#132b29"/>
+    <path d="M1200,340 L1130,346 L1080,366 L1040,380 L1200,380 Z" fill="#1b3a37"/>
+    <rect width="1200" height="640" fill="#172E2C" opacity=".18"/>
+  </svg>
+  <div class="txt">
+    <h1>Your view.<br>Our craft.</h1>
+    <div><a class="btn fill cap" href="#enquire">Begin a commission</a></div>
+  </div>
+</div>
+
+<section class="lede">
+  <span class="cap">Bude · North Cornwall</span>
+  <div>
+    <p>Elektrek makes electric camper vans to private commission. Each is designed around a single owner and built by hand in our coastal workshop. We accept six commissions a year.</p>
+    <small>There is no range and no standard specification. We begin with the windows: where you will sit, what you will see, and how the light will fall inside. Everything else follows.</small>
+  </div>
+</section>
+
+<section class="three">
+  <article><span class="cap">I</span><h3>The Day Van</h3><p>A compact companion for coast and town, built on the VW ID. Buzz Cargo. Two berths, one perfect galley.</p><a class="cap" href="#">Explore</a></article>
+  <article><span class="cap">II</span><h3>The Tourer</h3><p>Standing height and long-stay comfort on a large electric platform, for weeks rather than weekends.</p><a class="cap" href="#">Explore</a></article>
+  <article><span class="cap">III</span><h3>The Blank Sheet</h3><p>Bring us a base vehicle and an idea. We will draw it from nothing, with no template in sight.</p><a class="cap" href="#">Explore</a></article>
+</section>
+
+<section class="details">
+  <div class="panes">
+    <div class="pane big" style="background:linear-gradient(120deg,#b98b5a,#7d5330)"><span class="cap">Photograph — oak galley</span></div>
+    <div class="pane" style="background:linear-gradient(140deg,#d9d2c2,#a39b88)"><span class="cap" style="color:var(--deep)">Wool</span></div>
+    <div class="pane" style="background:linear-gradient(140deg,#d99a68,#9a5a31)"><span class="cap">Copper</span></div>
+  </div>
+  <div>
+    <span class="cap" style="color:var(--copper)">Craft</span>
+    <h2>Quiet materials, honestly worked.</h2>
+    <p style="opacity:.85">Nothing in an Elektrek is bought in as a kit. Cabinetry, upholstery and metalwork are made in-house or by craftspeople within a short drive of the workshop.</p>
+    <ul>
+      <li><span>Joinery</span><span>West Country oak &amp; ash</span></li>
+      <li><span>Textiles</span><span>British wool, undyed linen</span></li>
+      <li><span>Surfaces</span><span>Cornish slate</span></li>
+      <li><span>Hardware</span><span>Unlacquered copper &amp; brass</span></li>
+    </ul>
+  </div>
+</section>
+</div>
+
+<section class="enq" id="enquire"><div class="wrap"><div class="grid">
+  <div>
+    <span class="cap" style="color:var(--copper)">Enquire</span>
+    <h2>Commissions for 2027 are now open.</h2>
+    <p style="opacity:.85;max-width:28em">Share a few details and we will be in touch personally, usually within the week, to arrange a conversation at the workshop.</p>
+  </div>
+  <form onsubmit="return false">
+    <label><span class="cap">Name</span><input type="text"></label>
+    <label><span class="cap">Email</span><input type="email"></label>
+    <label><span class="cap">Starting point</span><select><option>The Day Van</option><option>The Tourer</option><option>The Blank Sheet</option><option>Not sure yet</option></select></label>
+    <label><span class="cap">How do you like to travel?</span><textarea></textarea></label>
+    <button class="btn cu" type="submit">Send enquiry</button>
+  </form>
+</div></div></section>
+
+<footer class="wrap cap"><span>Elektrek · Bude, North Cornwall</span><span>hello@elektrek.example</span><span>Instagram · Journal · Terms</span></footer>
+</body>
+</html>

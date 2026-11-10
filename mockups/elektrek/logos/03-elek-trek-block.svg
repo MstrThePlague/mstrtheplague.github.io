@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <title>Elektrek — ELEK / TREK Block</title>
+  <rect width="800" height="600" fill="#EFEBE4"/>
+  <rect x="240" y="90" width="320" height="280" fill="none" stroke="#1C1C1A" stroke-width="6"/>
+  <g font-family="Futura,'Avenir Next','Century Gothic',sans-serif" font-weight="700" font-size="96" fill="#1C1C1A" text-anchor="middle">
+    <text x="295" y="200">E</text>
+    <text x="365" y="200">L</text>
+    <text x="435" y="200">E</text>
+    <text x="505" y="200">K</text>
+    <text x="295" y="332">T</text>
+    <text x="365" y="332">R</text>
+    <text x="435" y="332">E</text>
+    <text x="505" y="332">K</text>
+  </g>
+  <line x1="268" y1="230" x2="532" y2="230" stroke="#2F6B62" stroke-width="4"/>
+  <text x="403" y="420" font-family="Futura,'Avenir Next','Century Gothic',sans-serif" font-weight="500" font-size="16" letter-spacing="6" fill="#1C1C1A" text-anchor="middle">BESPOKE ELECTRIC CAMPERS</text>
+  <text x="402" y="448" font-family="Futura,'Avenir Next','Century Gothic',sans-serif" font-size="12" letter-spacing="4" fill="#2F6B62" text-anchor="middle">BUILT TO COMMISSION · BUDE, CORNWALL</text>
+</svg>

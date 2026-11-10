@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elektrek — Mockup 4: Horizon Line</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--sand:#EDE6D6;--sand2:#E3DAC5;--teal:#1E4A4F;--sun:#D08A3C;--soft:rgba(30,74,79,.2)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--sand);color:var(--teal);font-family:Karla,'Gill Sans',sans-serif;font-size:19px;line-height:1.65}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,.serif{font-family:'Libre Baskerville',Baskerville,Georgia,serif;font-weight:400}
+.cap{text-transform:uppercase;letter-spacing:.24em;font-size:12px;font-weight:500}
+.wrap{max-width:1080px;margin:0 auto;padding:0 32px}
+header{display:flex;justify-content:space-between;align-items:center;padding:28px 0}
+.word{font-family:'Libre Baskerville',Baskerville,serif;font-size:30px;letter-spacing:.04em}
+nav{display:flex;gap:32px;align-items:center}
+.pill{display:inline-block;border-radius:999px;padding:13px 26px;background:var(--teal);color:var(--sand)}
+.pill.ghost{background:none;color:var(--teal);border:1.5px solid var(--teal)}
+.hero{text-align:center;padding:64px 0 0}
+.hero h1{font-size:clamp(42px,6.2vw,80px);line-height:1.12;max-width:14ch;margin:18px auto 24px}
+.hero h1 em{color:var(--sun)}
+.hero p{max-width:31em;margin:0 auto 34px}
+.line{display:block;width:100%;height:auto;margin-top:28px}
+section{padding:100px 0}
+.intro{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.arch{aspect-ratio:4/5;border-radius:999px 999px 18px 18px;background:linear-gradient(180deg,#e9c48d 0,#e0a868 38%,#5d8c8c 38.2%,#2f646a 70%,#c9b78f 70.2%);position:relative;overflow:hidden}
+.arch::after{content:"";position:absolute;width:24%;aspect-ratio:1;border-radius:50%;background:#f4e3c0;left:58%;top:17%}
+.arch span{position:absolute;left:0;right:0;bottom:14px;text-align:center;color:#fff}
+h2{font-size:clamp(30px,3.8vw,46px);line-height:1.2;margin:14px 0 22px}
+.intro p+p{margin-top:1em}
+.sig{font-family:'Libre Baskerville',serif;font-style:italic;margin-top:24px;display:block}
+.route{background:var(--sand2);border-radius:36px}
+.route .inner{padding:84px 56px}
+.route h2{text-align:center;margin-bottom:64px}
+.stops{position:relative;max-width:760px;margin:0 auto}
+.stops::before{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:2.5px dashed var(--teal);opacity:.5}
+.stop{display:grid;grid-template-columns:1fr 64px 1fr;align-items:center;margin-bottom:44px}
+.stop:last-child{margin-bottom:0}
+.stop .dot{width:44px;height:44px;border-radius:50%;background:var(--sand2);border:2.5px solid var(--teal);margin:0 auto;display:grid;place-items:center;font-family:'Libre Baskerville',serif;font-size:17px;position:relative}
+.stop:last-child .dot{background:var(--sun);border-color:var(--sun);color:#fff}
+.stop .txt h3{font-size:24px;margin-bottom:4px}
+.stop .txt p{font-size:17px}
+.stop:nth-child(odd) .txt{grid-column:1;text-align:right}
+.stop:nth-child(odd) .dot{grid-column:2}
+.stop:nth-child(even) .txt{grid-column:3}
+.stop:nth-child(even) .dot{grid-column:2;grid-row:1}
+.quote{text-align:center}
+.quote blockquote{font-family:'Libre Baskerville',serif;font-style:italic;font-size:clamp(24px,3vw,36px);line-height:1.45;max-width:24em;margin:0 auto 24px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:44px}
+.card .img{aspect-ratio:1/1.05;border-radius:999px 999px 14px 14px;margin-bottom:18px;position:relative;overflow:hidden}
+.card .img span{position:absolute;left:0;right:0;bottom:12px;text-align:center;color:#fff;font-size:10px}
+.card h3{font-size:22px;margin:6px 0}
+.card p{font-size:17px}
+.cta{background:var(--teal);color:var(--sand);border-radius:36px;text-align:center;padding:84px 32px 0;overflow:hidden}
+.cta h2{max-width:16ch;margin-left:auto;margin-right:auto}
+.cta .pill{background:var(--sun);color:#fff;margin-top:10px}
+.cta .sunrise{width:220px;height:110px;border-radius:220px 220px 0 0;background:var(--sun);margin:56px auto 0}
+footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;padding:40px 0 48px}
+@media(max-width:820px){nav a:not(.pill){display:none}.intro,.cards{grid-template-columns:1fr}.route .inner{padding:56px 24px}.stops::before{left:22px}.stop{grid-template-columns:44px 1fr;column-gap:20px}.stop .txt{grid-column:2!important;text-align:left!important;grid-row:1}.stop .dot{grid-column:1!important;grid-row:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <a class="word" href="#">elektrek</a>
+  <nav class="cap"><a href="#">Our vans</a><a href="#">How it works</a><a href="#">Journal</a><a class="pill" href="#">Say hello</a></nav>
+</header>
+</div>
+
+<main>
+<div class="hero">
+  <div class="wrap">
+    <span class="cap">Hand-built electric campers · Bude, North Cornwall</span>
+    <h1>Slow travel, <em>quietly</em> powered.</h1>
+    <p>We're a small workshop by the sea, turning electric vans into one-of-a-kind campers. Each is made to order, for one person or family, with a great deal of care.</p>
+    <a class="pill cap" href="#">Plan your van</a> &nbsp; <a class="pill ghost cap" href="#">See past builds</a>
+  </div>
+  <svg class="line" viewBox="0 0 1400 260" aria-hidden="true">
+    <path d="M904,220 A36,36 0 0 1 976,220 Z" fill="#D08A3C"/>
+    <g fill="none" stroke="#1E4A4F" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M160,220 L550,220 L550,128 Q550,105 573,105 L590,105 L590,60 L768,103 L778,105 Q803,105 817,128 L845,172 Q862,180 862,200 L862,220 L1500,220"/>
+      <line x1="590" y1="105" x2="768" y2="105"/><line x1="634" y1="220" x2="778" y2="220"/>
+      <path d="M740,128 L803,128 L828,166 L740,166 Z"/>
+      <circle cx="610" cy="220" r="22" fill="#EDE6D6"/><circle cx="802" cy="220" r="22" fill="#EDE6D6"/>
+      <line x1="138" y1="214" x2="126" y2="214"/><line x1="138" y1="226" x2="126" y2="226"/>
+      <path d="M1090,206 q14,-12 28,0 M1130,196 q14,-12 28,0" stroke-width="3"/>
+    </g>
+    <rect x="138" y="208" width="24" height="24" rx="5" fill="#1E4A4F"/>
+  </svg>
+</div>
+
+<section class="wrap intro">
+  <div class="arch"><span class="cap">Photograph — pop-top up at Sandymouth</span></div>
+  <div>
+    <span class="cap" style="color:var(--sun)">Hello from the workshop</span>
+    <h2>Made by hand, a few miles from the beach.</h2>
+    <p>Elektrek began with a simple idea: the nicest way to see a coastline is slowly and silently. So we build campers on electric vans, and we build them properly.</p>
+    <p>There's no catalogue. We start with how you like to travel, then design everything around that, from where the kettle lives to which way the bed faces at sunrise.</p>
+    <span class="sig">— The Elektrek workshop, Bude</span>
+  </div>
+</section>
+
+<div class="wrap"><section class="route"><div class="inner">
+  <span class="cap" style="display:block;text-align:center;color:var(--sun)">How it works</span>
+  <h2>The road from idea to open road.</h2>
+  <div class="stops">
+    <div class="stop"><div class="txt"><h3>A cup of tea</h3><p>Come to the workshop, or call. Tell us where you dream of waking up.</p></div><div class="dot">1</div></div>
+    <div class="stop"><div class="txt"><h3>Sketches &amp; samples</h3><p>We draw your layout and post you a box of timber, cloth and colour.</p></div><div class="dot">2</div></div>
+    <div class="stop"><div class="txt"><h3>The build</h3><p>Around fourteen weeks of making. We send photographs every Friday.</p></div><div class="dot">3</div></div>
+    <div class="stop"><div class="txt"><h3>A night by the sea</h3><p>We test every van ourselves on the cliffs before you collect it.</p></div><div class="dot">4</div></div>
+    <div class="stop"><div class="txt"><h3>Keys</h3><p>A handover day in Bude, a pasty, and off you go.</p></div><div class="dot">☼</div></div>
+  </div>
+</div></section></div>
+
+<section class="wrap quote">
+  <blockquote>“It feels less like a vehicle and more like a small, beautifully made room that happens to move.”</blockquote>
+  <span class="cap">Owner of Nº 005 · placeholder testimonial</span>
+</section>
+
+<section class="wrap" style="padding-top:0">
+  <span class="cap" style="color:var(--sun)">Recently finished</span>
+  <h2>Three vans, three very different briefs.</h2>
+  <div class="cards">
+    <article class="card"><div class="img" style="background:linear-gradient(180deg,#c9a878,#8f6f47)"><span class="cap">Photograph</span></div><span class="cap">Nº 006 · ID. Buzz</span><h3>The surfers' van</h3><p>Wet locker, outdoor shower, and a bench sized for a dog.</p></article>
+    <article class="card"><div class="img" style="background:linear-gradient(180deg,#8fb0ad,#3f6e72)"><span class="cap">Photograph</span></div><span class="cap">Nº 005 · E-Transit Custom</span><h3>The writing room</h3><p>A fold-away desk facing whatever view the rear doors open on.</p></article>
+    <article class="card"><div class="img" style="background:linear-gradient(180deg,#e2b77f,#c07a3a)"><span class="cap">Photograph</span></div><span class="cap">Nº 004 · eSprinter</span><h3>The family tourer</h3><p>Four berths, a proper galley and room for wellies.</p></article>
+  </div>
+</section>
+
+<div class="wrap"><section class="cta">
+  <span class="cap">Commissions for 2027</span>
+  <h2>Shall we start with a conversation?</h2>
+  <a class="pill cap" href="#">Say hello</a>
+  <div class="sunrise"></div>
+</section></div>
+</main>
+
+<footer class="wrap cap"><span>Elektrek · Bude, North Cornwall</span><span>hello@elektrek.example</span><span>Instagram · Journal</span></footer>
+</body>
+</html>

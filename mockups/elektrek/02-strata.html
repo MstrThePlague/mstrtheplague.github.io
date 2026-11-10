@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elektrek — Mockup 2: Strata</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--slate:#2B3238;--slate2:#232A2F;--slate3:#353D44;--bone:#E9E4D8;--copper:#C47A4A;--line:rgba(233,228,216,.16)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--slate);color:var(--bone);font-family:Jost,Futura,'Avenir Next',sans-serif;font-weight:300;font-size:18px;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.mono{font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.wrap{max-width:1200px;margin:0 auto;padding:0 36px}
+header{display:flex;align-items:center;justify-content:space-between;padding:26px 0}
+.brand{display:flex;align-items:center;gap:14px;font-weight:500;letter-spacing:.3em;font-size:19px}
+.brand svg{width:54px;height:34px}
+nav{display:flex;gap:34px;align-items:center}
+.btn{display:inline-block;border:1px solid var(--copper);color:var(--copper);padding:12px 22px}
+.btn.fill{background:var(--copper);color:var(--slate2)}
+.hero{position:relative;padding:90px 0 0;overflow:hidden}
+.hero h1{font-weight:300;font-size:clamp(46px,7vw,104px);line-height:1;letter-spacing:-.02em;max-width:11ch}
+.hero h1 b{font-weight:400;color:var(--copper)}
+.hero .sub{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:40px;align-items:end}
+.hero .sub p{max-width:30em;font-size:20px}
+.hero .sub div:last-child{text-align:right}
+.strata{display:block;width:100%;height:auto;margin-top:30px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stats div{padding:30px 0 30px 28px;border-left:1px solid var(--line)}
+.stats div:first-child{border-left:0;padding-left:0}
+.stats strong{display:block;font-weight:300;font-size:46px;line-height:1.1}
+section{padding:110px 0}
+.head{display:grid;grid-template-columns:200px 1fr;gap:40px;margin-bottom:54px}
+.head .mono{color:var(--copper);padding-top:14px}
+h2{font-weight:300;font-size:clamp(32px,4vw,56px);line-height:1.08;letter-spacing:-.01em;max-width:18ch}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:20px 16px 20px 0;border-bottom:1px solid var(--line);vertical-align:baseline}
+th{color:var(--copper);font-weight:400}
+td:first-child{font-size:26px;font-weight:400}
+td.m{font-family:'IBM Plex Mono',monospace;font-size:15px}
+.note{margin-top:18px;opacity:.6}
+.dark{background:var(--slate2)}
+.mats{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--line)}
+.mat{background:var(--slate2);padding:0 0 28px}
+.sw{aspect-ratio:1/1;margin-bottom:22px;position:relative}
+.sw::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(100deg,rgba(0,0,0,.07) 0 1px,transparent 1px 9px)}
+.mat h3,.mat p{padding:0 22px}
+.mat h3{font-weight:400;font-size:24px}
+.mat p{font-size:16px;opacity:.8;margin-top:6px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.steps::before{content:"";position:absolute;left:0;right:0;top:11px;height:1px;background:var(--line)}
+.step{padding-right:32px;position:relative}
+.step i{display:block;width:22px;height:22px;border:1px solid var(--copper);background:var(--slate);transform:rotate(45deg);margin-bottom:30px}
+.step h3{font-weight:400;font-size:26px;margin:8px 0}
+.step p{font-size:16px;opacity:.82}
+.cta{background:var(--copper);color:var(--slate2);padding:90px 0}
+.cta .wrap{display:flex;justify-content:space-between;align-items:center;gap:40px;flex-wrap:wrap}
+.cta h2{font-weight:400}
+.cta .btn{border-color:var(--slate2);color:var(--bone);background:var(--slate2);padding:18px 30px}
+footer{padding:40px 0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;opacity:.7}
+@media(max-width:860px){nav a:not(.btn){display:none}.hero .sub,.head{grid-template-columns:1fr}.hero .sub div:last-child{text-align:left}.stats,.mats,.steps{grid-template-columns:1fr 1fr}.steps{row-gap:40px}.steps::before{display:none}th:nth-child(4),td:nth-child(4){display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <a class="brand" href="#">
+    <svg viewBox="262 108 276 160" aria-hidden="true"><g fill="none" stroke="#E9E4D8" stroke-width="6" stroke-miterlimit="10">
+      <polyline points="270,170 340,170 362,130 390,200 418,115 446,200 468,170 530,170"/>
+      <polyline points="270,190 340,190 362,150 390,220 418,135 446,220 468,190 530,190"/>
+      <polyline points="270,210 340,210 362,170 390,240 418,155 446,240 468,210 530,210" stroke="#C47A4A"/>
+      <polyline points="270,230 340,230 362,190 390,260 418,175 446,260 468,230 530,230"/></g></svg>
+    ELEKTREK</a>
+  <nav class="mono"><a href="#">Builds</a><a href="#">Platforms</a><a href="#">Materials</a><a href="#">Process</a><a class="btn" href="#">Enquire</a></nav>
+</header>
+</div>
+
+<main>
+<div class="hero">
+  <div class="wrap">
+    <span class="mono" style="color:var(--copper)">Bespoke electric campers · 50.83°N 4.55°W</span>
+    <h1 style="margin-top:22px">Made slowly, <b>at the edge</b> of the Atlantic.</h1>
+    <div class="sub">
+      <p>Elektrek converts electric vans by commission from a single workshop near Bude. No stock models, no catalogue: one client, one design, one build at a time.</p>
+      <div><a class="btn fill mono" href="#">Start a commission</a></div>
+    </div>
+  </div>
+  <svg class="strata" viewBox="0 0 1600 300" preserveAspectRatio="none" aria-hidden="true">
+    <g fill="none" stroke="#E9E4D8" stroke-width="2" opacity=".55">
+      <polyline points="0,90 520,90 600,30 700,150 800,10 900,150 980,90 1600,90"/>
+      <polyline points="0,115 520,115 600,55 700,175 800,35 900,175 980,115 1600,115"/>
+      <polyline points="0,140 520,140 600,80 700,200 800,60 900,200 980,140 1600,140"/>
+      <polyline points="0,190 520,190 600,130 700,250 800,110 900,250 980,190 1600,190"/>
+      <polyline points="0,215 520,215 600,155 700,275 800,135 900,275 980,215 1600,215"/>
+      <polyline points="0,240 520,240 600,180 700,300 800,160 900,300 980,240 1600,240"/>
+    </g>
+    <polyline points="0,165 520,165 600,105 700,225 800,85 900,225 980,165 1600,165" fill="none" stroke="#C47A4A" stroke-width="3.5"/>
+  </svg>
+</div>
+
+<div class="wrap"><div class="stats">
+  <div><strong>1</strong><span class="mono">Van on the bench at a time</span></div>
+  <div><strong>6</strong><span class="mono">Commissions a year</span></div>
+  <div><strong>20</strong><span class="mono">Weeks, sketch to keys</span></div>
+  <div><strong>0</strong><span class="mono">Tailpipes</span></div>
+</div></div>
+
+<section><div class="wrap">
+  <div class="head"><span class="mono">01 / Platforms</span><h2>We build on the electric vans worth building on.</h2></div>
+  <table>
+    <thead><tr class="mono"><th>Base vehicle</th><th>Battery</th><th>Range (WLTP)</th><th>Suits</th></tr></thead>
+    <tbody>
+      <tr><td>VW ID. Buzz Cargo</td><td class="m">79 kWh</td><td class="m">≈ 280 mi</td><td>Compact two-berth, daily driver</td></tr>
+      <tr><td>Ford E-Transit Custom</td><td class="m">64 kWh</td><td class="m">≈ 200 mi</td><td>Pop-top weekender</td></tr>
+      <tr><td>Renault Master E-Tech</td><td class="m">87 kWh</td><td class="m">≈ 285 mi</td><td>Standing-height tourer</td></tr>
+      <tr><td>Mercedes eSprinter</td><td class="m">113 kWh</td><td class="m">≈ 270 mi</td><td>Long-stay, four-berth</td></tr>
+    </tbody>
+  </table>
+  <p class="mono note">Indicative manufacturer figures. Range after conversion depends on specification.</p>
+</div></section>
+
+<section class="dark"><div class="wrap">
+  <div class="head"><span class="mono">02 / Materials</span><h2>Chosen to be touched, and to last.</h2></div>
+  <div class="mats">
+    <div class="mat"><div class="sw" style="background:linear-gradient(140deg,#b98b5a,#8a5f38)"></div><span class="mono" style="padding:0 22px;color:var(--copper)">Joinery</span><h3>West Country oak</h3><p>Air-dried, oiled, never laminated.</p></div>
+    <div class="mat"><div class="sw" style="background:linear-gradient(140deg,#d9d2c2,#aaa290)"></div><span class="mono" style="padding:0 22px;color:var(--copper)">Insulation &amp; cloth</span><h3>British wool</h3><p>Breathes in a damp Atlantic climate.</p></div>
+    <div class="mat"><div class="sw" style="background:linear-gradient(140deg,#5d6870,#30383e)"></div><span class="mono" style="padding:0 22px;color:var(--copper)">Worktops</span><h3>Cornish slate</h3><p>Thin-cut and inlaid by hand.</p></div>
+    <div class="mat"><div class="sw" style="background:linear-gradient(140deg,#d08f5f,#9a5a31)"></div><span class="mono" style="padding:0 22px;color:var(--copper)">Hardware</span><h3>Solid copper</h3><p>Left unlacquered to weather with use.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="head"><span class="mono">03 / Process</span><h2>Four stages. One point of contact throughout.</h2></div>
+  <div class="steps">
+    <div class="step"><i></i><span class="mono">Wk 01</span><h3>Brief</h3><p>A conversation about how and where you travel.</p></div>
+    <div class="step"><i></i><span class="mono">Wk 02–05</span><h3>Design</h3><p>Scale drawings, samples and a fixed quotation.</p></div>
+    <div class="step"><i></i><span class="mono">Wk 06–19</span><h3>Build</h3><p>Made entirely in our workshop. Visit whenever you like.</p></div>
+    <div class="step"><i></i><span class="mono">Wk 20</span><h3>Handover</h3><p>A day in Bude learning every switch and latch.</p></div>
+  </div>
+</div></section>
+
+<div class="cta"><div class="wrap">
+  <h2>Two build slots remain for 2027.</h2>
+  <a class="btn mono" href="#">Start a commission →</a>
+</div></div>
+</main>
+
+<footer class="wrap mono"><span>Elektrek · Bude, North Cornwall</span><span>hello@elektrek.example</span><span>© 2026</span></footer>
+</body>
+</html>

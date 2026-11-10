@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elektrek — Mockup 3: Block Grid</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;700;800&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EFEBE4;--ink:#1C1C1A;--green:#2F6B62}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:Jost,Futura,'Avenir Next',sans-serif;font-size:18px;line-height:1.5}
+a{color:inherit;text-decoration:none}
+.mono{font-family:'Space Mono',ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.page{max-width:1320px;margin:0 auto;border-left:3px solid var(--ink);border-right:3px solid var(--ink)}
+header{display:grid;grid-template-columns:132px 1fr auto;border-bottom:3px solid var(--ink)}
+.logo{border-right:3px solid var(--ink);padding:18px;font-weight:800;font-size:34px;line-height:.92;letter-spacing:.06em}
+.logo hr{border:0;height:3px;background:var(--green);margin:6px 0}
+nav{display:grid;grid-template-columns:repeat(4,1fr)}
+nav a{padding:18px;border-right:1px solid var(--ink);display:flex;flex-direction:column;justify-content:space-between;font-weight:500;font-size:20px}
+nav a:hover{background:var(--ink);color:var(--bg)}
+.open{background:var(--green);color:var(--bg);padding:18px 24px;display:flex;flex-direction:column;justify-content:space-between;min-width:210px;font-weight:700;font-size:20px}
+.hero{display:grid;grid-template-columns:7fr 5fr;border-bottom:3px solid var(--ink)}
+.hero .t{padding:48px 32px 36px;display:flex;flex-direction:column;justify-content:space-between;gap:48px}
+h1{font-weight:800;font-size:clamp(56px,9.2vw,150px);line-height:.88;letter-spacing:-.03em;text-transform:uppercase}
+h1 span{color:var(--green)}
+.hero .t .b{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end}
+.hero .t p{max-width:26em;font-size:20px}
+.btn{display:inline-block;background:var(--ink);color:var(--bg);padding:18px 26px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:15px}
+.ph{position:relative;background:#b9b3a6 linear-gradient(200deg,#cfc9bc,#8e897d);min-height:260px}
+.ph::before{content:"";position:absolute;inset:0;background:linear-gradient(to top right,transparent calc(50% - .5px),rgba(28,28,26,.35) calc(50% - .5px),rgba(28,28,26,.35) calc(50% + .5px),transparent calc(50% + .5px))}
+.ph span{position:absolute;left:0;bottom:0;background:var(--bg);padding:6px 10px;border-top:1px solid var(--ink);border-right:1px solid var(--ink)}
+.hero .ph{border-left:3px solid var(--ink);min-height:560px}
+.ticker{background:var(--ink);color:var(--bg);padding:14px 32px;white-space:nowrap;overflow:hidden;font-weight:700;letter-spacing:.2em;text-transform:uppercase;font-size:14px;border-bottom:3px solid var(--ink)}
+.ticker i{color:#7fb8ae;font-style:normal;margin:0 18px}
+.four{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:3px solid var(--ink)}
+.four div{padding:28px 24px 40px;border-right:1px solid var(--ink)}
+.four div:last-child{border-right:0}
+.four b{display:block;font-weight:800;font-size:76px;line-height:1;color:var(--green);margin:14px 0 10px}
+.four h3{font-weight:700;font-size:24px;text-transform:uppercase;margin-bottom:8px}
+.sec{display:grid;grid-template-columns:132px 1fr;border-bottom:3px solid var(--ink)}
+.sec>.lab{border-right:3px solid var(--ink);padding:24px 18px;writing-mode:vertical-rl;transform:rotate(180deg);text-align:right;font-weight:800;font-size:28px;text-transform:uppercase;letter-spacing:.06em}
+.work{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:220px}
+.work .ph{border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);min-height:0}
+.w1{grid-column:span 4;grid-row:span 2}.w2{grid-column:span 2}.w3{grid-column:span 2}.w4{grid-column:span 2}.w5{grid-column:span 2}.w6{grid-column:span 2}
+.inc{display:grid;grid-template-columns:1fr 1fr}
+.inc h2{font-weight:800;font-size:clamp(36px,4.6vw,68px);line-height:.95;text-transform:uppercase;padding:40px 32px;border-right:1px solid var(--ink)}
+.inc ul{list-style:none}
+.inc li{display:grid;grid-template-columns:60px 1fr;padding:18px 32px;border-bottom:1px solid var(--ink);font-size:20px;font-weight:500}
+.inc li:last-child{border-bottom:0}
+.inc li .mono{padding-top:7px;color:var(--green)}
+.cta{background:var(--green);color:var(--bg);padding:64px 32px;display:flex;justify-content:space-between;align-items:end;gap:32px;flex-wrap:wrap;border-bottom:3px solid var(--ink)}
+.cta h2{font-weight:800;font-size:clamp(40px,6vw,92px);line-height:.9;text-transform:uppercase}
+.cta .btn{background:var(--bg);color:var(--ink)}
+footer{padding:28px 32px 0;overflow:hidden}
+footer .r{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
+footer .big{font-weight:800;font-size:23.5vw;line-height:.72;letter-spacing:-.02em;margin:40px 0 -1.6vw -1vw;white-space:nowrap}
+@media(min-width:1320px){footer .big{font-size:310px;margin-bottom:-22px}}
+@media(max-width:860px){header{grid-template-columns:110px 1fr}nav{grid-template-columns:1fr 1fr}.open{grid-column:1/-1}.hero,.inc{grid-template-columns:1fr}.hero .ph{border-left:0;border-top:3px solid var(--ink);min-height:300px}.four{grid-template-columns:1fr 1fr}.sec{grid-template-columns:1fr}.sec>.lab{writing-mode:initial;transform:none;text-align:left;border-right:0;border-bottom:3px solid var(--ink)}.work{grid-template-columns:1fr 1fr;grid-auto-rows:160px}.work .ph{grid-column:span 1;grid-row:span 1}.w1{grid-column:span 2!important}.hero .t .b{grid-template-columns:1fr}.inc h2{border-right:0;border-bottom:1px solid var(--ink)}}
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+  <a class="logo" href="#">ELEK<hr>TREK</a>
+  <nav>
+    <a href="#"><span class="mono">01</span>Work</a>
+    <a href="#"><span class="mono">02</span>Process</a>
+    <a href="#"><span class="mono">03</span>Platforms</a>
+    <a href="#"><span class="mono">04</span>Workshop</a>
+  </nav>
+  <a class="open" href="#"><span class="mono">Commissions open</span>2027 →</a>
+</header>
+
+<section class="hero">
+  <div class="t">
+    <span class="mono">Bespoke electric campers — Bude, Cornwall</span>
+    <h1>One van.<br>One owner.<br><span>One maker.</span></h1>
+    <div class="b">
+      <p>Elektrek builds electric camper vans to commission. Nothing off the shelf, nothing repeated. Six vans a year, made by hand on the North Cornwall coast.</p>
+      <a class="btn" href="#">Commission yours</a>
+    </div>
+  </div>
+  <div class="ph"><span class="mono">Photo — Nº 006, Widemouth Bay</span></div>
+</section>
+
+<div class="ticker">Built to commission<i>■</i>Electric only<i>■</i>Six a year<i>■</i>Bude, North Cornwall<i>■</i>Built to commission<i>■</i>Electric only<i>■</i>Six a year<i>■</i>Bude, North Cornwall<i>■</i>Built to commission</div>
+
+<section class="four">
+  <div><span class="mono">Step</span><b>01</b><h3>Talk</h3><p>Tell us how you travel. We listen, measure and sketch.</p></div>
+  <div><span class="mono">Step</span><b>02</b><h3>Draw</h3><p>Scale plans, samples, and a fixed price before any work begins.</p></div>
+  <div><span class="mono">Step</span><b>03</b><h3>Build</h3><p>Around fourteen weeks in the workshop. Visit any time.</p></div>
+  <div><span class="mono">Step</span><b>04</b><h3>Go</h3><p>A full handover day, then the road is yours.</p></div>
+</section>
+
+<section class="sec">
+  <div class="lab">Selected work</div>
+  <div class="work">
+    <div class="ph w1"><span class="mono">Nº 006 — ID. Buzz Cargo — oak / wool</span></div>
+    <div class="ph w2"><span class="mono">Nº 006 — galley</span></div>
+    <div class="ph w3"><span class="mono">Nº 005 — E-Transit Custom</span></div>
+    <div class="ph w4"><span class="mono">Nº 005 — fold-out desk</span></div>
+    <div class="ph w5"><span class="mono">Nº 004 — eSprinter</span></div>
+    <div class="ph w6"><span class="mono">Nº 004 — bunk detail</span></div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="lab">Included</div>
+  <div class="inc">
+    <h2>Every commission, without exception.</h2>
+    <ul>
+      <li><span class="mono">A</span>A design drawn for you alone</li>
+      <li><span class="mono">B</span>Hand-cut hardwood joinery</li>
+      <li><span class="mono">C</span>Natural wool insulation</li>
+      <li><span class="mono">D</span>Leisure electrics matched to the base vehicle</li>
+      <li><span class="mono">E</span>A weekend shakedown test on the coast</li>
+      <li><span class="mono">F</span>Numbered maker's plate and build book</li>
+    </ul>
+  </div>
+</section>
+
+<section class="cta">
+  <h2>Yours could<br>be Nº 008.</h2>
+  <a class="btn" href="#">Start the conversation →</a>
+</section>
+
+<footer>
+  <div class="r mono"><span>Elektrek — Bude, North Cornwall</span><span>hello@elektrek.example</span><span>Instagram / Journal / Terms</span></div>
+  <div class="big">ELEKTREK</div>
+</footer>
+</div>
+</body>
+</html>
