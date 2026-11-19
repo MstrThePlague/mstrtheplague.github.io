@@ -7,7 +7,7 @@
   <title>Projects</title>
   <meta name="description" content="Things I've built.">
   <script>try { if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light'); } catch (e) {}</script>
-  <link rel="stylesheet" href="styles.css?v=202611101800">
+  <link rel="stylesheet" href="styles.css?v=202611191200">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,9 +17,13 @@
 
   <main id="main">
 
-    <header class="page-head">
+    <!-- js/wind.js draws the wind behind this and the header -->
+    <header class="page-head" data-wind>
       <h1 class="page-title">Projects<span class="dot">.</span></h1>
-      <p class="tagline">Things I've built, mostly to scratch an itch</p>
+      <div class="hero-foot">
+        <p class="tagline">Things I've built, mostly to scratch an itch</p>
+        <button type="button" class="icon-btn wind-toggle" aria-label="Pause the wind" hidden></button>
+      </div>
     </header>
 
     <div class="projects">
@@ -57,6 +61,7 @@
   </noscript>
 
   <script src="js/nav.js?v=202611101800"></script>
+  <script src="js/wind.js?v=202611191200"></script>
 
   <!-- Default Statcounter code for Personal Site http://benbull.org -->
   <script type="text/javascript">

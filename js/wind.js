@@ -1,7 +1,8 @@
-// The home page's wind: streamlines drifting across a flow field behind the header and "Hello.",
-// swirling round the pointer. It flows straight behind the text, never around it.
+// The wind: streamlines drifting across a flow field behind the header and the page's big title
+// (whichever element carries data-wind), swirling round the pointer. It flows straight behind the
+// text, never around it.
 (function () {
-  var hero = document.querySelector('.hero');
+  var hero = document.querySelector('[data-wind]');
   var button = document.querySelector('.wind-toggle');
   var c = document.createElement('canvas');
   if (!hero || !c.getContext) return;
@@ -33,7 +34,7 @@
   }
   function clear() { ctx.fillStyle = pal.bg; ctx.fillRect(0, 0, W, H); }
 
-  // The canvas runs from the top of the page to the bottom of the hero, under the header too
+  // The canvas runs from the top of the page to the bottom of the [data-wind] element, under the header too
   function size() {
     var w = Math.max(1, document.documentElement.clientWidth);
     var h = Math.max(1, Math.round(hero.getBoundingClientRect().bottom + window.scrollY));
