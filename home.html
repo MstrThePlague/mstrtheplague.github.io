@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <meta name="description" content="A web app for the house: the heat pump, air conditioners, lights, battery, car and appliances in one place, with what the heating really costs after solar and the battery.">
+  <link rel="icon" type="image/png" href="images/home-icon.png">
+  <script>try { if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light'); } catch (e) {}</script>
+  <link rel="stylesheet" href="styles.css?v=202611191200">
+  <link rel="stylesheet" href="home-demo.css?v=202611191900">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+
+<body class="article-page">
+
+
+  <main id="main">
+
+    <header class="page-head">
+      <p class="breadcrumb"><a href="projects.html">&larr; Projects</a></p>
+      <img class="app-icon" src="images/home-icon.png" alt="The Home app icon: a white outline of a heat pump's outdoor unit, its fan and grille, on an orange-red gradient." width="128" height="128">
+      <h1 class="page-title">Home<span class="dot">.</span></h1>
+      <p class="tagline">The whole house on one screen</p>
+      <p class="label">Web app and home server &middot; Private &middot; November 2026</p>
+    </header>
+
+    <div class="article-body">
+
+    <!-- Filled in from the article's h2s by js/contents.js -->
+    <nav class="toc" aria-labelledby="toc-title" hidden>
+      <h2 id="toc-title" class="label">On this page</h2>
+      <ul></ul>
+    </nav>
+
+    <article class="prose">
+
+      <p class="lead">
+        Home is a web app for our house. It started as a way to see what the heat pump was up to, and now
+        shows and controls the heat pump, the air conditioners, the lights, the home battery, the car and its
+        charger, the dishwasher and washing machine, and the cat flap, all in one place. It also works out what the
+        heating and hot water really cost once the solar panels and the battery are taken into account.
+      </p>
+      <p>
+        It runs on a small server at home and only the people in the house can reach it, over our private network.
+        On a phone it opens full screen from the Home Screen, like any other app.
+      </p>
+
+      <h2 id="why">Why</h2>
+      <p>
+        We have a Mitsubishi Ecodan heat pump, and its own app, MELCloud, tells you very little. It can turn the
+        heating up and down, but it doesn't tell you whether the heat pump is working well, how much heat you got
+        for your electricity, or what any of it cost.
+      </p>
+      <p>
+        And the heat pump was only one of the apps. The battery has Tesla's, the immersion diverter has myenergi's,
+        the air conditioners have Bosch's, and the lights, the car charger, the car, the appliances and the cat flap
+        each have another. That's nine apps for one house, none of which knows about the others. The question I most
+        wanted answered, what did the heating cost today, needs at least three of them at once.
+      </p>
+      <p class="pull">
+        So I built one app that talks to all of them, <em>and keeps what they tell it.</em>
+      </p>
+
+      <h2 id="iphone-to-web">From an iPhone app to a web app</h2>
+      <p>
+        The first version, on 19 October 2026, was a native iPhone app that talked to MELCloud. It worked, but
+        it lived on one phone and could only show what MELCloud showed at that moment. The next day I put it away and
+        started again as a web app with a server behind it. The server checks every device around the clock and
+        keeps a history of its own, so anyone in the house can open it on any phone or computer and see the same
+        thing, with nothing to install.
+      </p>
+      <p>
+        It was called Heat Pump until 21 October, when the air conditioners and lights arrived and it plainly wasn't
+        only about the heat pump any more.
+      </p>
+
+      <h2 id="now">Now</h2>
+      <p>
+        The first tab, Now, is the house at a glance. The big card is the room temperature against its target.
+        Below it, a moving picture of the heat pump shows where the water is going: round the radiators, into the
+        hot water tank, or nowhere. It says in words what's happening too, such as how hard the compressor is
+        running and how much heat the radiators took out of the water.
+      </p>
+
+      <div class="shots two">
+        <figure>
+          <div class="hd-phone" data-demo="now" role="img"
+            aria-label="An animated preview of the Now tab, with made-up data: the room at 20.5 degrees, half a degree below its target, and a moving diagram of the heat pump, its fan spinning, sending warm water to the radiators and then to the hot water tank, which fills to 50 degrees.">
+            <div class="hd-screen" aria-hidden="true">
+              <div class="hd-head"><span class="hd-title" data-greeting>Good evening</span><span class="hd-help">?</span></div>
+              <span class="hd-pill"><i class="hd-dot"></i>Updated just now</span>
+              <div class="hd-hero">
+                <div class="hd-hero-top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3s5 4.5 5 10a5 5 0 0 1-10 0c0-2.5 1.5-4 2.5-5 .3 1.6 1 2.6 2 3 0-3 .5-5.5.5-8Z" /></svg>Heating zone 1<span class="hd-chev">›</span></div>
+                <div class="hd-temp"><span data-f="room">20.5</span>°</div>
+                <p class="hd-hero-line"><span data-f="below">0.5</span>° below the 21.0° target</p>
+                <p class="hd-hero-line">10° outside</p>
+              </div>
+              <div class="hd-card hd-system" data-mode="radiators">
+                <div class="hd-label"><span>#</span>Heat pump and hot water<span class="hd-info">i</span></div>
+                <svg class="hd-diagram" viewBox="0 0 400 145">
+                <path class="pipe out rad" d="M155 50 H100" />
+                <path class="pipe back rad" d="M55 75 V112 H155" />
+                <path class="pipe out tnk" d="M245 50 H305" />
+                <path class="pipe back tnk" d="M305 112 H245" />
+                <rect class="radiator" x="10" y="35" width="90" height="40" rx="5" />
+                <path class="fins" d="M28 40 V70 M46 40 V70 M64 40 V70 M82 40 V70" />
+                <g class="wisps"><path d="M32 29 q5 -5 0 -11" /><path d="M55 29 q5 -5 0 -11" /><path d="M78 29 q5 -5 0 -11" /></g>
+                <rect class="box" x="155" y="25" width="90" height="105" rx="10" />
+                <circle class="ring" cx="200" cy="77" r="31" />
+                <g class="fan"><path d="M200 77 L200 50 Q214 58 200 77 M200 77 L223 91 Q209 99 200 77 M200 77 L177 91 Q180 74 200 77" /></g>
+                <defs><clipPath id="hd-tank-now"><rect x="309" y="29" width="62" height="108" rx="21" /></clipPath></defs>
+                <rect class="empty" x="309" y="29" width="62" height="108" rx="21" />
+                <g clip-path="url(#hd-tank-now)"><rect class="water" x="309" y="29" width="62" height="108" /></g>
+                <rect class="tank" x="305" y="25" width="70" height="116" rx="24" />
+                <line class="target" x1="299" x2="381" y1="56" y2="56" />
+                <text class="reading" x="340" y="64" text-anchor="middle" data-f="reading">49°</text>
+              </svg>
+              <dl class="hd-figs">
+                <div><dt>Compressor</dt><dd data-f="hz">36 Hz</dd></div>
+                <div><dt>Out</dt><dd class="hd-out" data-f="out">38.5°</dd></div>
+                <div><dt>Back</dt><dd class="hd-back" data-f="back">33.5°</dd></div>
+                <div><dt>Aiming for</dt><dd>38.0°</dd></div>
+              </dl>
+              <dl class="hd-figs">
+                <div><dt>Bottom of tank</dt><dd data-f="tank">49.4°</dd></div>
+                <div><dt>Target</dt><dd>50°</dd></div>
+              </dl>
+              <p class="hd-words" data-f="words">The compressor is running at 36 Hz and the pump is sending the water to the radiators. The radiators took 5.0° out of the water.</p>
+              <p class="hd-words" data-f="tanknote">The tank is up to temperature.</p>
+              </div>
+              <div class="hd-pair">
+                <div class="hd-card"><div class="hd-label">Room 1 lights</div><p class="hd-big">All on at 31%</p></div>
+                <div class="hd-card"><div class="hd-label">Room 2 lights</div><p class="hd-big">On · 44%</p></div>
+              </div>
+              <div class="hd-tabs"><span class="on"><svg viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z" /></svg>Now</span><span><svg viewBox="0 0 24 24"><path d="M4 7h16M4 17h16" /><circle cx="9" cy="7" r="2.2" /><circle cx="15" cy="17" r="2.2" /></svg>Control</span><span><svg viewBox="0 0 24 24"><path d="M4 4v16h16M7 15l4-5 3 3 5-6" /></svg>History</span><span><svg viewBox="0 0 24 24"><path d="M6 20v-8M12 20V5M18 20v-11" /></svg>Reports</span><span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1" /></svg>Settings</span></div>
+            </div>
+          </div>
+          <figcaption><strong>Now.</strong> The room against its target, and a picture of the heat pump, its
+            compressor, the water out and back, and the tank.</figcaption>
+        </figure>
+        <figure>
+          <div class="hd-phone" data-demo="control" role="img"
+            aria-label="An animated preview of the Control tab, with made-up data: lists for the heat pump, two air conditioners, the lights by room and the Powerwall, with settings changing every few seconds as if tapped.">
+            <div class="hd-screen" aria-hidden="true">
+              <div class="hd-head"><span class="hd-title">Control</span><span class="hd-help">?</span></div>
+              <p class="hd-section">Heat pump</p>
+              <div class="hd-group">
+                <div class="hd-row"><span class="hd-tone heat"><svg viewBox="0 0 24 24"><path d="M5 6v12M9 6v12M13 6v12M17 6v12M3 9h17M3 15h17" /></svg></span><span class="hd-row-name">Heating</span><span class="hd-row-value" data-f="heating">Room · 21.0°</span></div>
+                <div class="hd-row"><span class="hd-tone water"><svg viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="5" /><path d="M7 12h10" /></svg></span><span class="hd-row-name">Hot water</span><span class="hd-row-value">50° target</span></div>
+                <div class="hd-row"><span class="hd-tone heat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" /></svg></span><span class="hd-row-name">Holiday mode</span><span class="hd-row-value">Off</span></div>
+                <div class="hd-row"><span class="hd-tone grey"><svg viewBox="0 0 24 24"><path d="M12 3v8M7 6.5a7 7 0 1 0 10 0" /></svg></span><span class="hd-row-name">Heat pump power</span><span class="hd-row-value">On</span></div>
+              </div>
+              <p class="hd-section">Air conditioning</p>
+              <div class="hd-group">
+                <div class="hd-row"><span class="hd-tone cool"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="9" rx="2" /><path d="M6 11h12M8 17l-1 3M12 17l-1 3M16 17l-1 3" /></svg></span><span class="hd-row-name">Study</span><span class="hd-row-value">Off</span></div>
+                <div class="hd-row"><span class="hd-tone cool"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="9" rx="2" /><path d="M6 11h12M8 17l-1 3M12 17l-1 3M16 17l-1 3" /></svg></span><span class="hd-row-name">Lounge</span><span class="hd-row-value" data-f="lounge">Off</span></div>
+              </div>
+              <p class="hd-section">Lights</p>
+              <div class="hd-group">
+                <div class="hd-row"><span class="hd-tone light"><svg viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v9H4z" /></svg></span><span class="hd-row-name">Whole house</span><span class="hd-row-value">Scenes</span></div>
+                <div class="hd-row"><span class="hd-tone light"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3Z" /></svg></span><span class="hd-row-name">Room 1</span><span class="hd-row-value" data-f="room1">All on at 31%</span></div>
+                <div class="hd-row"><span class="hd-tone light"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3Z" /></svg></span><span class="hd-row-name">Room 2</span><span class="hd-row-value">On · 44%</span></div>
+              </div>
+              <p class="hd-section">Battery</p>
+              <div class="hd-group">
+                <div class="hd-row"><span class="hd-tone green"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="16" height="10" rx="2.5" /><path d="M21 10.5v3M6.5 10v4M9.5 10v4" /></svg></span><span class="hd-row-name">Powerwall</span><span class="hd-row-value"></span></div>
+              </div>
+              <div class="hd-tabs"><span><svg viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z" /></svg>Now</span><span class="on"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 17h16" /><circle cx="9" cy="7" r="2.2" /><circle cx="15" cy="17" r="2.2" /></svg>Control</span><span><svg viewBox="0 0 24 24"><path d="M4 4v16h16M7 15l4-5 3 3 5-6" /></svg>History</span><span><svg viewBox="0 0 24 24"><path d="M6 20v-8M12 20V5M18 20v-11" /></svg>Reports</span><span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1" /></svg>Settings</span></div>
+            </div>
+          </div>
+          <figcaption><strong>Control.</strong> Every device, grouped. Tapping a tile on Now opens its card
+            here.</figcaption>
+        </figure>
+      </div>
+
+      <p>
+        Further down are tiles for everything else: the lights in each room, the air conditioners, where the
+        house's power is coming from, the battery, the car's charge, whether the dishwasher has finished, and whether
+        the cat is in or out. Anything that's under way rises to the top, and the quiet tiles gather into rows.
+      </p>
+      <p>
+        There's a version for a terminal, too. On a Raspberry Pi 400, typing <code>now</code>
+        shows the same page in text, kept up to date as things change.
+      </p>
+
+      <h2 id="true-cost">What it really costs</h2>
+      <p>
+        This is the part I most wanted. MELCloud reports how much electricity the heat pump used each day, but
+        not when it used it, and when matters: power from the grid at night is cheap, in the day it isn't, and power
+        from the solar panels or the battery has its own cost.
+      </p>
+      <p>
+        So the app prices every quarter of an hour separately, using Tesla's five-minute record of where the
+        house's power came from:
+      </p>
+      <ul>
+        <li><strong>From the grid</strong>, it costs the tariff's rate at that time of day.</li>
+        <li><strong>From the solar panels</strong>, it costs the export rate, because that's the payment we gave up
+          by using it rather than selling it.</li>
+        <li><strong>From the battery</strong>, it costs whatever filled the battery, as a running average, plus what's
+          lost on the way in and out.</li>
+      </ul>
+      <p>
+        The heat pump's day is then spread across those slots by when it was actually working, which the server
+        knows from its own readings every two minutes. Surplus solar that the diverter sends into the hot water tank
+        is counted separately. Where any of that is missing, the day is still priced, but marked as an estimate.
+      </p>
+
+      <h2 id="reports">History and reports</h2>
+      <p>
+        History has the day's temperatures, the compressor, and the time spent heating and on hot water, by day,
+        week, month or year. Reports adds it up by month and by year, and puts each beside the same days a year
+        earlier.
+      </p>
+
+      <figure class="shot-single narrow">
+        <div class="hd-phone" data-demo="reports" role="img"
+          aria-label="An animated preview of the Reports tab, with made-up data, switching between this month and this year. For November 2026 so far: a COP of 3.07, 217 kWh of electricity used, 668 kWh of heat made, an estimated cost of £47.84, and hot water as 10 percent of the electricity.">
+          <div class="hd-screen" aria-hidden="true">
+            <div class="hd-head"><span class="hd-title">Reports</span><span class="hd-help">?</span></div>
+            <div class="hd-seg" data-period="month"><span>Month</span><span>Year</span></div>
+            <div class="hd-picker"><span class="hd-round">‹</span><span class="hd-month" data-f="label">November 2026</span><span class="hd-round dim">›</span></div>
+            <div class="hd-cop-card">
+              <p class="hd-muted" data-f="span">1 November to 18 November so far</p>
+              <p class="hd-cop" data-f="cop">3.07</p>
+              <p>COP so far this <span data-f="what">month</span>: every kWh of electricity made <strong><span data-f="cop2">3.07</span> kWh</strong> of heat.</p>
+              <p class="hd-muted" data-f="earlier">3.07 over the same days a year earlier.</p>
+            </div>
+            <div class="hd-tiles">
+              <div class="hd-tile"><p class="hd-muted">Electricity used</p><p class="hd-num" data-f="used">217 kWh</p><p class="hd-muted">Same as a year earlier</p></div>
+              <div class="hd-tile"><p class="hd-muted">Heat made</p><p class="hd-num" data-f="heat">668 kWh</p><p class="hd-muted">Same as a year earlier</p></div>
+              <div class="hd-tile"><p class="hd-muted">Cost at your tariff (estimate)</p><p class="hd-num" data-f="cost">£47.84</p><p class="hd-muted">Same as a year earlier</p></div>
+              <div class="hd-tile"><p class="hd-muted">Hot water share of electricity</p><p class="hd-num" data-f="water">10%</p><p class="hd-muted">Same as a year earlier</p></div>
+            </div>
+            <div class="hd-tabs"><span><svg viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z" /></svg>Now</span><span><svg viewBox="0 0 24 24"><path d="M4 7h16M4 17h16" /><circle cx="9" cy="7" r="2.2" /><circle cx="15" cy="17" r="2.2" /></svg>Control</span><span><svg viewBox="0 0 24 24"><path d="M4 4v16h16M7 15l4-5 3 3 5-6" /></svg>History</span><span class="on"><svg viewBox="0 0 24 24"><path d="M6 20v-8M12 20V5M18 20v-11" /></svg>Reports</span><span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1" /></svg>Settings</span></div>
+          </div>
+        </div>
+        <figcaption><strong>Reports.</strong> How much heat each kWh of electricity made, and what it cost, against
+          a year earlier.</figcaption>
+      </figure>
+
+      <p>
+        The headline is the COP: how many kWh of heat each kWh of electricity made. A cold month needs more heat
+        than a mild one, so comparing months directly isn't fair, and the reports allow for the weather with heating
+        degree days, a measure of how cold it was. A month only gets that comparison once it has had at least 50
+        degree days, so a few chilly days don't produce a misleading number. A report can be saved as a PDF, and any
+        of the history as a spreadsheet.
+      </p>
+
+      <h2 id="control">Changing things, carefully</h2>
+      <p>
+        The app can change things as well as show them: the heating target and mode, hot water boosts and holiday
+        mode, the air conditioners, the lights and lighting scenes, and the battery's settings.
+      </p>
+      <p>
+        Each kind of control arrived switched off. The app watched the air conditioners and the lights, read-only,
+        for a while before it was allowed to change them, and only then did I turn their controls on. Every change is
+        written down in a change log with who made it, and changes made in the devices' own apps are logged too, so a
+        thermostat turned up from MELCloud doesn't go unnoticed.
+      </p>
+      <p>
+        It notifies the house about things that need someone: a fault code on the heat pump, a device that has stopped
+        answering, a service that has signed the app out, or a storm warning that has the battery charging from the
+        grid. There's a Help section written for everyone in the house, not just me, that explains the heat pump's
+        fault codes and what to try.
+      </p>
+
+      <h2 id="looks">Looks, themes and moments</h2>
+      <p>
+        Since it's our own app, it can have some fun. In Settings, you can pick a look: the standard one, or
+        Teletext, Neon Terminal, Control Room, Blueprint or Broadsheet. Each is a complete restyle, with its own header
+        and footer, not just a change of colours.
+      </p>
+
+      <figure class="shot-single narrow">
+        <div class="hd-phone" data-demo="teletext" role="img"
+          aria-label="An animated preview of the Now tab in the Teletext look, with made-up data: blocky yellow, cyan and red type on black, a page number P100 and a ticking clock in the header, the same moving heat pump diagram in Teletext colours, and coloured links for each tab along the bottom.">
+          <div class="hd-screen hd-tt" aria-hidden="true">
+            <div class="hd-tt-top"><span>P100</span><span class="y">HOME</span><span data-f="clock">Thu 19 Nov 18:29:51</span><span class="hd-tt-q">?</span></div>
+            <span class="hd-tt-greet" data-greeting>Good evening</span>
+            <span class="hd-tt-pill"><i class="hd-dot"></i>Updated just now</span>
+            <div class="hd-tt-hero">
+              <div class="hd-hero-top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3s5 4.5 5 10a5 5 0 0 1-10 0c0-2.5 1.5-4 2.5-5 .3 1.6 1 2.6 2 3 0-3 .5-5.5.5-8Z" /></svg>Heating zone 1</div>
+              <div class="hd-temp"><span data-f="room">20.5</span>°</div>
+              <p class="hd-hero-line"><span data-f="below">0.5</span>° below the 21.0° target</p>
+              <p class="hd-hero-line">10° outside</p>
+            </div>
+            <div class="hd-tt-bar"># HEAT PUMP AND HOT WATER</div>
+            <div class="hd-system" data-mode="radiators">
+              <svg class="hd-diagram" viewBox="0 0 400 145">
+                <path class="pipe out rad" d="M155 50 H100" />
+                <path class="pipe back rad" d="M55 75 V112 H155" />
+                <path class="pipe out tnk" d="M245 50 H305" />
+                <path class="pipe back tnk" d="M305 112 H245" />
+                <rect class="radiator" x="10" y="35" width="90" height="40" rx="5" />
+                <path class="fins" d="M28 40 V70 M46 40 V70 M64 40 V70 M82 40 V70" />
+                <g class="wisps"><path d="M32 29 q5 -5 0 -11" /><path d="M55 29 q5 -5 0 -11" /><path d="M78 29 q5 -5 0 -11" /></g>
+                <rect class="box" x="155" y="25" width="90" height="105" rx="10" />
+                <circle class="ring" cx="200" cy="77" r="31" />
+                <g class="fan"><path d="M200 77 L200 50 Q214 58 200 77 M200 77 L223 91 Q209 99 200 77 M200 77 L177 91 Q180 74 200 77" /></g>
+                <defs><clipPath id="hd-tank-tt"><rect x="309" y="29" width="62" height="108" rx="21" /></clipPath></defs>
+                <rect class="empty" x="309" y="29" width="62" height="108" rx="21" />
+                <g clip-path="url(#hd-tank-tt)"><rect class="water" x="309" y="29" width="62" height="108" /></g>
+                <rect class="tank" x="305" y="25" width="70" height="116" rx="24" />
+                <line class="target" x1="299" x2="381" y1="56" y2="56" />
+                <text class="reading" x="340" y="64" text-anchor="middle" data-f="reading">49°</text>
+              </svg>
+              <dl class="hd-figs">
+                <div><dt>Compressor</dt><dd data-f="hz">36 Hz</dd></div>
+                <div><dt>Out</dt><dd class="hd-out" data-f="out">38.5°</dd></div>
+                <div><dt>Back</dt><dd class="hd-back" data-f="back">33.5°</dd></div>
+                <div><dt>Aiming for</dt><dd>38.0°</dd></div>
+              </dl>
+              <dl class="hd-figs">
+                <div><dt>Bottom of tank</dt><dd data-f="tank">49.4°</dd></div>
+                <div><dt>Target</dt><dd>50°</dd></div>
+              </dl>
+              <p class="hd-words" data-f="words">The compressor is running at 36 Hz and the pump is sending the water to the radiators. The radiators took 5.0° out of the water.</p>
+              <p class="hd-words" data-f="tanknote">The tank is up to temperature.</p>
+            </div>
+            <div class="hd-tt-tabs"><span class="now">Now</span><span style="color:#0f0">Control</span><span style="color:#ff0">History</span><span style="color:#0ff">Reports</span><span style="color:#f0f">Settings</span></div>
+          </div>
+        </div>
+        <figcaption><strong>Teletext.</strong> Eight colours on black, a page number, and a coloured link for each
+          tab.</figcaption>
+      </figure>
+
+      <p>
+        On certain dates a theme takes over for the day: Halloween, Christmas, New Year's Eve with fireworks,
+        midsummer and midwinter, and the Perseid and Leonid meteor showers. There's a birthday theme that only the
+        person whose birthday it is gets to see.
+      </p>
+      <p>
+        Moments are smaller: a tile that celebrates something in the house's own data, like the solar panels' total
+        on Midsummer's Day.
+      </p>
+
+      <h2 id="how-its-built">How it's built</h2>
+      <ul>
+        <li>The server is Python with FastAPI, storing everything in SQLite. Each device is described once, in one
+          list: how to reach it, its pretend stand-in for the demo, and its part of the app.</li>
+        <li>The web app is Svelte 5 and TypeScript, built with Vite, and installs to the Home Screen as a web app
+          with notifications.</li>
+        <li>It runs in a single Docker container on the home server, and is published to the house's devices with
+          Tailscale. Tailscale says who each request is from, so there's no separate sign-in, and nothing outside
+          the house can reach it.</li>
+        <li>The passwords and tokens for each service are encrypted, with the key kept apart from the data and from
+          the nightly backups, which are kept for 14 days.</li>
+        <li>It never asks a device for news more than once a minute, and backs off when a service says it's busy.
+          That limit survives a restart.</li>
+        <li>A demo mode runs the whole app against pretend devices and a year of made-up history, so I can try changes
+          without touching the real heat pump. The previews on this page show its made-up data.</li>
+        <li>There are over 400 tests, and the deploy script runs them first and refuses to deploy anything that isn't
+          committed.</li>
+      </ul>
+
+      <h2 id="small-print">The small print</h2>
+      <p>
+        Home is private. It's built for one house's devices and runs only on our own network, so there's no download
+        and no public code. It's unofficial and has no connection with any of the companies whose devices it talks to.
+        Several of the services it relies on don't publish their interfaces, so any of them could change and break a
+        part of it without warning, and I'll fix it when they do.
+      </p>
+
+    </article>
+
+    </div>
+
+    <a class="next-project" href="interlude.html">
+      <span>
+        <span class="label">Next project</span>
+        <span class="next-title">InterLude</span>
+      </span>
+      <span class="next-arrow" aria-hidden="true">&rarr;</span>
+    </a>
+
+  </main>
+
+
+  <!-- No-JS fallback: keep in sync with PAGES in js/nav.js -->
+  <noscript>
+    <nav class="site-nav site-header" aria-label="Main">
+      <a href="index.html">benbull.org</a>
+      <a href="projects.html" aria-current="page">Projects</a>
+      <a href="tribute.html">Tom</a>
+    </nav>
+  </noscript>
+
+  <script src="js/nav.js?v=202611101800"></script>
+  <script src="js/contents.js?v=202611101800"></script>
+  <script src="js/home-demo.js?v=202611191900"></script>
+
+  <!-- Default Statcounter code for Personal Site http://benbull.org -->
+  <script type="text/javascript">
+    var sc_project = 13228015;
+    var sc_invisible = 1;
+    var sc_security = "065d3980";
+  </script>
+  <script type="text/javascript" src="https://www.statcounter.com/counter/counter.js" async></script>
+  <noscript>
+    <div class="statcounter"><a title="Web Analytics" href="https://statcounter.com/" target="_blank"><img
+          class="statcounter" src="https://c.statcounter.com/13228015/0/065d3980/1/" alt="Web Analytics"
+          referrerPolicy="no-referrer-when-downgrade"></a></div>
+  </noscript>
+  <!-- End of Statcounter Code -->
+</body>
+
+</html>
