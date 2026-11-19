@@ -11,7 +11,7 @@
   <script>try { if (localStorage.getItem('theme') === 'light') document.documentElement.setAttribute('data-theme', 'light'); } catch (e) {}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=202611191200">
+  <link rel="stylesheet" href="styles.css?v=202611192000">
 </head>
 
 <body class="home">
@@ -34,33 +34,31 @@
         <p class="label">Things I've built, mostly to scratch an itch</p>
       </div>
 
-      <div class="cards">
+      <ul class="project-list">
+        <li>
+          <a href="home.html">
+            <img src="images/home-icon.png" alt="" width="48" height="48">
+            <span class="pl-text"><span class="pl-name">Home</span><span class="pl-what">One app for the whole house, and what the heating really costs</span></span>
+            <span class="label pl-date">Nov 2026</span>
+          </a>
+        </li>
+        <li>
+          <a href="interlude.html">
+            <img src="images/interlude-icon.png" alt="" width="48" height="48">
+            <span class="pl-text"><span class="pl-name">InterLude</span><span class="pl-what">BBC radio with the news bulletins muted</span></span>
+            <span class="label pl-date">Oct 2026</span>
+          </a>
+        </li>
+        <li>
+          <a href="hd60.html">
+            <img src="images/hd60-player-icon.png" alt="" width="48" height="48">
+            <span class="pl-text"><span class="pl-name">HD60 Pro for macOS</span><span class="pl-what">A Mac driver for Elgato's capture card</span></span>
+            <span class="label pl-date">Oct 2026</span>
+          </a>
+        </li>
+      </ul>
 
-        <a class="card" href="home.html">
-          <img class="card-icon" src="images/home-icon.png" alt="" width="84" height="84">
-          <h3 class="card-title">Home</h3>
-          <p class="label">Web app and home server &middot; Private &middot; November 2026</p>
-          <p class="card-text">One app for the whole house: the heat pump, air conditioners, lights, battery, car, appliances and cat flap, with what the heating really costs once the solar panels and battery are counted.</p>
-          <span class="card-more">Read more &rarr;</span>
-        </a>
-
-        <a class="card" href="interlude.html">
-          <img class="card-icon" src="images/interlude-icon.png" alt="" width="84" height="84">
-          <h3 class="card-title">InterLude</h3>
-          <p class="label">macOS app and Linux server &middot; Open source &middot; October 2026</p>
-          <p class="card-text">Plays BBC radio to my Mac, a browser, or Chromecast and Sonos speakers and quietly mutes the news bulletins, or cuts them out of programmes from the last 30 days. Runs as a menu bar app or on a Linux server, with a remote for your phone.</p>
-          <span class="card-more">Read more &rarr;</span>
-        </a>
-
-        <a class="card" href="hd60.html">
-          <img class="card-icon" src="images/hd60-player-icon.png" alt="" width="84" height="84">
-          <h3 class="card-title">HD60 Pro for macOS</h3>
-          <p class="label">macOS driver and app &middot; October 2026</p>
-          <p class="card-text">A DriverKit driver and player that make Elgato's HD60 Pro capture card work on Apple Silicon Macs, a card Elgato never wrote a Mac driver for.</p>
-          <span class="card-more">Read more &rarr;</span>
-        </a>
-
-      </div>
+      <p class="all-projects"><a href="projects.html">All projects, in more detail &rarr;</a></p>
     </section>
 
     <section class="tom-note" aria-labelledby="tom-title">
@@ -81,7 +79,7 @@
     </nav>
   </noscript>
 
-  <script src="js/nav.js?v=202611101800"></script>
+  <script src="js/nav.js?v=202611192000"></script>
   <script src="js/wind.js?v=202611191200"></script>
 
   <!-- Default Statcounter code for Personal Site http://benbull.org -->

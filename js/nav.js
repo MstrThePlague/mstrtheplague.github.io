@@ -4,7 +4,7 @@
 // The site name is the link home, so the home page has no line of its own.
 (function () {
   var PAGES = [
-    { label: 'Projects', href: 'projects.html', also: ['interlude.html', 'hd60.html'] },
+    { label: 'Projects', href: 'projects.html', also: ['home.html', 'interlude.html', 'hd60.html'] },
     { label: 'Tom', href: 'tribute.html' }
     // { label: 'Professional', href: 'professional.html' },
   ];

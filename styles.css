@@ -387,6 +387,85 @@ img {
   text-underline-offset: 4px;
 }
 
+/* The home page's short list of projects; projects.html has the full cards */
+
+.project-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid var(--line);
+}
+
+.project-list li {
+  border-top: 1px solid var(--line);
+}
+
+.project-list a {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.25rem 0;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.project-list img {
+  flex: none;
+  width: 3rem;
+  height: 3rem;
+}
+
+.pl-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.pl-name {
+  font-size: 1.375rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  transition: color 0.2s ease;
+}
+
+.pl-what {
+  color: var(--muted);
+}
+
+.pl-date {
+  flex: none;
+  white-space: nowrap;
+}
+
+.project-list a:hover .pl-name,
+.project-list a:focus-visible .pl-name {
+  color: var(--accent);
+}
+
+.all-projects {
+  margin-top: 2rem;
+}
+
+.all-projects a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+@media (max-width: 600px) {
+  .project-list a {
+    align-items: flex-start;
+  }
+
+  .pl-date {
+    display: none;
+  }
+}
+
 /* A quiet note about Tom, at the foot of the home page */
 
 .tom-note {
